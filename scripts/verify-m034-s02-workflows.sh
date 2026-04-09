@@ -109,6 +109,22 @@ if job.is_a?(Hash)
     errors << "workflow must fail early if scripts/verify-m034-s01.sh is missing"
   end
 
+  init_diagnostics = find_step.call("Initialize live proof diagnostics")
+  if init_diagnostics.is_a?(Hash)
+    init_run = init_diagnostics["run"].to_s
+    unless init_diagnostics["shell"] == "bash"
+      errors << "workflow must initialize live proof diagnostics under bash"
+    end
+    unless init_run.include?("mkdir -p .tmp/m034-s01/verify")
+      errors << "workflow must pre-create .tmp/m034-s01/verify before the proof runs"
+    end
+    unless init_run.include?("hosted-workflow-metadata.txt")
+      errors << "workflow must seed hosted-workflow-metadata.txt before the proof runs"
+    end
+  else
+    errors << "workflow must initialize live proof diagnostics before running the proof"
+  end
+
   cache_llvm = find_step.call("Cache LLVM")
   if cache_llvm.is_a?(Hash)
     unless cache_llvm["uses"] == "actions/cache@v4"

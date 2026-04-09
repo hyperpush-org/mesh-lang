@@ -59,6 +59,19 @@ jobs:
         with:
           key: authoritative-live-proof-x86_64-unknown-linux-gnu
 
+      - name: Initialize live proof diagnostics
+        shell: bash
+        run: |
+          mkdir -p .tmp/m034-s01/verify
+          {
+            echo "workflow=${GITHUB_WORKFLOW}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "ref=${GITHUB_REF}"
+            echo "sha=${GITHUB_SHA}"
+            echo "runner=${RUNNER_NAME:-unknown}"
+          } > .tmp/m034-s01/verify/hosted-workflow-metadata.txt
+
       - name: Run authoritative live proof
         id: proof
         shell: bash
