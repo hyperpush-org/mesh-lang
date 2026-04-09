@@ -1,9 +1,6 @@
 name: Deploy Services to Fly.io
 
 on:
-  push:
-    branches: [main]
-    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -15,7 +12,6 @@ concurrency:
 
 jobs:
   deploy-registry:
-    if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}
     name: Deploy mesh-registry
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -33,7 +29,6 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   deploy-packages-website:
-    if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}
     name: Deploy mesh-packages website
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -51,7 +46,6 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   health-check:
-    if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}
     name: Post-deploy health checks
     needs: [deploy-registry, deploy-packages-website]
     runs-on: ubuntu-latest

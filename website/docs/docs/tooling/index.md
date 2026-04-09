@@ -55,7 +55,7 @@ If you are contributing to Mesh or need an unsupported target, build from source
 
 Mesh includes a built-in package manager for creating and managing projects.
 
-Keep the public CLI workflow explicit and examples-first: hello world first, then the clustered scaffold, then the honest local SQLite starter or the serious shared/deployable PostgreSQL starter, and only after that the maintainer-facing backend proof page. SQLite stays local-only and single-node only here; the generated PostgreSQL starter is the serious shared/deployable path and the handoff into the staged deploy + failover proof chain plus the same hosted packages/public-surface contract, with the repo-boundary product handoff beginning only once you leave the public starter ladder.
+Keep the public CLI workflow explicit and examples-first: hello world first, then the clustered scaffold, then the honest local SQLite starter or the serious shared/deployable PostgreSQL starter, and only after that the maintainer-facing backend proof page. SQLite stays local-only and single-node only here; the generated PostgreSQL starter is the serious shared/deployable path and the handoff into the staged deploy + failover proof chain, with the repo-boundary product handoff beginning only once you leave the public starter ladder.
 
 ### Creating a New Project
 
@@ -111,7 +111,7 @@ When you need the serious shared or deployable Todo starter, generate Postgres i
 meshc init --template todo-api --db postgres my_shared_todo
 ```
 
-The PostgreSQL Todo starter keeps the clustered-function contract source-first and route-free: `work.mpl` stays on `@cluster pub fn sync_todos()`, `main.mpl` boots through `Node.start_from_env()`, `GET /todos` and `GET /todos/:id` dogfood explicit-count `HTTP.clustered(1, ...)`, `GET /health` plus mutating routes stay local, and the Dockerfile packages the binary produced by `meshc build .`. Treat the PostgreSQL starter as the fuller starter layered above the same route-free clustered contract, not as a replacement for the canonical route-free public surfaces. It is also the generated starter that owns the staged deploy + failover proof chain plus the same hosted packages/public-surface contract once you leave this first-contact tooling page for the proof pages. Keep the SQLite starter on its honest single-node contract instead of treating it as a clustered/operator proof surface.
+The PostgreSQL Todo starter keeps the clustered-function contract source-first and route-free: `work.mpl` stays on `@cluster pub fn sync_todos()`, `main.mpl` boots through `Node.start_from_env()`, `GET /todos` and `GET /todos/:id` dogfood explicit-count `HTTP.clustered(1, ...)`, `GET /health` plus mutating routes stay local, and the Dockerfile packages the binary produced by `meshc build .`. Treat the PostgreSQL starter as the fuller starter layered above the same route-free clustered contract, not as a replacement for the canonical route-free public surfaces. It is also the generated starter that owns the staged deploy + failover proof chain once you leave this first-contact tooling page for the proof pages. Keep the SQLite starter on its honest single-node contract instead of treating it as a clustered/operator proof surface.
 
 Inspect a running clustered app with the same operator order used by the scaffold and [`examples/todo-postgres/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md):
 
@@ -126,7 +126,7 @@ Use the list form first to discover startup or request keys, then inspect a sing
 
 - [Clustered Example](/docs/getting-started/clustered-example/) — the scaffold-first clustered app story
 - [SQLite Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local-only single-node starter
-- [PostgreSQL Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) — the serious shared/deployable starter and the proof-page handoff for staged deploy + failover plus the same hosted packages/public-surface checks
+- [PostgreSQL Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) — the serious shared/deployable starter and the proof-page handoff for staged deploy + failover
 - [Production Backend Proof](/docs/production-backend-proof/) — the maintainer-facing backend proof page after the starter/examples-first ladder, where the repo-boundary handoff into the Hyperpush product repo begins
 
 Keep the starter split explicit here too: [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) is the honest local starter with no `work.mpl`, `HTTP.clustered(...)`, or `meshc cluster` story, while [`examples/todo-postgres/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) is the shared/deployable route-free starter that only dogfoods explicit-count `HTTP.clustered(1, ...)` on `GET /todos` and `GET /todos/:id`.

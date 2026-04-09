@@ -1688,7 +1688,7 @@ fn m047_s05_public_clustered_surfaces_use_source_first_names_and_todo_template()
     assert_contains(
         "website/docs/docs/distributed-proof/index.md",
         &distributed_proof,
-        "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth, `bash scripts/verify-m053-s02.sh` owns failover truth, and `bash scripts/verify-m053-s03.sh` keeps packages/public-surface proof in the same hosted contract.",
+        "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth and `bash scripts/verify-m053-s02.sh` owns failover truth. Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.",
     );
     assert_contains(
         "website/docs/docs/distributed-proof/index.md",
@@ -1762,7 +1762,7 @@ fn m047_s05_public_clustered_surfaces_use_source_first_names_and_todo_template()
     assert_contains(
         "website/docs/docs/tooling/index.md",
         &tooling,
-        "hosted packages/public-surface contract",
+        "proof-page handoff",
     );
     assert_contains(
         "website/docs/docs/tooling/index.md",

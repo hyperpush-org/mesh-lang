@@ -28,10 +28,10 @@ const staleHistoricalRails = [
   'mesh-cluster-proof.fly.dev',
 ]
 const distributedCalloutMarker = '> **Clustered proof surfaces:**'
-const distributedM053MapMarker = 'M053 starter-owned staged deploy + failover + hosted-contract proof map'
+const distributedM053MapMarker = 'M053 starter-owned staged deploy + failover proof map'
 const distributedFlyBoundaryMarker = 'retained read-only Fly reference lane'
 const distributedProofRoleSentence = 'This is the only public-secondary docs page that carries the named clustered verifier rails.'
-const distributedProofChainSentence = "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth, `bash scripts/verify-m053-s02.sh` owns failover truth, and `bash scripts/verify-m053-s03.sh` keeps packages/public-surface proof in the same hosted contract."
+const distributedProofChainSentence = "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth and `bash scripts/verify-m053-s02.sh` owns failover truth. Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain."
 const distributedProofFlyBoundaryMarker = 'keep Fly as a retained read-only reference/proof lane for already-deployed environments instead of treating it as a coequal public starter surface'
 const distributedProofFlyNote = '> **Note:** The Fly verifier is intentionally read-only and intentionally secondary.'
 const clusterProofRetainedMarker = '`scripts/fixtures/clustered/cluster-proof/` is a retained reference/proof fixture for the older Fly-oriented packaging rail.'
@@ -46,7 +46,6 @@ const distributedProofPostgresBullet = '- [`examples/todo-postgres/README.md`](h
 const distributedProofSqliteBullet = '- [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local single-node SQLite starter, not a clustered/operator proof surface'
 const distributedProofS01Bullet = '- `bash scripts/verify-m053-s01.sh` — starter-owned staged deploy proof that retains the generated PostgreSQL bundle plus bundled artifacts'
 const distributedProofS02Bullet = '- `bash scripts/verify-m053-s02.sh` — starter-owned failover proof that replays S01, exercises the staged PostgreSQL starter under failover, and retains the failover proof bundle'
-const distributedProofS03Bullet = '- `bash scripts/verify-m053-s03.sh` — hosted packages/public-surface contract that checks the same starter proof remains visible in the public hosted story'
 const distributedProofProductionBullet = '- [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface'
 const distributedProofProductRepoBullet = '- [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) — repo-boundary maintained-app/backend handoff'
 const distributedProofProductRunbookBullet = '- [`mesher/README.md`](https://github.com/hyperpush-org/hyperpush-mono/blob/main/mesher/README.md) — deeper maintained app runbook after the repo-boundary handoff'
@@ -184,7 +183,7 @@ function validateS04DocsReferenceContract(baseRoot) {
     '## Named proof commands',
     'bash scripts/verify-m053-s01.sh',
     'bash scripts/verify-m053-s02.sh',
-    'bash scripts/verify-m053-s03.sh',
+    'Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.',
     'bash scripts/verify-m043-s04-fly.sh --help',
     distributedProofFlyBoundaryMarker,
     distributedProofFlyNote,
@@ -202,7 +201,6 @@ function validateS04DocsReferenceContract(baseRoot) {
     distributedProofSqliteBullet,
     distributedProofS01Bullet,
     distributedProofS02Bullet,
-    distributedProofS03Bullet,
     distributedProofProductionBullet,
     distributedProofProductRepoBullet,
     distributedProofProductRunbookBullet,
@@ -264,16 +262,16 @@ test('contract fails closed when Distributed Proof drops the M053 starter chain 
   copyAllFiles(tmpRoot)
 
   let mutatedDistributedProof = readFrom(tmpRoot, files.distributedProof)
-  mutatedDistributedProof = mutatedDistributedProof.replace(distributedProofChainSentence, 'Fly owns the clustered proof story now.')
+  mutatedDistributedProof = mutatedDistributedProof.replace('Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.', 'Fly owns the clustered proof story now.')
   mutatedDistributedProof = mutatedDistributedProof.replace(distributedProofFlyBoundaryMarker, 'keep Fly as the canonical public starter lane')
-  mutatedDistributedProof = mutatedDistributedProof.replace('bash scripts/verify-m053-s03.sh', 'bash scripts/verify-m047-s06.sh')
+  mutatedDistributedProof = mutatedDistributedProof.replace('bash scripts/verify-m053-s02.sh', 'bash scripts/verify-m047-s06.sh')
   writeTo(tmpRoot, files.distributedProof, mutatedDistributedProof)
 
   const errors = validateS04DocsReferenceContract(tmpRoot)
   const errorText = errors.join('\n')
   assert.ok(errorText.includes(distributedProofChainSentence), errorText)
   assert.ok(errorText.includes(distributedProofFlyBoundaryMarker), errorText)
-  assert.ok(errorText.includes(distributedProofS03Bullet), errorText)
+  assert.ok(errorText.includes('bash scripts/verify-m053-s02.sh'), errorText)
 })
 
 test('contract fails closed when distributed public docs regress toward local-product or proof-maze-first teaching', (t) => {

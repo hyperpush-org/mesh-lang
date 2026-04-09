@@ -7,7 +7,7 @@ description: Start the generated clustered scaffold, inspect runtime-owned start
 
 Use `meshc init --clustered` when you want the minimal public clustered-app contract first: package-only `mesh.toml`, source-declared `@cluster` work in `work.mpl`, and runtime-owned inspection through `meshc cluster ...`.
 
-This page stays on that scaffold first. Once you have the route-free clustered contract in hand, keep the public follow-on ladder ordered: honest local SQLite starter, serious shared/deployable PostgreSQL starter, then Production Backend Proof only when you need the maintainer-facing deeper backend proof. The generated PostgreSQL starter owns the staged deploy + failover proof chain plus the same hosted packages/public-surface contract there, and that proof page is the repo-boundary handoff into the [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) instead of a local mesh-lang product path.
+This page stays on that scaffold first. Once you have the route-free clustered contract in hand, keep the public follow-on ladder ordered: honest local SQLite starter, serious shared/deployable PostgreSQL starter, then Production Backend Proof only when you need the maintainer-facing deeper backend proof. The generated PostgreSQL starter owns the staged deploy + failover proof chain there, and that proof page is the repo-boundary handoff into the [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) instead of a local mesh-lang product path.
 
 ## Generate the scaffold
 
@@ -162,12 +162,12 @@ Use diagnostics when you need the broader cluster view after checking membership
 Take the public follow-on ladder in order: honest local SQLite starter, serious shared/deployable PostgreSQL starter, then Production Backend Proof only when you need the maintainer-facing deeper backend proof.
 
 - `meshc init --template todo-api --db sqlite my_local_todo` — the honest local-only single-node starter. It matches [SQLite Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md): generated package tests, local `/health`, and no `work.mpl`, `HTTP.clustered(...)`, or `meshc cluster` story.
-- `meshc init --template todo-api --db postgres my_shared_todo` — the serious shared/deployable starter. It matches [PostgreSQL Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md): route-free `work.mpl`, PostgreSQL-backed state, explicit-count `HTTP.clustered(1, ...)` on `GET /todos` and `GET /todos/:id`, local `/health` plus mutating routes, and the staged deploy + failover proof chain plus the same hosted packages/public-surface contract on the proof pages.
+- `meshc init --template todo-api --db postgres my_shared_todo` — the serious shared/deployable starter. It matches [PostgreSQL Todo starter](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md): route-free `work.mpl`, PostgreSQL-backed state, explicit-count `HTTP.clustered(1, ...)` on `GET /todos` and `GET /todos/:id`, local `/health` plus mutating routes, and the staged deploy + failover proof chain on the proof pages.
 - [Production Backend Proof](/docs/production-backend-proof/) — the maintainer-facing backend proof page after the starter/examples-first ladder, where those deeper proof commands stay behind the proof pages.
 
 ## Need the retained verifier map?
 
-Use [Distributed Proof](/docs/distributed-proof/) when you need the repo-owned verifier map, retained compatibility wrappers, or the lower-level fixture-backed rails behind this public starter story. The generated PostgreSQL starter owns the staged deploy + failover proof chain plus the same hosted packages/public-surface contract there, so this page stays focused on the scaffold plus the SQLite/PostgreSQL starter split and leaves the product-owned handoff on the far side of Production Backend Proof.
+Use [Distributed Proof](/docs/distributed-proof/) when you need the repo-owned verifier map, retained compatibility wrappers, or the lower-level fixture-backed rails behind this public starter story. The generated PostgreSQL starter owns the staged deploy + failover proof chain there, so this page stays focused on the scaffold plus the SQLite/PostgreSQL starter split and leaves the product-owned handoff on the far side of Production Backend Proof.
 
 ## What to read next
 

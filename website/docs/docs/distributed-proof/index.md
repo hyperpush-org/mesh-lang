@@ -9,7 +9,7 @@ next: false
 
 This is the only public-secondary docs page that carries the named clustered verifier rails.
 
-Use [Distributed Actors](/docs/distributed/) for the language/runtime primitives, [Clustered Example](/docs/getting-started/clustered-example/) for the scaffold-first walkthrough, and [Production Backend Proof](/docs/production-backend-proof/) when the work becomes backend-specific. The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth, `bash scripts/verify-m053-s02.sh` owns failover truth, and `bash scripts/verify-m053-s03.sh` keeps packages/public-surface proof in the same hosted contract.
+Use [Distributed Actors](/docs/distributed/) for the language/runtime primitives, [Clustered Example](/docs/getting-started/clustered-example/) for the scaffold-first walkthrough, and [Production Backend Proof](/docs/production-backend-proof/) when the work becomes backend-specific. The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth and `bash scripts/verify-m053-s02.sh` owns failover truth. Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.
 
 Keep the public starter split honest here too: [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) is the honest local single-node starter with no `work.mpl`, `HTTP.clustered(...)`, or `meshc cluster` story, while [`examples/todo-postgres/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) is the serious shared/deployable starter that keeps source-first `@cluster` work and only dogfoods explicit-count `HTTP.clustered(1, ...)` on `GET /todos` and `GET /todos/:id`.
 
@@ -26,7 +26,6 @@ This page is the canonical clustered proof map. The other public-secondary pages
 - [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local single-node SQLite starter, not a clustered/operator proof surface
 - `bash scripts/verify-m053-s01.sh` — starter-owned staged deploy proof that retains the generated PostgreSQL bundle plus bundled artifacts
 - `bash scripts/verify-m053-s02.sh` — starter-owned failover proof that replays S01, exercises the staged PostgreSQL starter under failover, and retains the failover proof bundle
-- `bash scripts/verify-m053-s03.sh` — hosted packages/public-surface contract that checks the same starter proof remains visible in the public hosted story
 - [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface
 - [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) — repo-boundary maintained-app/backend handoff
 - [`mesher/README.md`](https://github.com/hyperpush-org/hyperpush-mono/blob/main/mesher/README.md) — deeper maintained app runbook after the repo-boundary handoff
@@ -51,7 +50,7 @@ The public clustered story is intentionally smaller than the repo's full retaine
 - let one public app URL sit in front of multiple nodes while Mesh runtime placement stays server-side and operator truth stays on `meshc cluster`
 - let `bash scripts/verify-m053-s01.sh` own staged deploy proof for the generated PostgreSQL starter
 - let `bash scripts/verify-m053-s02.sh` own failover proof for that same staged PostgreSQL starter
-- let `bash scripts/verify-m053-s03.sh` prove the hosted packages/public-surface contract still tells the same story
+- keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain
 - keep clustered declaration state in source instead of the manifest
 - rename legacy helper-shaped names to ordinary verbs instead of preserving runtime-plumbing-shaped public APIs
 - let the runtime own startup, placement, continuity, promotion, recovery, and diagnostics
@@ -83,7 +82,6 @@ These are the repo-level commands behind the current distributed proof story:
 # public starter-owned clustered proof chain in mesh-lang
 bash scripts/verify-m053-s01.sh
 bash scripts/verify-m053-s02.sh
-bash scripts/verify-m053-s03.sh
 
 # after the repo-boundary handoff in the Hyperpush product repo
 bash mesher/scripts/verify-maintainer-surface.sh
@@ -149,7 +147,7 @@ Non-goals for this public rail:
 
 Use the generic [Distributed Actors](/docs/distributed/) guide when you want the language/runtime primitives.
 
-Use this page when you want the named proof surfaces behind the scaffold/examples-first clustered story, the PostgreSQL starter's staged deploy + failover + hosted-contract chain, the SQLite-local boundary, the Production Backend Proof handoff into the Hyperpush product repo, and the retained Fly reference rail.
+Use this page when you want the named proof surfaces behind the scaffold/examples-first clustered story, the PostgreSQL starter's staged deploy + failover chain, the SQLite-local boundary, the Production Backend Proof handoff into the Hyperpush product repo, and the retained Fly reference rail.
 
 ## Failure inspection map
 
@@ -157,7 +155,6 @@ If a proof fails, rerun the named command for the exact surface you care about:
 
 - **Starter staged deploy proof:** `bash scripts/verify-m053-s01.sh`
 - **Starter failover proof:** `bash scripts/verify-m053-s02.sh`
-- **Hosted starter/packages/public-surface proof:** `bash scripts/verify-m053-s03.sh`
 - **Repo-boundary maintained-app handoff:** [Production Backend Proof](/docs/production-backend-proof/), [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono), and [`mesher/README.md`](https://github.com/hyperpush-org/hyperpush-mono/blob/main/mesher/README.md)
 - **Product-owned Mesher verifier:** `bash mesher/scripts/verify-maintainer-surface.sh`
 - **mesh-lang compatibility wrapper:** `bash scripts/verify-m051-s01.sh`

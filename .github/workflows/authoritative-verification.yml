@@ -6,8 +6,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '17 4 * * 1'
 
 permissions:
   contents: read
@@ -48,21 +46,111 @@ jobs:
 
           bash scripts/verify-whitespace.sh --diff-range "$range"
 
-  live-proof:
-    name: Authoritative live proof
-    needs: whitespace-guard
-    # Fork PRs stay on the repo's secret-free build/test lanes. This workflow only
-    # reruns the live publish proof when the checked-out PR head is this repository,
-    # so untrusted forks never receive publish secrets.
-    if: >-
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
-    uses: ./.github/workflows/authoritative-live-proof.yml
-    secrets:
-      MESH_PUBLISH_OWNER: ${{ secrets.MESH_PUBLISH_OWNER }}
-      MESH_PUBLISH_TOKEN: ${{ secrets.MESH_PUBLISH_TOKEN }}
+  rust-core:
+    name: Rust core build and smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  starter-failover-proof:
-    name: Authoritative starter failover proof
-    needs: whitespace-guard
-    uses: ./.github/workflows/authoritative-starter-failover-proof.yml
+      - name: Cache LLVM
+        uses: actions/cache@v4
+        id: cache-llvm
+        with:
+          path: ~/llvm
+          key: llvm-21.1.8-v4-x86_64-unknown-linux-gnu
+
+      - name: Install LLVM 21 (Linux x86_64)
+        if: steps.cache-llvm.outputs.cache-hit != 'true'
+        timeout-minutes: 10
+        run: |
+          LLVM_VERSION="21.1.8"
+          LLVM_ARCHIVE="LLVM-${LLVM_VERSION}-Linux-X64.tar.xz"
+          LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_ARCHIVE}"
+          curl -sSfL "$LLVM_URL" -o llvm.tar.xz
+          mkdir -p "$HOME/llvm"
+          tar xf llvm.tar.xz --strip-components=1 -C "$HOME/llvm"
+          rm llvm.tar.xz
+
+      - name: Set LLVM prefix
+        shell: bash
+        run: echo "LLVM_SYS_211_PREFIX=$HOME/llvm" >> "$GITHUB_ENV"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        timeout-minutes: 10
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Cargo cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: authoritative-verification-rust-core-x86_64-unknown-linux-gnu
+
+      - name: Run core workspace tests
+        shell: bash
+        timeout-minutes: 45
+        run: |
+          cargo test -p mesh-parser --lib --locked
+          cargo test -p mesh-typeck --lib --locked
+          cargo test -p mesh-codegen --lib --locked
+          cargo build --workspace --locked
+
+      - name: Run clustered tiny-cluster smoke
+        shell: bash
+        timeout-minutes: 20
+        run: |
+          cargo run -q -p meshc -- build scripts/fixtures/clustered/tiny-cluster
+          cargo run -q -p meshc -- test scripts/fixtures/clustered/tiny-cluster/tests
+
+  docs-and-sites:
+    name: Docs and sites build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            website/package-lock.json
+            packages-website/package-lock.json
+
+      - name: Verify local public docs contract
+        shell: bash
+        run: python3 scripts/lib/m034_public_surface_contract.py local-docs --root "$GITHUB_WORKSPACE"
+
+      - name: Build website docs
+        run: |
+          npm --prefix website ci
+          npm --prefix website run build
+
+      - name: Build packages website
+        run: |
+          npm --prefix packages-website ci
+          npm --prefix packages-website run build
+
+  vscode-extension:
+    name: VS Code extension compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tools/editors/vscode-mesh/package-lock.json
+
+      - name: Build extension
+        run: |
+          npm --prefix tools/editors/vscode-mesh ci
+          npm --prefix tools/editors/vscode-mesh run compile

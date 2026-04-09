@@ -473,7 +473,7 @@ summary = {
             [
                 'Clustered proof surfaces:',
                 'Distributed Proof',
-                'M053 starter-owned staged deploy + failover + hosted-contract proof map',
+                'M053 starter-owned staged deploy + failover proof map',
                 'retained read-only Fly reference lane',
             ],
             'distributed',
@@ -487,7 +487,7 @@ summary = {
                 'This is the only public-secondary docs page that carries the named clustered verifier rails.',
                 'bash scripts/verify-m053-s01.sh',
                 'bash scripts/verify-m053-s02.sh',
-                'bash scripts/verify-m053-s03.sh',
+                'Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.',
                 'bash scripts/verify-m043-s04-fly.sh --help',
             ],
             'distributed-proof',
@@ -499,30 +499,27 @@ require_markers(getting_started_text, [
     'honest local-only starter',
     'single-node only',
     'staged deploy + failover proof chain',
-    'hosted packages/public-surface contract',
 ], 'getting-started')
 require_markers(clustered_example_text, [
     'This page stays on that scaffold first.',
     'staged deploy + failover proof chain',
-    'hosted packages/public-surface contract',
 ], 'clustered-example')
 require_markers(tooling_text, [
     'Keep the public CLI workflow explicit and examples-first',
     'SQLite stays local-only and single-node only here;',
     'staged deploy + failover proof chain',
-    'hosted packages/public-surface contract',
     'Assembled first-contact docs verifier',
 ], 'tooling')
 require_markers(distributed_text, [
     'Clustered proof surfaces:',
-    'M053 starter-owned staged deploy + failover + hosted-contract proof map',
+    'M053 starter-owned staged deploy + failover proof map',
     'retained read-only Fly reference lane',
 ], 'distributed')
 require_markers(distributed_proof_text, [
     'generated PostgreSQL starter\'s M053 chain',
     'bash scripts/verify-m053-s01.sh',
     'bash scripts/verify-m053-s02.sh',
-    'bash scripts/verify-m053-s03.sh',
+    'Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.',
     'keep Fly as a retained read-only reference/proof lane for already-deployed environments instead of treating it as a coequal public starter surface',
     'The Fly verifier is intentionally read-only and intentionally secondary.',
 ], 'distributed-proof')
@@ -707,3 +704,4 @@ done
 echo "verify-m053-s04: ok"
 echo "artifacts: $(repo_rel "$ARTIFACT_DIR")"
 echo "proof bundle: $(repo_rel "$ARTIFACT_DIR")"
+$(repo_rel "$ARTIFACT_DIR")"

@@ -28,7 +28,7 @@ const retainedVerifierCommand = 'bash scripts/verify-m051-s02.sh'
 const proofSurfaceVerifierCommand = 'bash scripts/verify-production-proof-surface.sh'
 const distributedRoleSentence = '> **Clustered proof surfaces:**'
 const distributedProofRoleSentence = 'This is the only public-secondary docs page that carries the named clustered verifier rails.'
-const distributedProofChainSentence = "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth, `bash scripts/verify-m053-s02.sh` owns failover truth, and `bash scripts/verify-m053-s03.sh` keeps packages/public-surface proof in the same hosted contract."
+const distributedProofChainSentence = "The clustered proof story now centers the generated PostgreSQL starter's M053 chain: `bash scripts/verify-m053-s01.sh` owns staged deploy truth and `bash scripts/verify-m053-s02.sh` owns failover truth. Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain."
 const distributedBoundaryMarker = 'mesh-lang keeps only the public proof-page wrappers and retained compatibility rails on this side of the boundary.'
 const distributedProofBoundaryMarker = 'The local `verify-m051*` rails stay retained compatibility wrappers, not the public clustered story.'
 const productionRoleSentence = 'This is the compact public-secondary handoff for Mesh\'s backend proof story.'
@@ -38,7 +38,6 @@ const distributedProofPostgresBullet = '- [`examples/todo-postgres/README.md`](h
 const distributedProofSqliteBullet = '- [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local single-node SQLite starter, not a clustered/operator proof surface'
 const distributedProofS01Bullet = '- `bash scripts/verify-m053-s01.sh` — starter-owned staged deploy proof that retains the generated PostgreSQL bundle plus bundled artifacts'
 const distributedProofS02Bullet = '- `bash scripts/verify-m053-s02.sh` — starter-owned failover proof that replays S01, exercises the staged PostgreSQL starter under failover, and retains the failover proof bundle'
-const distributedProofS03Bullet = '- `bash scripts/verify-m053-s03.sh` — hosted packages/public-surface contract that checks the same starter proof remains visible in the public hosted story'
 const distributedProofProductionBullet = '- [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface'
 const distributedProofProductRepoBullet = '- [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) — repo-boundary maintained-app/backend handoff'
 const distributedProofProductRunbookBullet = '- [`mesher/README.md`](https://github.com/hyperpush-org/hyperpush-mono/blob/main/mesher/README.md) — deeper maintained app runbook after the repo-boundary handoff'
@@ -187,7 +186,6 @@ function validateSecondarySurfaces(baseRoot) {
     sqliteStarter,
     'bash scripts/verify-m053-s01.sh',
     'bash scripts/verify-m053-s02.sh',
-    'bash scripts/verify-m053-s03.sh',
     productionBackendProofLink,
     productRepo,
     productRunbook,
@@ -207,7 +205,6 @@ function validateSecondarySurfaces(baseRoot) {
     distributedProofSqliteBullet,
     distributedProofS01Bullet,
     distributedProofS02Bullet,
-    distributedProofS03Bullet,
     distributedProofProductionBullet,
     distributedProofProductRepoBullet,
     distributedProofProductRunbookBullet,

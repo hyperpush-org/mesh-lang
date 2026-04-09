@@ -174,7 +174,7 @@ for needle in \
   "$SQLITE_STARTER_URL" \
   'bash scripts/verify-m053-s01.sh' \
   'bash scripts/verify-m053-s02.sh' \
-  'bash scripts/verify-m053-s03.sh' \
+  'Keep hosted/public-surface checks as operational follow-up instead of the routine public proof chain.' \
   '[Production Backend Proof](/docs/production-backend-proof/)' \
   "$PRODUCT_REPO_URL" \
   "$PRODUCT_RUNBOOK_URL" \
@@ -194,7 +194,7 @@ done
 require_order "$DISTRIBUTED_PROOF_PAGE" '[Clustered Example](/docs/getting-started/clustered-example/)' '- [`examples/todo-postgres/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) — the serious shared/deployable starter that owns the shipped clustered contract' 'Distributed Proof keeps Clustered Example ahead of the Postgres starter'
 require_order "$DISTRIBUTED_PROOF_PAGE" '- [`examples/todo-postgres/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-postgres/README.md) — the serious shared/deployable starter that owns the shipped clustered contract' '- [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local single-node SQLite starter, not a clustered/operator proof surface' 'Distributed Proof keeps the Postgres starter ahead of the SQLite starter'
 require_order "$DISTRIBUTED_PROOF_PAGE" '- [`examples/todo-sqlite/README.md`](https://github.com/hyperpush-org/mesh-lang/blob/main/examples/todo-sqlite/README.md) — the honest local single-node SQLite starter, not a clustered/operator proof surface' '- `bash scripts/verify-m053-s01.sh` — starter-owned staged deploy proof that retains the generated PostgreSQL bundle plus bundled artifacts' 'Distributed Proof keeps starter README markers ahead of the M053 proof chain'
-require_order "$DISTRIBUTED_PROOF_PAGE" '- `bash scripts/verify-m053-s03.sh` — hosted packages/public-surface contract that checks the same starter proof remains visible in the public hosted story' '- [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface' 'Distributed Proof keeps the hosted public-surface proof ahead of Production Backend Proof'
+require_order "$DISTRIBUTED_PROOF_PAGE" '- `bash scripts/verify-m053-s02.sh` — starter-owned failover proof that replays S01, exercises the staged PostgreSQL starter under failover, and retains the failover proof bundle' '- [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface' 'Distributed Proof keeps the failover proof ahead of Production Backend Proof'
 require_order "$DISTRIBUTED_PROOF_PAGE" '- [Production Backend Proof](/docs/production-backend-proof/) — the compact backend proof handoff before any maintainer-only surface' '- [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) — repo-boundary maintained-app/backend handoff' 'Distributed Proof keeps Production Backend Proof ahead of the product repo handoff'
 require_order "$DISTRIBUTED_PROOF_PAGE" '- [Hyperpush product repo](https://github.com/hyperpush-org/hyperpush-mono) — repo-boundary maintained-app/backend handoff' '- [`mesher/README.md`](https://github.com/hyperpush-org/hyperpush-mono/blob/main/mesher/README.md) — deeper maintained app runbook after the repo-boundary handoff' 'Distributed Proof keeps the product repo ahead of the product runbook'
 require_order "$DISTRIBUTED_PROOF_PAGE" '## Public surfaces and verifier rails' '## Retained reference rails' 'Distributed Proof keeps public surfaces ahead of retained rails'
@@ -246,5 +246,8 @@ require_order "$PRODUCTION_BACKEND_PROOF_PAGE" "$PRODUCT_REPO_URL" "$PRODUCT_RUN
 require_order "$PRODUCTION_BACKEND_PROOF_PAGE" "$PRODUCT_RUNBOOK_URL" 'bash mesher/scripts/verify-maintainer-surface.sh' 'Production Backend Proof keeps the product runbook ahead of the product verifier command'
 require_order "$PRODUCTION_BACKEND_PROOF_PAGE" 'bash mesher/scripts/verify-maintainer-surface.sh' 'bash scripts/verify-m051-s01.sh' 'Production Backend Proof keeps the product-owned verifier ahead of the compatibility wrapper'
 require_order "$PRODUCTION_BACKEND_PROOF_PAGE" 'bash scripts/verify-m051-s01.sh' 'bash scripts/verify-m051-s02.sh' 'Production Backend Proof keeps the compatibility wrapper ahead of the retained backend-only replay'
+
+phase "production proof surface verified"
+end-only replay'
 
 phase "production proof surface verified"
