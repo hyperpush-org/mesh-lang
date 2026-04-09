@@ -74,10 +74,11 @@ If it fails, start with `.tmp/m055-s01/verify/phase-report.txt` and then read th
 The local `mesh-lang/mesher` compatibility path can make the workspace feel monolithic, but git authority is still per repo.
 If you edit `mesh-lang/mesher/...`, you are editing `../hyperpush-mono/mesher/...` and must commit/push from `hyperpush-mono`, not from `mesh-lang`.
 
-From `mesh-lang/`, use the helper below to see both repos at once or push either side explicitly:
+From `mesh-lang/`, use the helper below to see both repos at once, install the split-workspace hooks, or push either side explicitly:
 
 ```bash
 bash scripts/workspace-git.sh status
+bash scripts/workspace-git.sh install-hooks
 bash scripts/workspace-git.sh push mesh-lang
 bash scripts/workspace-git.sh push hyperpush-mono
 bash scripts/workspace-git.sh push both
@@ -85,6 +86,8 @@ bash scripts/workspace-git.sh push both
 
 The helper validates the expected `origin` remotes from `scripts/lib/repo-identity.json`, resolves the blessed sibling `../hyperpush-mono` root, and fails closed if either repo still has uncommitted changes.
 It pushes the currently checked-out branch in each target repo, so keep each repo on the branch you actually intend to publish.
+`install-hooks` configures `core.hooksPath=.githooks` in both repos so the tracked `pre-push` guards refuse accidental partial pushes whenever the sibling repo is still dirty.
+If you intentionally need a one-sided push, override the guard for that command only with `M055_ALLOW_PARTIAL_PUSH=1 git push ...`.
 
 Manual equivalents from the blessed sibling workspace root are still just ordinary per-repo git commands:
 

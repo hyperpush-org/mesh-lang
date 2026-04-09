@@ -66,42 +66,73 @@ usage() {
   cat <<EOF
 Usage:
   bash scripts/workspace-git.sh status
-  bash scripts/workspace-git.sh push <mesh-lang|hyperpush-mono|both> [--dry-run]
+  bash scripts/workspace-git.sh install-hooks
+  bash scripts/workspace-git.sh push <mesh-lang|hyperpush-mono|hyperpush|both> [--dry-run]
 
 Notes:
   - The helper pushes the currently checked-out branch in each target repo.
   - It fails if a target repo has uncommitted changes or the origin remote drifts
     from scripts/lib/repo-identity.json.
+  - install-hooks sets core.hooksPath=.githooks in both sibling repos so the split
+    pre-push guard blocks accidental partial pushes.
 EOF
 }
 
-repo_root() {
+canonical_repo_name() {
   case "$1" in
+    mesh-lang) printf 'mesh-lang\n' ;;
+    hyperpush-mono|hyperpush) printf 'hyperpush-mono\n' ;;
+    *) fail "unknown repo '$1' (expected mesh-lang, hyperpush-mono, hyperpush, or both)" ;;
+  esac
+}
+
+repo_root() {
+  case "$(canonical_repo_name "$1")" in
     mesh-lang) printf '%s\n' "$ROOT_DIR" ;;
     hyperpush-mono) printf '%s\n' "$PRODUCT_ROOT" ;;
-    *) fail "unknown repo '$1' (expected mesh-lang or hyperpush-mono)" ;;
+    *) fail "unknown canonical repo for '$1'" ;;
   esac
+}
+
+repo_hook_file() {
+  local root="$1"
+  printf '%s/.githooks/pre-push\n' "$root"
+}
+
+repo_hooks_path_config() {
+  local root="$1"
+  git -C "$root" config --get core.hooksPath 2>/dev/null || true
 }
 
 print_repo_status() {
   local name="$1"
-  local root
-  root="$(repo_root "$name")"
+  local canonical root branch remote clean_flag hooks_path hook_state
+  canonical="$(canonical_repo_name "$name")"
+  root="$(repo_root "$canonical")"
 
-  local branch remote clean_flag
   branch="$(git -C "$root" branch --show-current)"
   remote="$(git -C "$root" remote get-url origin)"
+  hooks_path="$(repo_hooks_path_config "$root")"
   if [[ -z "$(git -C "$root" status --porcelain)" ]]; then
     clean_flag='clean'
   else
     clean_flag='dirty'
   fi
+  if [[ -x "$(repo_hook_file "$root")" && "$hooks_path" == '.githooks' ]]; then
+    hook_state='active'
+  elif [[ -x "$(repo_hook_file "$root")" ]]; then
+    hook_state='present-but-not-configured'
+  else
+    hook_state='missing'
+  fi
 
-  printf '=== %s ===\n' "$name"
+  printf '=== %s ===\n' "$canonical"
   printf 'root: %s\n' "$root"
   printf 'branch: %s\n' "${branch:-<detached>}"
   printf 'origin: %s\n' "$remote"
   printf 'state: %s\n' "$clean_flag"
+  printf 'hooksPath: %s\n' "${hooks_path:-<unset>}"
+  printf 'pre-push guard: %s\n' "$hook_state"
   git -C "$root" status --short --branch
   printf '\n'
 }
@@ -114,6 +145,17 @@ ensure_pushable_repo() {
 
   [[ -n "$branch" ]] || fail "$name is on a detached HEAD; check out a branch before pushing"
   [[ -z "$(git -C "$root" status --porcelain)" ]] || fail "$name has uncommitted changes; commit or stash before pushing"
+}
+
+install_hooks_for_repo() {
+  local name="$1"
+  local root hook_file
+  root="$(repo_root "$name")"
+  hook_file="$(repo_hook_file "$root")"
+
+  [[ -x "$hook_file" ]] || fail "$name is missing executable pre-push hook at $hook_file"
+  git -C "$root" config core.hooksPath .githooks
+  printf 'workspace-git: %s hooksPath -> .githooks\n' "$name"
 }
 
 push_repo() {
@@ -153,9 +195,14 @@ main() {
       print_repo_status mesh-lang
       print_repo_status hyperpush-mono
       ;;
+    install-hooks)
+      [[ "$#" -eq 0 ]] || fail 'install-hooks does not accept extra arguments'
+      install_hooks_for_repo mesh-lang
+      install_hooks_for_repo hyperpush-mono
+      ;;
     push)
       local target="${1:-}"
-      [[ -n "$target" ]] || fail 'push requires <mesh-lang|hyperpush-mono|both>'
+      [[ -n "$target" ]] || fail 'push requires <mesh-lang|hyperpush-mono|hyperpush|both>'
       shift
 
       local dry_run='0'
@@ -169,15 +216,15 @@ main() {
       done
 
       case "$target" in
-        mesh-lang|hyperpush-mono)
-          push_repo "$target" "$dry_run"
+        mesh-lang|hyperpush-mono|hyperpush)
+          push_repo "$(canonical_repo_name "$target")" "$dry_run"
           ;;
         both)
           push_repo mesh-lang "$dry_run"
           push_repo hyperpush-mono "$dry_run"
           ;;
         *)
-          fail "unknown push target '$target' (expected mesh-lang, hyperpush-mono, or both)"
+          fail "unknown push target '$target' (expected mesh-lang, hyperpush-mono, hyperpush, or both)"
           ;;
       esac
       ;;

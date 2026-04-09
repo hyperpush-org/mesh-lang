@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${M055_ALLOW_PARTIAL_PUSH:-}" == '1' ]]; then
+  exit 0
+fi
+
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "$ROOT_DIR" ]]; then
+  echo 'pre-push: must run inside a git worktree' >&2
+  exit 1
+fi
+
+cd "$ROOT_DIR"
+
+# shellcheck source=scripts/lib/m055-workspace.sh
+source "$ROOT_DIR/scripts/lib/m055-workspace.sh"
+
+fail_guard() {
+  printf 'pre-push: %s\n' "$1" >&2
+  printf 'pre-push: run `bash scripts/workspace-git.sh status` before pushing.\n' >&2
+  printf 'pre-push: if you really need a partial push, rerun with M055_ALLOW_PARTIAL_PUSH=1.\n' >&2
+  exit 1
+}
+
+if [[ -e "$ROOT_DIR/mesher" && ! -L "$ROOT_DIR/mesher" ]]; then
+  fail_guard "mesh-lang/mesher is a real path again; the split workspace must keep it as a local compatibility symlink only"
+fi
+
+PRODUCT_ROOT="$(m055_resolve_hyperpush_root "$ROOT_DIR" 2>/dev/null || true)"
+if [[ -z "$PRODUCT_ROOT" || ! -d "$PRODUCT_ROOT/.git" ]]; then
+  exit 0
+fi
+
+if [[ -n "$(git -C "$PRODUCT_ROOT" status --porcelain)" ]]; then
+  printf 'pre-push: sibling repo %s is dirty:\n' "$PRODUCT_ROOT" >&2
+  git -C "$PRODUCT_ROOT" status --short >&2
+  fail_guard 'refusing to push mesh-lang while the product repo still has uncommitted changes'
+fi

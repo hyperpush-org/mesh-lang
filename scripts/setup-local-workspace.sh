@@ -50,6 +50,14 @@ ensure_git_info_exclude() {
   fi
 }
 
+ensure_hooks_path() {
+  local repo_root="$1"
+  local label="$2"
+
+  [[ -x "$repo_root/.githooks/pre-push" ]] || fail "$label is missing executable .githooks/pre-push"
+  git -C "$repo_root" config core.hooksPath .githooks
+}
+
 language_workspace_dir="$(m055_repo_identity_field "$ROOT_DIR" 'languageRepo.workspaceDir')"
 language_git_url="$(m055_repo_identity_field "$ROOT_DIR" 'languageRepo.gitUrl')"
 product_workspace_dir="$(m055_repo_identity_field "$ROOT_DIR" 'productRepo.workspaceDir')"
@@ -75,10 +83,13 @@ if [[ -L "$ROOT_DIR/mesher" ]]; then
   current_target="$(readlink "$ROOT_DIR/mesher")"
   if [[ "$current_target" == "$TARGET_RELATIVE" ]]; then
     ensure_git_info_exclude
+    ensure_hooks_path "$ROOT_DIR" "$language_workspace_dir"
+    ensure_hooks_path "$PRODUCT_ROOT" "$product_workspace_dir"
     printf 'setup-local-workspace: ok (existing compatibility path kept)\n'
     printf 'mesh-lang root: %s\n' "$ROOT_DIR"
     printf 'product root: %s\n' "$PRODUCT_ROOT"
     printf 'compatibility path: mesher -> %s\n' "$TARGET_RELATIVE"
+    printf 'hooksPath: mesh-lang=.githooks, %s=.githooks\n' "$product_workspace_dir"
     exit 0
   fi
   rm "$ROOT_DIR/mesher"
@@ -86,8 +97,11 @@ fi
 
 ln -s "$TARGET_RELATIVE" "$ROOT_DIR/mesher"
 ensure_git_info_exclude
+ensure_hooks_path "$ROOT_DIR" "$language_workspace_dir"
+ensure_hooks_path "$PRODUCT_ROOT" "$product_workspace_dir"
 
 printf 'setup-local-workspace: ok\n'
 printf 'mesh-lang root: %s\n' "$ROOT_DIR"
 printf 'product root: %s\n' "$PRODUCT_ROOT"
 printf 'compatibility path: mesher -> %s\n' "$TARGET_RELATIVE"
+printf 'hooksPath: mesh-lang=.githooks, %s=.githooks\n' "$product_workspace_dir"

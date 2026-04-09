@@ -1,0 +1,65 @@
+# Agent workspace rules
+
+This checkout is **not** a monorepo.
+
+## Repo layout
+
+Blessed sibling workspace:
+
+```text
+<workspace>/
+  mesh-lang/
+  hyperpush-mono/
+    mesher/
+    mesher/landing/
+    mesher/frontend-exp/
+```
+
+GitHub authority is split:
+
+- `mesh-lang` owns language/toolchain/docs/installers/registry/packages/public-site surfaces.
+- `hyperpush-mono` / `hyperpush` owns `mesher/`, `mesher/landing/`, and `mesher/frontend-exp/`.
+
+The local `mesh-lang/mesher` path is only a compatibility symlink into the sibling product repo.
+If you edit `mesh-lang/mesher/...`, those changes belong to `../hyperpush-mono`, not to `mesh-lang`.
+
+## Before commit or push
+
+From `mesh-lang/`, run:
+
+```bash
+bash scripts/workspace-git.sh status
+```
+
+This shows both repos, their current branches, and whether the tracked split `pre-push` guards are active.
+
+Install the tracked hooks once per clone/worktree:
+
+```bash
+bash scripts/workspace-git.sh install-hooks
+```
+
+## Push commands
+
+Push the owning repo explicitly:
+
+```bash
+bash scripts/workspace-git.sh push mesh-lang
+bash scripts/workspace-git.sh push hyperpush-mono
+bash scripts/workspace-git.sh push both
+```
+
+The helper refuses to push a dirty target repo.
+The tracked `pre-push` hooks also refuse accidental partial pushes when the sibling repo is dirty.
+
+If a one-sided push is truly intentional, bypass the hook for that command only:
+
+```bash
+M055_ALLOW_PARTIAL_PUSH=1 git push ...
+```
+
+## Never do this
+
+- Do not assume one repo's branch graph applies to the other repo.
+- Do not commit or push product changes from `mesh-lang` just because they appeared under `mesh-lang/mesher` locally.
+- Do not copy product files back into `mesh-lang` to "make the push work".
