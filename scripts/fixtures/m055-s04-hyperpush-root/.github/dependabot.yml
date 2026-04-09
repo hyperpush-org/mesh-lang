@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - area: release
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: npm
+    directory: "/mesher/landing"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - area: landing
+    commit-message:
+      prefix: "landing"

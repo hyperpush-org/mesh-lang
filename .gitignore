@@ -1,0 +1,82 @@
+# Rust build artifacts
+/target
+
+# Insta snapshot review files
+*.snap.new
+
+tools/editors/vscode-mesh/node_modules/
+tools/editors/vscode-mesh/*.vsix
+tools/editors/vscode-mesh/.vscode-test/
+tools/editors/vscode-mesh/out/
+
+# Root
+/node_modules/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+packages-website/.svelte-kit/
+
+# Website
+website/node_modules/
+website/docs/.vitepress/dist/
+website/docs/.vitepress/cache/
+
+# Compiled Mesh binaries (native LLVM output)
+mesher/mesher
+benchmarks/*/benchmark
+cluster-proof/cluster-proof
+tiny-cluster/tiny-cluster
+tiny-cluster-prefered/tiny-cluster
+
+# Temp probe/scratch directories (created during debugging)
+/.tmp/
+.tmp_*/
+.tmp_fmt_probe*/
+
+# Background shell state
+.bg-shell/
+
+# GSD runtime/state (system-managed)
+/.gsd/STATE.md
+/.gsd/activity/
+/.gsd/runtime/
+/.gsd/journal/
+/.gsd/gsd.db
+/.gsd/gsd.db-shm
+/.gsd/gsd.db-wal
+/.gsd/doctor-history.jsonl
+/.gsd/event-log.jsonl
+/.gsd/state-manifest.json
+/.gsd/metrics.json
+/.gsd/completed-units.json
+/.gsd/reports/
+
+# ── GSD baseline (auto-generated) ──
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+dist/
+!compiler/mesh-rt/src/dist/
+!compiler/mesh-rt/src/dist/*.rs
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+target/
+vendor/
+*.log
+coverage/
+.cache/
+tmp/

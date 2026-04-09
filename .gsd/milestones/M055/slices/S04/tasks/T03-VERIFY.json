@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M055/S04/T03",
+  "timestamp": 1775551089632,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/verify-m055-s04-contract.test.mjs\nnode scripts/materialize-hyperpush-mono.mjs --check\nM055_HYPERPUSH_ROOT=.tmp/m055-s04/workspace/hyperpush-mono bash scripts/verify-m051-s01.sh",
+      "exitCode": 0,
+      "durationMs": 103486,
+      "verdict": "pass"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M055/S03/T01",
+  "timestamp": 1775509205166,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node scripts/tests/verify-m049-s03-materialize-examples.mjs --check\ncargo test -p meshc --test e2e_m049_s03 -- --nocapture\nnode --test scripts/tests/verify-m049-s04-onboarding-contract.test.mjs\nnode --test scripts/tests/verify-m050-s02-first-contact-contract.test.mjs",
+      "exitCode": 0,
+      "durationMs": 17438,
+      "verdict": "pass"
+    }
+  ]
+}

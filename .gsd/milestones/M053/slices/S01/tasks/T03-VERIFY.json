@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M053/S01/T03",
+  "timestamp": 1775413568000,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "DATABASE_URL=${DATABASE_URL:?set DATABASE_URL} bash scripts/verify-m053-s01.sh",
+      "exitCode": 1,
+      "durationMs": 63000,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}

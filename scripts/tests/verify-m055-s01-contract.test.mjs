@@ -23,7 +23,6 @@ const files = {
   installPublicSh: 'website/docs/public/install.sh',
   installPublicPs1: 'website/docs/public/install.ps1',
   packagesLayout: 'packages-website/src/routes/+layout.svelte',
-  landingLinks: 'mesher/landing/lib/external-links.ts',
   packageJson: 'tools/editors/vscode-mesh/package.json',
   knowledge: '.gsd/KNOWLEDGE.md',
   verifier: 'scripts/verify-m055-s01.sh',
@@ -57,7 +56,6 @@ const languageToolingUrl = `${expectedLanguageRepo.docsRoot}tooling/`
 const languageWorkspaceUrl = `${expectedLanguageRepo.blobBaseUrl}WORKSPACE.md`
 const packagesLanguageRepoLabel = 'mesh-lang repo'
 const packagesWorkspaceLabel = 'Workspace'
-const landingProductRepoDisplay = `github.com/${expectedProductRepo.slug}`
 const vscodeRepositoryDirectory = 'tools/editors/vscode-mesh'
 const helperIdentityPathMarker = 'scripts/lib/repo-identity.json'
 const helperForbiddenIdentityCopies = [
@@ -79,14 +77,14 @@ const helperForbiddenIdentityCopies = [
 
 const workspaceTitle = '# Workspace Contract'
 const workspaceIntro = 'This document is the maintainer-facing workspace contract for M055.'
-const workspaceTwoRepoMarker = 'M055 is a two-repo split only: `mesh-lang` stays the language repo, and `hyperpush-mono` becomes the product repo that absorbs `mesher/`.'
+const workspaceTwoRepoMarker = 'M055 is now a real two-repo split: `mesh-lang` is the language repo, and `hyperpush-mono` is the product repo that owns `mesher/`.'
 const workspaceLayoutHeading = '## Blessed sibling workspace'
 const workspaceLayoutMeshLang = '  mesh-lang/'
 const workspaceLayoutHyperpush = '  hyperpush-mono/'
 const workspaceNotSiblingMarker = 'Only these two sibling repos are part of the blessed M055 workspace. `mesh-packages/` and `mesh-website/` are not sibling repos in this milestone.'
 const workspaceOwnershipHeading = '## Repo ownership'
 const workspaceLanguageOwnedMarker = '`website/`, `packages-website/`, `registry/`, installers, and evaluator-facing examples remain language-owned inside `mesh-lang` for M055.'
-const workspaceProductMarker = '`mesher/` is the product surface that moves to `hyperpush-mono`; extraction happens in later M055 slices.'
+const workspaceProductMarker = '`mesher/` is product-owned in `hyperpush-mono`; `mesh-lang` must not keep a tracked authoritative copy.'
 const workspaceGsdHeading = '## Repo-local GSD authority'
 const workspaceGsdMarker = 'Repo-local `.gsd/` stays authoritative for repo-owned work.'
 const workspaceNoUmbrellaMarker = 'Do not replace repo-local `.gsd/` with one umbrella milestone tree that pretends to own both repos.'
@@ -99,12 +97,12 @@ const readmeLanguageOwnedMarker = '`website/`, `packages-website/`, `registry/`,
 const readmeGsdMarker = 'Repo-local `.gsd` remains authoritative, and cross-repo work uses the lightweight coordination layer in [WORKSPACE.md](WORKSPACE.md).'
 const contributingWorkspaceHeading = '## M055 workspace contract'
 const contributingTwoRepoMarker = 'M055 is a two-repo split only: `mesh-lang` plus `hyperpush-mono`.'
-const contributingHandoffMarker = '`hyperpush-mono` is the product repo that will absorb `mesher/`.'
+const contributingHandoffMarker = '`hyperpush-mono` is the product repo that owns `mesher/`.'
 const contributingLanguageOwnedMarker = 'For this milestone, `website/`, `packages-website/`, `registry/`, installers, and evaluator-facing examples remain language-owned inside `mesh-lang`.'
 const contributingGsdMarker = 'Repo-local `.gsd` stays authoritative; cross-repo work should use the lightweight coordination layer instead of one umbrella milestone tree. See [WORKSPACE.md](WORKSPACE.md) for the durable split contract.'
 const projectM055Marker = 'M055 is now the active split-contract milestone.'
-const projectTwoRepoMarker = 'The durable target is a two-repo sibling workspace: `mesh-lang` keeps the language/toolchain/docs/installers/registry/packages/public-site surfaces, and `hyperpush-mono` becomes the product repo that absorbs `mesher/`.'
-const projectTransitionalMarker = 'The source still lives in one checkout today, but that layout is transitional rather than the durable ownership model.'
+const projectTwoRepoMarker = 'The repo now works against a real two-repo sibling workspace: `mesh-lang` keeps the language/toolchain/docs/installers/registry/packages/public-site surfaces, and `hyperpush-mono` owns `mesher/`.'
+const projectTransitionalMarker = 'This checkout no longer tracks product source; any local `mesh-lang/mesher` path is compatibility-only and comes from the workspace helper instead of a tracked tree.'
 const projectWorkspaceMarker = '`WORKSPACE.md` is the maintainer-facing contract for the blessed sibling layout, and repo-local `.gsd` remains authoritative instead of yielding to one umbrella workspace tree.'
 const staleFourRepoLayout = '  mesh-packages/'
 const staleFourRepoLayoutTwo = '  mesh-website/'
@@ -359,19 +357,6 @@ function validateSplitAwarePublicIdentitySurfaces(errors, baseRoot) {
     expectedProductRepo.slug,
     expectedProductRepo.gitUrl,
     expectedProductRepo.issuesUrl,
-  ])
-
-  const landingLinks = readFrom(baseRoot, files.landingLinks)
-  requireIncludes(errors, files.landingLinks, landingLinks, [
-    expectedProductRepo.slug,
-    expectedProductRepo.repoUrl,
-    landingProductRepoDisplay,
-  ])
-  requireExcludes(errors, files.landingLinks, landingLinks, [
-    expectedLanguageRepo.repoUrl,
-    expectedLanguageRepo.slug,
-    expectedLanguageRepo.gitUrl,
-    expectedLanguageRepo.issuesUrl,
   ])
 
   const packageJson = JSON.parse(readFrom(baseRoot, files.packageJson))
@@ -630,12 +615,12 @@ test('contract fails closed when WORKSPACE drifts back to a four-repo layout or 
 
   const errors = validateWorkspaceContract(tmpRoot)
   const joinedErrors = errors.join('\n')
-  assert.match(joinedErrors, /WORKSPACE\.md missing "M055 is a two-repo split only: `mesh-lang` stays the language repo, and `hyperpush-mono` becomes the product repo that absorbs `mesher\/`\."/)
+  assert.match(joinedErrors, /WORKSPACE\.md missing "M055 is now a real two-repo split: `mesh-lang` is the language repo, and `hyperpush-mono` is the product repo that owns `mesher\/`\."/)
   assert.match(joinedErrors, /WORKSPACE\.md still contains stale text "  mesh-packages\/"/)
   assert.match(joinedErrors, /WORKSPACE\.md still contains stale text "  mesh-website\/"/)
   assert.match(joinedErrors, /WORKSPACE\.md missing "Repo-local `.gsd\/` stays authoritative for repo-owned work\."/)
   assert.match(joinedErrors, /WORKSPACE\.md missing "Do not replace repo-local `.gsd\/` with one umbrella milestone tree that pretends to own both repos\."/)
-  assert.match(joinedErrors, /WORKSPACE\.md missing "`mesher\/` is the product surface that moves to `hyperpush-mono`; extraction happens in later M055 slices\."/)
+  assert.match(joinedErrors, /WORKSPACE\.md missing "`mesher\/` is product-owned in `hyperpush-mono`; `mesh-lang` must not keep a tracked authoritative copy\."/)
 })
 
 test('contract fails closed when README or CONTRIBUTING mention the split but stop linking maintainers to WORKSPACE', (t) => {
@@ -672,7 +657,7 @@ test('contract fails closed when language-owned boundary text disappears from WO
   const errors = validateWorkspaceContract(tmpRoot)
   const joinedErrors = errors.join('\n')
   assert.match(joinedErrors, /WORKSPACE\.md missing "`website\/`, `packages-website\/`, `registry\/`, installers, and evaluator-facing examples remain language-owned inside `mesh-lang` for M055\."/)
-  assert.match(joinedErrors, /\.gsd\/PROJECT\.md missing "The durable target is a two-repo sibling workspace: `mesh-lang` keeps the language\/toolchain\/docs\/installers\/registry\/packages\/public-site surfaces, and `hyperpush-mono` becomes the product repo that absorbs `mesher\/`\."/)
+  assert.match(joinedErrors, /\.gsd\/PROJECT\.md missing "The repo now works against a real two-repo sibling workspace: `mesh-lang` keeps the language\/toolchain\/docs\/installers\/registry\/packages\/public-site surfaces, and `hyperpush-mono` owns `mesher\/`\."/)
   assert.match(joinedErrors, /\.gsd\/PROJECT\.md missing "`WORKSPACE\.md` is the maintainer-facing contract for the blessed sibling layout, and repo-local `.gsd` remains authoritative instead of yielding to one umbrella workspace tree\."/)
 })
 
@@ -735,21 +720,6 @@ test('repo identity contract fails closed when the packages footer drifts toward
   assert.match(joinedErrors, /packages-website\/src\/routes\/\+layout\.svelte missing "https:\/\/github\.com\/hyperpush-org\/mesh-lang\/blob\/main\/WORKSPACE\.md"/)
   assert.match(joinedErrors, /packages-website\/src\/routes\/\+layout\.svelte missing "mesh-lang repo"/)
   assert.match(joinedErrors, /packages-website\/src\/routes\/\+layout\.svelte still contains stale text "https:\/\/github\.com\/hyperpush-org\/hyperpush-mono"/)
-})
-
-test('repo identity contract fails closed when landing external links drift back to mesh-lang', (t) => {
-  const tmpRoot = mkTmpDir(t, 'verify-m055-s01-landing-links-')
-  copyAllFiles(tmpRoot)
-
-  let mutatedLinks = readFrom(tmpRoot, files.landingLinks)
-  mutatedLinks = mutatedLinks.replaceAll(expectedProductRepo.slug, expectedLanguageRepo.slug)
-  writeTo(tmpRoot, files.landingLinks, mutatedLinks)
-
-  const errors = validateRepoIdentityContract(tmpRoot)
-  const joinedErrors = errors.join('\n')
-  assert.match(joinedErrors, /mesher\/landing\/lib\/external-links\.ts missing "hyperpush-org\/hyperpush-mono"/)
-  assert.match(joinedErrors, /mesher\/landing\/lib\/external-links\.ts missing "https:\/\/github\.com\/hyperpush-org\/hyperpush-mono"/)
-  assert.match(joinedErrors, /mesher\/landing\/lib\/external-links\.ts still contains stale text "hyperpush-org\/mesh-lang"/)
 })
 
 test('repo identity contract fails closed when VS Code metadata mixes product repo identity into the language extension', (t) => {

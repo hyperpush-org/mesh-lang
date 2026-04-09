@@ -2,8 +2,8 @@
 
 This document is the maintainer-facing workspace contract for M055.
 
-M055 is a two-repo split only: `mesh-lang` stays the language repo, and `hyperpush-mono` becomes the product repo that absorbs `mesher/`.
-The extracted product package root is nested under `hyperpush-mono/mesher/`.
+M055 is now a real two-repo split: `mesh-lang` is the language repo, and `hyperpush-mono` is the product repo that owns `mesher/`.
+The extracted product package root stays nested under `hyperpush-mono/mesher/`.
 
 ## Blessed sibling workspace
 
@@ -37,7 +37,7 @@ A local `mesh-lang/mesher -> ../hyperpush-mono/mesher` compatibility path is all
 | `registry/` | `mesh-lang` | Registry ownership stays with the language repo in this milestone. |
 | `tools/install/` plus mirrored public installer files | `mesh-lang` | Installer ownership stays with the language repo in this milestone. |
 | evaluator-facing generated starters and examples | `mesh-lang` | Public starter/docs continuity stays language-owned in this milestone. |
-| `hyperpush-mono/mesher/` and `hyperpush-mono/mesher/landing/` | `hyperpush-mono` | `mesher/` is the product surface that moves to `hyperpush-mono`; extraction happens in later M055 slices. The extracted package still lives under `hyperpush-mono/mesher/`. |
+| `hyperpush-mono/mesher/` and `hyperpush-mono/mesher/landing/` | `hyperpush-mono` | `mesher/` is product-owned in `hyperpush-mono`; `mesh-lang` must not keep a tracked authoritative copy. The extracted package still lives under `hyperpush-mono/mesher/`. |
 
 ## Repo-local GSD authority
 

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M055/S04/T02",
+  "timestamp": 1775548338137,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/verify-m055-s04-materialize.test.mjs\nnode scripts/materialize-hyperpush-mono.mjs --check\nbash .tmp/m055-s04/workspace/hyperpush-mono/mesher/scripts/verify-maintainer-surface.sh\nbash .tmp/m055-s04/workspace/hyperpush-mono/scripts/verify-landing-surface.sh",
+      "exitCode": 0,
+      "durationMs": 93882,
+      "verdict": "pass"
+    }
+  ]
+}

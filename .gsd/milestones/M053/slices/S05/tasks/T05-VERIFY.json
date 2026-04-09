@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T05",
+  "unitId": "M053/S05/T05",
+  "timestamp": 1775435908343,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "python3 - <<'PY'\nimport json, pathlib\nverify = pathlib.Path('.tmp/m053-s03/verify')\nassert verify.joinpath('status.txt').read_text().strip() == 'ok'\nassert verify.joinpath('current-phase.txt').read_text().strip() == 'complete'\nworkflows = json.loads(verify.joinpath('remote-runs.json').read_text())['workflows']\nassert len(workflows) == 3 and all(w['status'] == 'ok' for w in workflows)\nPY\n\ngit ls-remote --quiet origin refs/tags/v0.1.0 'refs/tags/v0.1.0^{}'",
+      "exitCode": 0,
+      "durationMs": 579,
+      "verdict": "pass"
+    }
+  ]
+}

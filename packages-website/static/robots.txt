@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /token
+Sitemap: https://packages.meshlang.dev/sitemap.xml

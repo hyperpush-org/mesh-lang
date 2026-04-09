@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M053/S06/T03",
+  "timestamp": 1775446386000,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash scripts/verify-m034-s02-workflows.sh && node --test scripts/tests/verify-m053-s03-contract.test.mjs",
+      "exitCode": 0,
+      "durationMs": 16285,
+      "verdict": "pass"
+    },
+    {
+      "command": "DATABASE_URL='postgres://postgres:postgres@127.0.0.1:5432/postgres' cargo test -p meshc --test e2e_m053_s02 m053_s02_staged_postgres_failover_proves_clustered_http_and_runtime_recovery -- --nocapture",
+      "exitCode": 0,
+      "durationMs": 42640,
+      "verdict": "pass"
+    },
+    {
+      "command": "DATABASE_URL='postgres://postgres:postgres@127.0.0.1:5432/postgres' bash scripts/verify-m053-s02.sh",
+      "exitCode": 0,
+      "durationMs": 120000,
+      "verdict": "pass"
+    },
+    {
+      "command": "bash scripts/verify-m053-s03.sh",
+      "exitCode": 1,
+      "durationMs": 0,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2,
+  "blocker": "Fresh authoritative-verification.yml and deploy-services.yml are green on e5fb36a6fe7e9e56f3a608a608abbaaab6764167 and v0.1.0 is now annotated, but release.yml run 24017289518 is still in_progress so scripts/verify-m053-s03.sh cannot close green yet."
+}

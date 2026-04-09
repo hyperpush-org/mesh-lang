@@ -1,0 +1,9 @@
+---
+source: crates/mesh-lexer/tests/lexer_tests.rs
+expression: tokens
+---
+- kind: Eof
+  text: ""
+  span:
+    - 0
+    - 0

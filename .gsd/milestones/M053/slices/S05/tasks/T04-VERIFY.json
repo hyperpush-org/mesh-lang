@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T04",
+  "unitId": "M053/S05/T04",
+  "timestamp": 1775433870489,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash scripts/verify-m034-s02-workflows.sh",
+      "exitCode": 0,
+      "durationMs": 841,
+      "verdict": "pass"
+    },
+    {
+      "command": "node --test scripts/tests/verify-m053-s03-contract.test.mjs",
+      "exitCode": 0,
+      "durationMs": 12042,
+      "verdict": "pass"
+    },
+    {
+      "command": "test -s .tmp/m053-s05/rollout/main-shipped-sha.txt",
+      "exitCode": 0,
+      "durationMs": 74,
+      "verdict": "pass"
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json, pathlib\nship = pathlib.Path('.tmp/m053-s05/rollout/main-shipped-sha.txt').read_text().strip()\nworkflows = {w['workflowFile']: w for w in json.loads(pathlib.Path('.tmp/m053-s03/verify/remote-runs.json').read_text())['workflows']}\nauth = workflows['authoritative-verification.yml']\ndeploy = workflows['deploy-services.yml']\nassert auth['status'] == 'ok'\nassert auth['observedHeadSha'] == ship\nassert deploy['status'] == 'ok'\nassert deploy['observedHeadSha'] == ship\nPY",
+      "exitCode": 1,
+      "durationMs": 185,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M053/S03/T02",
+  "timestamp": 1775423026490,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/verify-m053-s03-contract.test.mjs",
+      "exitCode": 0,
+      "durationMs": 13122,
+      "verdict": "pass"
+    }
+  ]
+}

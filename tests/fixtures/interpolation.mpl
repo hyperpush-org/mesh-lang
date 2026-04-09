@@ -1,0 +1,6 @@
+"hello ${name}"
+"sum is ${a + b}"
+"${x}"
+"no interpolation"
+"${greeting}, ${name}!"
+"nested braces ${map[key]}"

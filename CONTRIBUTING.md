@@ -41,13 +41,13 @@ Git cannot force local hooks from a clone, so GitHub enforcement also lives in C
 
 M055 is a two-repo split only: `mesh-lang` plus `hyperpush-mono`.
 
-`hyperpush-mono` is the product repo that will absorb `mesher/`.
+`hyperpush-mono` is the product repo that owns `mesher/`.
 
 For this milestone, `website/`, `packages-website/`, `registry/`, installers, and evaluator-facing examples remain language-owned inside `mesh-lang`.
 
 Repo-local `.gsd` stays authoritative; cross-repo work should use the lightweight coordination layer instead of one umbrella milestone tree. See [WORKSPACE.md](WORKSPACE.md) for the durable split contract.
 
-If you need the old local path shape after the product repo is extracted, use `bash scripts/setup-local-workspace.sh` from `mesh-lang/`. That helper is local-only: it assembles `mesh-lang/mesher` as a compatibility path, verifies sibling repo roots/remotes, and does not change the canonical GitHub structure or CI assumptions.
+If you need the old local path shape now that product source is externalized, use `bash scripts/setup-local-workspace.sh` from `mesh-lang/`. That helper is local-only: it assembles `mesh-lang/mesher` as a compatibility path, verifies sibling repo roots/remotes, and does not change the canonical GitHub structure or CI assumptions.
 
 Run `bash scripts/verify-m055-s01.sh` before changing workspace ownership text, repo identity, or the repo-local `.gsd` seam. It writes `.tmp/m055-s01/verify/status.txt`, `current-phase.txt`, `phase-report.txt`, and `full-contract.log`; start with `phase-report.txt` when the wrapper goes red.
 
