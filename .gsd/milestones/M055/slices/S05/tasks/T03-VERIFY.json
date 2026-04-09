@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M055/S05/T03",
+  "timestamp": 1775588565289,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash scripts/verify-m055-s03.sh",
+      "exitCode": 127,
+      "durationMs": 120055,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}

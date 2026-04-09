@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M053/S05/T02",
+  "timestamp": 1775430531229,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "test -s .tmp/m053-s05/rollout/main-shipped-sha.txt",
+      "exitCode": 0,
+      "durationMs": 72,
+      "verdict": "pass"
+    }
+  ]
+}

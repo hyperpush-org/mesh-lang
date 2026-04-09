@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M053/S05/T01",
+  "timestamp": 1775429235221,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash scripts/verify-m034-s02-workflows.sh",
+      "exitCode": 0,
+      "durationMs": 929,
+      "verdict": "pass"
+    },
+    {
+      "command": "node --test scripts/tests/verify-m053-s03-contract.test.mjs",
+      "exitCode": 0,
+      "durationMs": 13815,
+      "verdict": "pass"
+    },
+    {
+      "command": "test -s .tmp/m053-s03/verify/remote-runs.json",
+      "exitCode": 0,
+      "durationMs": 54,
+      "verdict": "pass"
+    },
+    {
+      "command": "test -s .tmp/m053-s05/rollout/main-rollout-commit.txt",
+      "exitCode": 0,
+      "durationMs": 50,
+      "verdict": "pass"
+    }
+  ]
+}

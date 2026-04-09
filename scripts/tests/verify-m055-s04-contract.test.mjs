@@ -11,9 +11,7 @@ const root = path.resolve(scriptDir, '..', '..')
 
 const files = {
   workspace: 'WORKSPACE.md',
-  readme: 'mesher/README.md',
-  toolchain: 'mesher/scripts/lib/mesh-toolchain.sh',
-  s02Contract: 'scripts/tests/verify-m055-s02-contract.test.mjs',
+  setupLocalWorkspace: 'scripts/setup-local-workspace.sh',
   repoIdentity: 'scripts/lib/repo-identity.json',
   helper: 'scripts/lib/m055-workspace.sh',
   materializer: 'scripts/materialize-hyperpush-mono.mjs',
@@ -87,9 +85,7 @@ function requireOrder(errors, relativePath, text, markers) {
 function validateS04RetargetContract(baseRoot) {
   const errors = []
   const workspace = readFrom(baseRoot, files.workspace)
-  const readme = readFrom(baseRoot, files.readme)
-  const toolchain = readFrom(baseRoot, files.toolchain)
-  const s02Contract = readFrom(baseRoot, files.s02Contract)
+  const setupLocalWorkspace = readFrom(baseRoot, files.setupLocalWorkspace)
   const helper = readFrom(baseRoot, files.helper)
   const verifyM051 = readFrom(baseRoot, files.verifyM051)
   const verifyM053 = readFrom(baseRoot, files.verifyM053)
@@ -110,32 +106,19 @@ function validateS04RetargetContract(baseRoot) {
     'hyperpush-mono/',
     '`hyperpush-mono/mesher/...`',
     'Do not flatten the product package to `<workspace>/mesher`',
+    'GitHub authority is split:',
+    'A local `mesh-lang/mesher -> ../hyperpush-mono/mesher` compatibility path is allowed only as local workspace assembly.',
     '## Mesh-lang compatibility boundaries',
     '`bash scripts/verify-m051-s01.sh` from `mesh-lang/` must resolve the sibling product repo from `M055_HYPERPUSH_ROOT` or the blessed `../hyperpush-mono` root.',
     '`bash scripts/verify-m053-s03.sh` must derive the default language repo slug from `scripts/lib/repo-identity.json`, not from the current `origin` remote.',
   ])
 
-  requireIncludes(errors, files.readme, readme, [
-    '`mesh-lang/mesher`',
-    '`hyperpush-mono/mesher`',
-    'Flattening the product package to `<workspace>/mesher` is stale and unsupported.',
-    '`../../mesh-lang` relative to `hyperpush-mono/mesher`',
-  ])
-  requireExcludes(errors, files.readme, readme, ['a blessed `../mesh-lang` checkout next to the extracted Mesher workspace'])
-
-  requireIncludes(errors, files.toolchain, toolchain, [
-    'nested product root',
-    'stale direct-sibling',
-    'expected sibling mesh-lang repo at',
-    'hyperpush-mono',
-  ])
-  requireExcludes(errors, files.toolchain, toolchain, ['local sibling_root="$MESHER_PACKAGE_DIR/../mesh-lang"'])
-
-  requireIncludes(errors, files.s02Contract, s02Contract, [
-    "installPackage(tmpRoot, 'hyperpush-mono/mesher')",
-    'missing the blessed sibling mesh-lang checkout',
-    'mixed direct-sibling and nested sibling mesh-lang roots as drift',
-    'source=sibling-workspace',
+  requireIncludes(errors, files.setupLocalWorkspace, setupLocalWorkspace, [
+    'm055_resolve_hyperpush_root',
+    'mesh-lang/mesher exists as a real directory; remove the tracked tree before creating a local-only compatibility path',
+    'compatibility path: mesher ->',
+    'product repo is missing mesher/scripts/verify-maintainer-surface.sh',
+    'origin remote drifted',
   ])
 
   requireIncludes(errors, files.helper, helper, [
@@ -180,8 +163,17 @@ function validateS04AssembledVerifierContract(baseRoot) {
 
   requireIncludes(errors, files.materializer, materializer, [
     "defaultOutputRoot = path.join(repoRoot, '.tmp', 'm055-s04', 'workspace', 'hyperpush-mono')",
+    "defaultRepoIdentityPath = path.join(repoRoot, 'scripts', 'lib', 'repo-identity.json')",
+    'function resolveProductRoot({',
+    "source = 'option:productRoot'",
+    "source = 'env:M055_HYPERPUSH_ROOT'",
+    'blessed-sibling:',
+    'sourceBase: resolvedProductRoot',
     "version: 'm055-s04-materialize-v1'",
-    '[m055-s04] phase=materialize mode=${summary.mode} result=pass',
+    'productRoot: resolvedProductRoot',
+    'productRootSource',
+    'product_root=',
+    'product_root_source=',
   ])
 
   requireIncludes(errors, files.verifyM055S03, verifyM055S03, [
@@ -274,7 +266,13 @@ function validateS04AssembledVerifierContract(baseRoot) {
 }
 
 function makeMinimalMeshLangRoot(baseRoot) {
-  for (const relativePath of [files.repoIdentity, files.helper, files.verifyM051, files.verifyM053]) {
+  for (const relativePath of [
+    files.repoIdentity,
+    files.setupLocalWorkspace,
+    files.helper,
+    files.verifyM051,
+    files.verifyM053,
+  ]) {
     copyRepoFile(baseRoot, relativePath)
   }
 }
@@ -498,7 +496,7 @@ test('contract fails closed when workspace docs or verifiers drift back to local
     files.verifyM053,
     readFrom(tmpRoot, files.verifyM053)
       .replace('m055_resolve_language_repo_slug "$ROOT_DIR"', 'printf %s "hyperpush-org/hyperpush-mono"')
-      .concat("\n# stale fallback: git remote get-url origin\n"),
+      .concat('\n# stale fallback: git remote get-url origin\n'),
   )
 
   const errors = validateS04RetargetContract(tmpRoot)

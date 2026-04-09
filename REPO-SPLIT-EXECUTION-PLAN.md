@@ -1,6 +1,6 @@
 # Repo Split Execution Plan
 
-Status: execution in progress (GitHub cutover still blocked)
+Status: execution in progress (product repo published; actual code separation still incomplete)
 Owner target: `hyperpush-org`
 Language repo target: `hyperpush-org/mesh-lang`
 Product repo target: `hyperpush-org/hyperpush-mono`
@@ -9,6 +9,37 @@ Local requirement: preserve the current monorepo-like path shape on this machine
 ---
 
 ## Handoff status — 2026-04-08
+
+### Current truth by repo
+
+#### `hyperpush-org/hyperpush-mono`
+- **Product code is now published on remote `main`.**
+- Remote `main` currently points at `5bc43b31dae913418721e51896713ab8f39a9e92`.
+- The pushed product-root work includes:
+  - root `README.md` rewritten as the product extraction root
+  - product `.github/dependabot.yml`
+  - product `.github/workflows/deploy-landing.yml`
+  - `scripts/verify-landing-surface.sh`
+  - `mesher/scripts/verify-maintainer-surface.sh`
+  - `mesher/scripts/{test,build,migrate,smoke}.sh`
+  - Mesher toolchain fixes so sibling `mesh-lang/target` is reused for runtime lookup
+  - Mesher README/verifier/e2e updates so the product repo proves its own maintainer surface from the product root
+- In other words: **Hyperpush/Mesher now has a real product repo with real product-root proof surfaces on GitHub.**
+
+#### `hyperpush-org/mesh-lang`
+- **The actual code separation is not finished yet.**
+- `mesh-lang` still tracks `mesher/` in the repo, so GitHub truth still contains a duplicate product tree.
+- A prep branch was published to GitHub for the language repo:
+  - branch: `m055-repo-split-core`
+  - commit: `86268b913c227c5e140d1fb79402c21cc6dcfe01`
+  - PR: `hyperpush-org/mesh-lang#1`
+- That branch/PR contains the **split plumbing**, not the final extraction:
+  - repo identity metadata
+  - workspace contract docs
+  - split-boundary verifier updates
+  - local sibling-workspace helper
+  - docs/install/release handoff updates
+- That branch is useful because it makes `mesh-lang` understand the split, but **it does not yet remove the duplicated `mesher/` code from `mesh-lang`**.
 
 ### Completed in this working tree
 - Canonical language repo identity was retargeted from `snowdamiz/mesh-lang` to `hyperpush-org/mesh-lang` in `scripts/lib/repo-identity.json`.
@@ -33,24 +64,52 @@ Local requirement: preserve the current monorepo-like path shape on this machine
 - `bash scripts/verify-m055-s01.sh` passed against the real sibling `../hyperpush-mono` product root after hydrating `../hyperpush-mono/mesher/landing` with `npm --prefix mesher/landing ci`.
 - After retargeting S04 to the real sibling repo, `node --test scripts/tests/verify-m055-s04-contract.test.mjs` passed again under the new real-product-root contract.
 - `bash scripts/verify-m055-s04.sh` now passes end-to-end against the real sibling `../hyperpush-mono` repo, with the staged materializer retained as a supporting check only.
+- `cd ../hyperpush-mono && bash scripts/verify-m051-s01.sh` passed after the product-root maintainer proof surfaces were fixed.
+- `cd ../hyperpush-mono && bash scripts/verify-landing-surface.sh` passed after the product-root README/dependabot/workflow surfaces were fixed.
 
-### Still outstanding / blocked
-- The real sibling `../hyperpush-mono` repo needed local product-root fixes to go green. Those are local commits right now:
-  - `a38cf754f9ccc80ef3341c0cf7779b422df50dfe` — Add product-root landing and maintainer proof surfaces
-  - `0f841a12dca6dfb8662e5fd2140dc0f86b8cf31f` — Use sibling mesh-lang target dir for Mesher toolchain
-  - `541ba58e213f665692b97ed76fe00b3e15eb711e` — Fix extracted Mesher maintainer proof surfaces
-  - `5bc43b31bf29abcc56bd180d6db14fd669f03e95` — Restore product root split surfaces
-  They still need whatever outbound/push workflow the user wants before GitHub truth matches the now-green local split proof.
-- Tracked `mesher/` has **not** been removed from `mesh-lang` yet.
-- The sibling product repo still needs a local dependency hydrate before `mesher/landing` will build (`npm --prefix mesher/landing ci` in `../hyperpush-mono`). That is workspace state, not yet a guaranteed remote CI truth unless the product workflow installs deps itself (the local verifier is green on that contract now).
+### Still outstanding / blocked for actual code separation
+- **`mesh-lang` still tracks `mesher/`.** Until that tree is removed, the code is not actually separated even though the product repo now exists and verifies cleanly.
+- The current `mesh-lang` PR/branch is **prep only**. It documents and verifies the split, but it does not perform the destructive separation step.
+- The core follow-up still needed in `mesh-lang` is:
+  1. delete tracked `mesher/**`
+  2. keep the split-boundary docs/verifiers/links pointing at `hyperpush-mono`
+  3. rerun the M055 wrapper chain after that deletion
+  4. publish that as the real separation branch/PR
+- The language repo push path is still constrained by the host's HTTPS `git push` timeout (`HTTP 408`). That is why the current `mesh-lang` state on GitHub is a branch/PR rather than a direct `main` push.
+- `../hyperpush-mono` still needs local dependency hydration for `mesher/landing` (`npm --prefix mesher/landing ci`) before local landing builds work. The product workflow installs deps itself, so this is a local workspace requirement, not a reason to keep product code in `mesh-lang`.
 
 ### Recommended next steps for the next agent
-1. Decide whether to push the local `../hyperpush-mono` fix commits upstream; without that, GitHub truth still lags the now-green local S04 proof.
-2. Rerun the broader M055 wrapper chain from the language repo if you want one more assembled proof after the product commits are pushed.
-3. Once the product repo truth is in place, remove tracked `mesher/` from `mesh-lang` and rerun the split-boundary verifiers.
-4. Keep using `.tmp/m055-s04/verify/phase-report.txt` and `.tmp/m055-s04/verify/retained-proof-bundle/` as the authoritative resume point if S04 regresses.
+1. Prepare the **real** `mesh-lang` separation branch: remove tracked `mesher/**` from `mesh-lang` while preserving the already-landed split docs/verifiers/helpers.
+2. Rerun at least:
+   - `node --test scripts/tests/verify-m055-s01-contract.test.mjs`
+   - `node --test scripts/tests/verify-m055-s04-contract.test.mjs`
+   - `bash scripts/verify-m055-s01.sh`
+   - `bash scripts/verify-m055-s04.sh`
+3. Publish that branch/PR to `hyperpush-org/mesh-lang` as the actual code-separation change.
+4. Only after that branch is reviewed/merged should `mesh-lang/main` be considered truly separated from product code.
 
-## 0. Target end state
+## 0.5 Current gap between "split prep" and "actual code separation"
+
+### Split prep that is already done
+- `mesh-lang` knows the canonical repo pair (`hyperpush-org/mesh-lang` + `hyperpush-org/hyperpush-mono`).
+- Docs/install/release/verifier surfaces in `mesh-lang` now point at the `hyperpush-org` repos.
+- Split-boundary verifiers in `mesh-lang` can prove the real sibling `../hyperpush-mono` product repo.
+- `hyperpush-mono/main` now contains product-root README/workflow/verifier/runbook/toolchain surfaces and proves them locally.
+
+### What still prevents actual code separation
+- `mesh-lang` still has tracked `mesher/**`.
+- That means GitHub still shows the product code in **both** repos.
+- As long as that duplicate tree remains in `mesh-lang`, the split is operationally prepared but **not** actually complete.
+
+### Concrete definition of the missing final step
+Actual code separation happens only when all of these are true at the same time:
+1. `hyperpush-org/hyperpush-mono` contains the product code and its product-root proof surfaces.
+2. `hyperpush-org/mesh-lang` keeps only language-owned surfaces plus split-boundary helpers/docs.
+3. `hyperpush-org/mesh-lang` no longer tracks `mesher/**`.
+4. The M055 split-boundary verifiers still pass after that deletion.
+
+Until step 3 is done and verified, treat the current `mesh-lang` PR/branch as **split preparation**, not as the final extraction.
+
 
 ### GitHub truth
 - `hyperpush-org/mesh-lang`
@@ -538,3 +597,145 @@ This split is done when:
 - `hyperpush-org/hyperpush-mono` owns `mesher/` and its CI
 - this machine can still work with the same practical path shape
 - all canonical docs/install/release links point at the `hyperpush-org` repos
+
+---
+
+## 12. Immediate execution tranche from the current state
+
+The prep work is already good enough to perform the real destructive separation. The remaining work should be treated as one focused `mesh-lang` change set whose job is only to remove tracked product source while preserving the already-landed split boundary.
+
+### 12.1 Preconditions already satisfied
+- `hyperpush-org/hyperpush-mono` exists and has real product-root proof surfaces.
+- Local sibling product repo `../hyperpush-mono` is real and tracks the correct remote.
+- `mesh-lang` already knows the canonical split slugs.
+- `scripts/setup-local-workspace.sh` exists, so local path preservation no longer depends on keeping `mesher/` tracked in `mesh-lang`.
+- `bash scripts/verify-m055-s01.sh` and `bash scripts/verify-m055-s04.sh` already prove the sibling-repo contract against the real product repo.
+
+### 12.2 Remaining destructive step
+In `mesh-lang`, do exactly this next:
+1. create a dedicated separation branch off the current split-prep state
+2. delete tracked `mesher/**`
+3. keep every split-boundary helper, doc handoff, repo-identity surface, and verifier that now points at `hyperpush-mono`
+4. rerun the M055 boundary rails after the deletion
+5. publish that branch as the **actual** separation PR
+
+### 12.3 Scope guard for that branch
+That branch should **not** try to rework unrelated language tooling, landing UI, or broader docs copy. Its purpose is narrow:
+- remove duplicated product source from `mesh-lang`
+- prove that the language repo still verifies cleanly without it
+- preserve local workspace compatibility through the helper/symlink path only
+
+---
+
+## 13. Exact `mesh-lang` cutover sequence
+
+### 13.1 Branch shape
+Recommended branch intent:
+- current published prep branch remains the plumbing/reference branch
+- new branch is the destructive removal branch
+
+Suggested naming:
+- `m055-repo-split-remove-mesher`
+
+### 13.2 File-system action
+Primary destructive change:
+- remove tracked `mesher/**` from `mesh-lang`
+
+Keep in `mesh-lang`:
+- `scripts/lib/repo-identity.json`
+- `scripts/lib/m055-workspace.sh`
+- `scripts/setup-local-workspace.sh`
+- all M055 split-boundary verifiers/tests
+- public docs/install/release surfaces that now hand off to `hyperpush-mono`
+- any retained fixture or verifier content that proves the handoff contract without reintroducing product ownership
+
+Do not keep in `mesh-lang`:
+- tracked product source
+- tracked landing app source
+- language-repo CI that still assumes product code is present locally
+
+### 13.3 Local compatibility repair after deletion
+Immediately after removing tracked `mesher/**`, restore the local path shape with:
+- `bash scripts/setup-local-workspace.sh`
+
+Expected result:
+- GitHub/source control truth: no tracked `mesher/` in `mesh-lang`
+- local machine convenience: `mesh-lang/mesher -> ../hyperpush-mono/mesher`
+
+### 13.4 Required verification after deletion
+Run these in `mesh-lang` after the delete + compatibility repair:
+- `node --test scripts/tests/verify-m055-s01-contract.test.mjs`
+- `node --test scripts/tests/verify-m055-s04-contract.test.mjs`
+- `bash scripts/verify-m055-s01.sh`
+- `bash scripts/verify-m055-s04.sh`
+
+Then confirm the sibling product repo still stands on its own:
+- `cd ../hyperpush-mono && bash scripts/verify-m051-s01.sh`
+- `cd ../hyperpush-mono && bash scripts/verify-landing-surface.sh`
+
+### 13.5 Minimum success condition for the destructive branch
+That branch is only valid if all of the following are true together:
+- `git ls-files mesher` returns nothing meaningful in `mesh-lang`
+- the local compatibility path exists only as local assembly, not tracked product source
+- M055 split-boundary rails still pass
+- sibling product-root verifiers still pass
+
+---
+
+## 14. Publish plan for the final separation change
+
+### 14.1 Preferred publication flow
+Because direct `main` pushes are still vulnerable to the host's HTTPS `git push` timeout, publish the destructive separation as a normal branch + PR first.
+
+Recommended flow:
+1. push `m055-repo-split-remove-mesher`
+2. open a PR against `hyperpush-org/mesh-lang`
+3. describe it explicitly as the branch that performs the real source separation
+4. keep the earlier prep PR as reference only, or supersede it if that is cleaner
+
+### 14.2 What the PR description should state explicitly
+- `hyperpush-mono` is already the product authority
+- this PR is the step that removes duplicated product source from `mesh-lang`
+- local `mesh-lang/mesher` can still exist after merge, but only through the workspace helper/symlink
+- the attached verification is boundary-only for `mesh-lang` and product-root-only for `hyperpush-mono`
+
+### 14.3 What not to claim yet
+Do not describe the split as complete merely because:
+- the product repo exists
+- docs link to the right slugs
+- the prep PR is open
+
+The split is only complete after the destructive delete branch lands and `mesh-lang` no longer tracks `mesher/**`.
+
+---
+
+## 15. Post-merge local machine state
+
+After the final separation branch merges, the expected steady state on this machine is:
+
+```text
+<workspace>/
+  mesh-lang/
+  hyperpush-mono/
+```
+
+With the local compatibility path restored as needed:
+
+```text
+mesh-lang/mesher -> ../hyperpush-mono/mesher
+```
+
+### Post-merge local checklist
+1. fetch latest `mesh-lang/main`
+2. run `bash scripts/setup-local-workspace.sh`
+3. if landing deps are absent locally, run `cd ../hyperpush-mono && npm --prefix mesher/landing ci`
+4. rerun:
+   - `bash scripts/verify-m055-s01.sh`
+   - `bash scripts/verify-m055-s04.sh`
+5. confirm local editors/tools still work against the compatibility path without restoring tracked product source
+
+### Final steady-state rule
+- Product authority lives in `hyperpush-mono`
+- Language authority lives in `mesh-lang`
+- Local path convenience is allowed
+- Duplicate GitHub authority is not

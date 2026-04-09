@@ -1,0 +1,11 @@
+**
+!Cargo.toml
+!Cargo.lock
+!compiler/**
+!cluster-proof/**
+!scripts/**
+
+cluster-proof/cluster-proof
+compiler/**/target/
+*.log
+.DS_Store

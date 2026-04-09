@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M053/S05/T03",
+  "timestamp": 1775431826744,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "test -s .tmp/m053-s05/starter-proof-repro/root-cause.md",
+      "exitCode": 0,
+      "durationMs": 63,
+      "verdict": "pass"
+    },
+    {
+      "command": "python3 - <<'PY'\nimport json, pathlib\nroot = pathlib.Path('.tmp/m053-s05/starter-proof-repro')\ndata = json.loads(root.joinpath('ci-failure-classification.json').read_text())\nassert data['failure_class'] in {'timeout', 'assertion', 'environment'}\nassert data['failing_command']\nlog_path = pathlib.Path(data['primary_log'])\nassert log_path.exists()\nassert log_path.stat().st_size > 0\nPY",
+      "exitCode": 0,
+      "durationMs": 664,
+      "verdict": "pass"
+    }
+  ]
+}

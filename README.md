@@ -106,7 +106,7 @@ M055 is a two-repo split only: the blessed sibling workspace is `mesh-lang/` plu
 
 Repo-local `.gsd` remains authoritative, and cross-repo work uses the lightweight coordination layer in [WORKSPACE.md](WORKSPACE.md).
 
-If you need the old `mesh-lang/mesher` path locally after product extraction, use `bash scripts/setup-local-workspace.sh`. That compatibility path is local-only and is not part of the canonical GitHub structure or CI contract.
+If you need the old `mesh-lang/mesher` path locally, use `bash scripts/setup-local-workspace.sh`. `mesh-lang` no longer tracks product source; that compatibility path is local-only and is not part of the canonical GitHub structure or CI contract.
 
 ## Maintainers / public release proof
 
