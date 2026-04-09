@@ -84,10 +84,18 @@ bash scripts/workspace-git.sh push hyperpush-mono
 bash scripts/workspace-git.sh push both
 ```
 
-The helper validates the expected `origin` remotes from `scripts/lib/repo-identity.json`, resolves the blessed sibling `../hyperpush-mono` root, and fails closed if either repo still has uncommitted changes.
+The helper validates the expected `origin` remotes from `scripts/lib/repo-identity.json`, resolves the blessed sibling `../hyperpush-mono` root when it exists, and fails closed if a pushed target repo still has uncommitted changes.
 It pushes the currently checked-out branch in each target repo, so keep each repo on the branch you actually intend to publish.
-`install-hooks` configures `core.hooksPath=.githooks` in both repos so the tracked `pre-push` guards refuse accidental partial pushes whenever the sibling repo is still dirty.
+`install-hooks` configures `core.hooksPath=.githooks` in both repos inside the blessed sibling workspace, or just `mesh-lang` when you are in a standalone `mesh-lang` clone.
 If you intentionally need a one-sided push, override the guard for that command only with `M055_ALLOW_PARTIAL_PUSH=1 git push ...`.
+
+For a standalone `mesh-lang` clone, the simpler repo-local install path is:
+
+```bash
+bash scripts/install-git-hooks.sh
+```
+
+That tracked `pre-push` hook is safe in a standalone clone: it enforces the local `mesh-lang/mesher` compatibility-path rule, and it skips the cross-repo dirty-check when no sibling product repo is present.
 
 Manual equivalents from the blessed sibling workspace root are still just ordinary per-repo git commands:
 

@@ -39,6 +39,12 @@ Install the tracked hooks once per clone/worktree:
 bash scripts/workspace-git.sh install-hooks
 ```
 
+If this is only a standalone `mesh-lang` clone with no sibling product repo, use the repo-local installer instead:
+
+```bash
+bash scripts/install-git-hooks.sh
+```
+
 ## Push commands
 
 Push the owning repo explicitly:

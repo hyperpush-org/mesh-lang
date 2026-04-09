@@ -57,24 +57,52 @@ LANGUAGE_DIR="$(m055_repo_identity_field "$ROOT_DIR" 'languageRepo.workspaceDir'
 LANGUAGE_GIT_URL="$(m055_repo_identity_field "$ROOT_DIR" 'languageRepo.gitUrl')"
 PRODUCT_DIR="$(m055_repo_identity_field "$ROOT_DIR" 'productRepo.workspaceDir')"
 PRODUCT_GIT_URL="$(m055_repo_identity_field "$ROOT_DIR" 'productRepo.gitUrl')"
-PRODUCT_ROOT="$(m055_resolve_hyperpush_root "$ROOT_DIR")" || exit 1
+PRODUCT_ROOT=''
 
 require_git_remote "$ROOT_DIR" "$LANGUAGE_GIT_URL" "$LANGUAGE_DIR"
-require_git_remote "$PRODUCT_ROOT" "$PRODUCT_GIT_URL" "$PRODUCT_DIR"
+
+resolve_product_root() {
+  if [[ -n "$PRODUCT_ROOT" ]]; then
+    printf '%s\n' "$PRODUCT_ROOT"
+    return 0
+  fi
+
+  local resolved=''
+  if resolved="$(m055_resolve_hyperpush_root "$ROOT_DIR" 2>/dev/null)"; then
+    PRODUCT_ROOT="$resolved"
+    printf '%s\n' "$PRODUCT_ROOT"
+    return 0
+  fi
+
+  return 1
+}
+
+product_repo_available() {
+  resolve_product_root >/dev/null 2>&1
+}
+
+require_product_repo() {
+  local root
+  root="$(resolve_product_root)" || fail "sibling product repo not found; expected blessed ../$PRODUCT_DIR workspace or M055_HYPERPUSH_ROOT override"
+  require_git_remote "$root" "$PRODUCT_GIT_URL" "$PRODUCT_DIR"
+  printf '%s\n' "$root"
+}
 
 usage() {
   cat <<EOF
 Usage:
   bash scripts/workspace-git.sh status
-  bash scripts/workspace-git.sh install-hooks
+  bash scripts/workspace-git.sh install-hooks [mesh-lang|hyperpush-mono|hyperpush|both]
   bash scripts/workspace-git.sh push <mesh-lang|hyperpush-mono|hyperpush|both> [--dry-run]
 
 Notes:
   - The helper pushes the currently checked-out branch in each target repo.
   - It fails if a target repo has uncommitted changes or the origin remote drifts
     from scripts/lib/repo-identity.json.
-  - install-hooks sets core.hooksPath=.githooks in both sibling repos so the split
-    pre-push guard blocks accidental partial pushes.
+  - install-hooks with no target configures both repos in the blessed sibling
+    workspace, or just mesh-lang in a standalone mesh-lang clone.
+  - For standalone clones, repo-local bash scripts/install-git-hooks.sh is the
+    simpler install path.
 EOF
 }
 
@@ -89,7 +117,7 @@ canonical_repo_name() {
 repo_root() {
   case "$(canonical_repo_name "$1")" in
     mesh-lang) printf '%s\n' "$ROOT_DIR" ;;
-    hyperpush-mono) printf '%s\n' "$PRODUCT_ROOT" ;;
+    hyperpush-mono) require_product_repo ;;
     *) fail "unknown canonical repo for '$1'" ;;
   esac
 }
@@ -135,6 +163,14 @@ print_repo_status() {
   printf 'pre-push guard: %s\n' "$hook_state"
   git -C "$root" status --short --branch
   printf '\n'
+}
+
+print_missing_product_status() {
+  printf '=== %s ===\n' "$PRODUCT_DIR"
+  printf 'root: <unavailable>\n'
+  printf 'state: unavailable\n'
+  printf 'note: sibling product repo not found; standalone %s clone is okay\n' "$LANGUAGE_DIR"
+  printf 'expected sibling: %s\n\n' "$ROOT_DIR/../$PRODUCT_DIR"
 }
 
 ensure_pushable_repo() {
@@ -193,12 +229,42 @@ main() {
     status)
       [[ "$#" -eq 0 ]] || fail 'status does not accept extra arguments'
       print_repo_status mesh-lang
-      print_repo_status hyperpush-mono
+      if product_repo_available; then
+        print_repo_status hyperpush-mono
+      else
+        print_missing_product_status
+      fi
       ;;
     install-hooks)
-      [[ "$#" -eq 0 ]] || fail 'install-hooks does not accept extra arguments'
-      install_hooks_for_repo mesh-lang
-      install_hooks_for_repo hyperpush-mono
+      local target="${1:-auto}"
+      if [[ "$#" -gt 0 ]]; then
+        shift
+      fi
+      [[ "$#" -eq 0 ]] || fail 'install-hooks accepts at most one optional target'
+
+      case "$target" in
+        auto)
+          install_hooks_for_repo mesh-lang
+          if product_repo_available; then
+            install_hooks_for_repo hyperpush-mono
+          else
+            printf 'workspace-git: sibling product repo unavailable; configured mesh-lang only\n'
+          fi
+          ;;
+        mesh-lang)
+          install_hooks_for_repo mesh-lang
+          ;;
+        hyperpush-mono|hyperpush)
+          install_hooks_for_repo "$(canonical_repo_name "$target")"
+          ;;
+        both)
+          install_hooks_for_repo mesh-lang
+          install_hooks_for_repo hyperpush-mono
+          ;;
+        *)
+          fail "unknown install-hooks target '$target' (expected mesh-lang, hyperpush-mono, hyperpush, or both)"
+          ;;
+      esac
       ;;
     push)
       local target="${1:-}"

@@ -9,9 +9,10 @@ if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
   exit 1
 fi
 
-chmod +x .githooks/pre-commit scripts/verify-whitespace.sh
+chmod +x .githooks/pre-commit .githooks/pre-push scripts/verify-whitespace.sh
 
 git config core.hooksPath .githooks
 
 echo "install-git-hooks: configured core.hooksPath=.githooks"
 echo "install-git-hooks: pre-commit now runs scripts/verify-whitespace.sh --staged --fix"
+echo "install-git-hooks: pre-push split guard is active and will no-op when the sibling product repo is absent"
