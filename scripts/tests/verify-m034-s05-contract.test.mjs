@@ -83,13 +83,17 @@ test("README and tooling docs publish the canonical S05 runbook contract", () =>
 });
 
 test("shared helper owns the retry budget and all call-sites consume it without overrides", () => {
-  assert.equal(contract.contractVersion, "m034-s07-public-surface-v2");
+  assert.equal(contract.contractVersion, "m034-s07-public-surface-v3");
   assert.equal(contract.helperPath, "scripts/lib/m034_public_surface_contract.py");
   assert.deepEqual(contract.retryBudget, {
     attempts: 6,
     sleepSeconds: 15,
     fetchTimeoutSeconds: 20,
   });
+  assert.equal(contract.workflowContract.deployDocsOptInVariable, 'MESH_ENABLE_PAGES_DEPLOY');
+  assert.equal(contract.workflowContract.deployDocsOptInExpression, "${{ vars.MESH_ENABLE_PAGES_DEPLOY == 'true' }}");
+  assert.equal(contract.workflowContract.deployServicesOptInVariable, 'MESH_ENABLE_FLY_DEPLOY');
+  assert.equal(contract.workflowContract.deployServicesOptInExpression, "${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}");
 
   assert.match(s05Verifier, /PUBLIC_SURFACE_HELPER="\$ROOT_DIR\/scripts\/lib\/m034_public_surface_contract\.py"/);
   assert.match(s05Verifier, /python3 "\$PUBLIC_SURFACE_HELPER" local-docs --root "\$ROOT_DIR"/);
@@ -124,15 +128,17 @@ test("shared helper owns the retry budget and all call-sites consume it without 
 });
 
 test("hosted workflows consume the stronger shared contract and reject the old shallow checks", () => {
+  assert.match(deployWorkflow, /build:[\s\S]*if: \$\{\{ vars\.MESH_ENABLE_PAGES_DEPLOY == 'true' \}\}/);
+  assert.match(deployWorkflow, /deploy:[\s\S]*if: \$\{\{ vars\.MESH_ENABLE_PAGES_DEPLOY == 'true' \}\}/);
   assert.match(deployWorkflow, /- name: Verify public docs contract[\s\S]*python3 scripts\/lib\/m034_public_surface_contract\.py built-docs/);
   assert.doesNotMatch(deployWorkflow, /DIST_ROOT="website\/docs\/\.vitepress\/dist"/);
   assert.doesNotMatch(deployWorkflow, /missing exact public proof markers/);
 
-  assert.match(deployServicesWorkflow, /deploy-registry:[\s\S]*name: Deploy mesh-registry[\s\S]*working-directory: registry/);
-  assert.match(deployServicesWorkflow, /deploy-packages-website:[\s\S]*name: Deploy mesh-packages website[\s\S]*working-directory: packages-website/);
+  assert.match(deployServicesWorkflow, /deploy-registry:[\s\S]*if: \$\{\{ vars\.MESH_ENABLE_FLY_DEPLOY == 'true' \}\}[\s\S]*name: Deploy mesh-registry[\s\S]*working-directory: registry/);
+  assert.match(deployServicesWorkflow, /deploy-packages-website:[\s\S]*if: \$\{\{ vars\.MESH_ENABLE_FLY_DEPLOY == 'true' \}\}[\s\S]*name: Deploy mesh-packages website[\s\S]*working-directory: packages-website/);
   assert.doesNotMatch(deployServicesWorkflow, /deploy-hyperpush-landing:/);
   assert.doesNotMatch(deployServicesWorkflow, /name: Deploy hyperpush landing/);
-  assert.match(deployServicesWorkflow, /health-check:[\s\S]*needs: \[deploy-registry, deploy-packages-website\][\s\S]*- name: Checkout[\s\S]*- name: Verify public surface contract/);
+  assert.match(deployServicesWorkflow, /health-check:[\s\S]*if: \$\{\{ vars\.MESH_ENABLE_FLY_DEPLOY == 'true' \}\}[\s\S]*needs: \[deploy-registry, deploy-packages-website\][\s\S]*- name: Checkout[\s\S]*- name: Verify public surface contract/);
   assert.doesNotMatch(deployServicesWorkflow, /Verify hyperpush landing/);
   assert.doesNotMatch(deployServicesWorkflow, /hyperpush-landing\.fly\.dev/);
   for (const legacy of [
@@ -155,6 +161,9 @@ test("hosted workflows consume the stronger shared contract and reject the old s
   assert.match(s05Verifier, /'Post-deploy health checks': \[[\s\S]*'Verify public surface contract'[\s\S]*\]/);
   assert.match(s05Verifier, /'forbiddenJobs': \['Deploy hyperpush landing'\]/);
   assert.match(s05Verifier, /'forbiddenSteps': \{[\s\S]*'Post-deploy health checks': \['Verify hyperpush landing'\]/);
+  assert.match(workflowVerifier, /build job must stay gated by vars\.MESH_ENABLE_PAGES_DEPLOY/);
+  assert.match(workflowVerifier, /deploy job must stay gated by vars\.MESH_ENABLE_PAGES_DEPLOY/);
+  assert.match(workflowVerifier, /health-check job must stay gated by vars\.MESH_ENABLE_FLY_DEPLOY/);
   assert.match(workflowVerifier, /health-check job must only keep Checkout and Verify public surface contract steps/);
   assert.doesNotMatch(workflowVerifier, /health-check job must verify the hyperpush landing deployment/);
 });

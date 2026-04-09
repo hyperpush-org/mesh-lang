@@ -13,7 +13,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Sequence
 
-CONTRACT_VERSION = "m034-s07-public-surface-v2"
+CONTRACT_VERSION = "m034-s07-public-surface-v3"
 HELPER_RELATIVE_PATH = "scripts/lib/m034_public_surface_contract.py"
 REPO_IDENTITY_RELATIVE_PATH = "scripts/lib/repo-identity.json"
 
@@ -293,8 +293,12 @@ TOOLING_REGEX_MARKERS = [
 ]
 
 WORKFLOW_CONTRACT = {
+    "deployDocsOptInVariable": "MESH_ENABLE_PAGES_DEPLOY",
+    "deployDocsOptInExpression": "${{ vars.MESH_ENABLE_PAGES_DEPLOY == 'true' }}",
     "deployDocsStepName": "Verify public docs contract",
     "deployDocsCommand": 'python3 scripts/lib/m034_public_surface_contract.py built-docs --root "$GITHUB_WORKSPACE" --dist-root "$GITHUB_WORKSPACE/website/docs/.vitepress/dist"',
+    "deployServicesOptInVariable": "MESH_ENABLE_FLY_DEPLOY",
+    "deployServicesOptInExpression": "${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}",
     "deployServicesStepName": "Verify public surface contract",
     "deployServicesCommand": 'python3 scripts/lib/m034_public_surface_contract.py public-http --root "$GITHUB_WORKSPACE" --artifact-dir "$RUNNER_TEMP/m034-public-surface-contract"',
     "deployServicesJobs": [

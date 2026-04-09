@@ -91,7 +91,11 @@ function validateLanguageOwnedDeployContract(baseRoot) {
   const m034Verifier = readFrom(baseRoot, files.m034Verifier)
   const m053Verifier = readFrom(baseRoot, files.m053Verifier)
 
-  assert.equal(contract.contractVersion, 'm034-s07-public-surface-v2')
+  assert.equal(contract.contractVersion, 'm034-s07-public-surface-v3')
+  assert.equal(contract.workflowContract.deployDocsOptInVariable, 'MESH_ENABLE_PAGES_DEPLOY')
+  assert.equal(contract.workflowContract.deployDocsOptInExpression, "${{ vars.MESH_ENABLE_PAGES_DEPLOY == 'true' }}")
+  assert.equal(contract.workflowContract.deployServicesOptInVariable, 'MESH_ENABLE_FLY_DEPLOY')
+  assert.equal(contract.workflowContract.deployServicesOptInExpression, "${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}")
   assert.deepEqual(contract.workflowContract.deployServicesJobs, [
     'deploy-registry',
     'deploy-packages-website',
@@ -111,6 +115,7 @@ function validateLanguageOwnedDeployContract(baseRoot) {
   requireIncludes(errors, files.workflow, workflow, [
     'name: Deploy Services to Fly.io',
     'deploy-registry:',
+    "if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}",
     'name: Deploy mesh-registry',
     'working-directory: registry',
     'deploy-packages-website:',
@@ -135,6 +140,8 @@ function validateLanguageOwnedDeployContract(baseRoot) {
     'deploy-services workflow must define deploy-registry, deploy-packages-website, and health-check jobs',
     'expected_needs = %w[deploy-packages-website deploy-registry]',
     'health-check job must depend on deploy-registry and deploy-packages-website',
+    '#{job_key} job must stay gated by vars.MESH_ENABLE_FLY_DEPLOY',
+    'health-check job must stay gated by vars.MESH_ENABLE_FLY_DEPLOY',
     'health-check job must only keep Checkout and Verify public surface contract steps',
     'deploy-services workflow must not keep pre-S07 inline public proof logic',
   ])
@@ -255,8 +262,8 @@ test('contract fails closed when landing deploy steps or landing-specific hosted
 
   let workflow = readFrom(tmpRoot, files.workflow)
   workflow = workflow.replace(
-    '  health-check:\n    name: Post-deploy health checks\n    needs: [deploy-registry, deploy-packages-website]\n',
-    '  deploy-hyperpush-landing:\n    name: Deploy hyperpush landing\n    runs-on: ubuntu-latest\n    timeout-minutes: 20\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup flyctl\n        uses: superfly/flyctl-actions/setup-flyctl@master\n\n      - name: Deploy landing to Fly.io\n        run: flyctl deploy --remote-only\n        working-directory: mesher/landing\n        env:\n          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}\n\n  health-check:\n    name: Post-deploy health checks\n    needs: [deploy-registry, deploy-packages-website, deploy-hyperpush-landing]\n',
+    '  health-check:\n    if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == \'true\' }}\n    name: Post-deploy health checks\n    needs: [deploy-registry, deploy-packages-website]\n',
+    '  deploy-hyperpush-landing:\n    name: Deploy hyperpush landing\n    runs-on: ubuntu-latest\n    timeout-minutes: 20\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup flyctl\n        uses: superfly/flyctl-actions/setup-flyctl@master\n\n      - name: Deploy landing to Fly.io\n        run: flyctl deploy --remote-only\n        working-directory: mesher/landing\n        env:\n          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}\n\n  health-check:\n    if: ${{ vars.MESH_ENABLE_FLY_DEPLOY == \'true\' }}\n    name: Post-deploy health checks\n    needs: [deploy-registry, deploy-packages-website, deploy-hyperpush-landing]\n',
   )
   workflow = workflow.replace(
     '- name: Verify public surface contract\n        shell: bash\n        timeout-minutes: 8\n        run: |\n          set -euo pipefail\n          python3 scripts/lib/m034_public_surface_contract.py public-http --root "$GITHUB_WORKSPACE" --artifact-dir "$RUNNER_TEMP/m034-public-surface-contract"\n',

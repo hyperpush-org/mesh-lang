@@ -54,6 +54,7 @@ expected_command = ARGV.fetch(2)
 workflow = YAML.load_file(workflow_path)
 raw = File.read(workflow_path)
 errors = []
+expected_pages_if = "${{ vars.MESH_ENABLE_PAGES_DEPLOY == 'true' }}"
 
 errors << "deploy workflow file is missing" unless File.file?(workflow_path)
 errors << "shared public surface helper is missing" unless File.file?(helper_path)
@@ -111,6 +112,7 @@ end
 
 build = jobs.is_a?(Hash) ? jobs["build"] : nil
 if build.is_a?(Hash)
+  errors << "build job must stay gated by vars.MESH_ENABLE_PAGES_DEPLOY" unless build["if"] == expected_pages_if
   errors << "build job must stay on ubuntu-latest" unless build["runs-on"] == "ubuntu-latest"
   unless build["timeout-minutes"].is_a?(Integer) && build["timeout-minutes"] >= 10
     errors << "build job must declare timeout-minutes"
@@ -191,6 +193,7 @@ end
 
 deploy = jobs.is_a?(Hash) ? jobs["deploy"] : nil
 if deploy.is_a?(Hash)
+  errors << "deploy job must stay gated by vars.MESH_ENABLE_PAGES_DEPLOY" unless deploy["if"] == expected_pages_if
   errors << "deploy job must depend on build" unless deploy["needs"] == "build"
   errors << "deploy job must stay on ubuntu-latest" unless deploy["runs-on"] == "ubuntu-latest"
   unless deploy["timeout-minutes"].is_a?(Integer) && deploy["timeout-minutes"] >= 10
@@ -255,6 +258,7 @@ expected_command = ARGV.fetch(2)
 workflow = YAML.load_file(workflow_path)
 raw = File.read(workflow_path)
 errors = []
+expected_fly_if = "${{ vars.MESH_ENABLE_FLY_DEPLOY == 'true' }}"
 
 errors << "deploy-services workflow file is missing" unless File.file?(workflow_path)
 errors << "shared public surface helper is missing" unless File.file?(helper_path)
@@ -313,6 +317,7 @@ verify_fly_deploy_job = lambda do |job_key, expected_name, expected_dir, deploy_
   end
 
   errors << "#{job_key} job name drifted" unless job["name"] == expected_name
+  errors << "#{job_key} job must stay gated by vars.MESH_ENABLE_FLY_DEPLOY" unless job["if"] == expected_fly_if
   errors << "#{job_key} job must stay on ubuntu-latest" unless job["runs-on"] == "ubuntu-latest"
   unless job["timeout-minutes"].is_a?(Integer) && job["timeout-minutes"] >= 10
     errors << "#{job_key} job must declare timeout-minutes"
@@ -354,6 +359,7 @@ verify_fly_deploy_job.call("deploy-packages-website", "Deploy mesh-packages webs
 health = jobs.is_a?(Hash) ? jobs["health-check"] : nil
 if health.is_a?(Hash)
   errors << "health-check job name must stay 'Post-deploy health checks'" unless health["name"] == "Post-deploy health checks"
+  errors << "health-check job must stay gated by vars.MESH_ENABLE_FLY_DEPLOY" unless health["if"] == expected_fly_if
   expected_needs = %w[deploy-packages-website deploy-registry]
   unless health["needs"].is_a?(Array) && health["needs"].sort == expected_needs.sort
     errors << "health-check job must depend on deploy-registry and deploy-packages-website"
