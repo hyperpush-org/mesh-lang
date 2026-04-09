@@ -68,3 +68,27 @@ If it fails, start with `.tmp/m055-s01/verify/phase-report.txt` and then read th
 - Use `mesh-lang/` when the change is language-owned: compiler/runtime/tooling, docs/installers, registry, packages/public-site surfaces, or evaluator-facing starter/examples work.
 - Use `hyperpush-mono/` when the change is product-owned: Mesher, landing, or the product runbook/proof surfaces that move under `hyperpush-mono/mesher/`.
 - When one change spans both repos, keep the active slice in the owning repo and link to the sibling repo's proof or summary instead of inventing one shared umbrella plan tree.
+
+## Git status and pushing in the split workspace
+
+The local `mesh-lang/mesher` compatibility path can make the workspace feel monolithic, but git authority is still per repo.
+If you edit `mesh-lang/mesher/...`, you are editing `../hyperpush-mono/mesher/...` and must commit/push from `hyperpush-mono`, not from `mesh-lang`.
+
+From `mesh-lang/`, use the helper below to see both repos at once or push either side explicitly:
+
+```bash
+bash scripts/workspace-git.sh status
+bash scripts/workspace-git.sh push mesh-lang
+bash scripts/workspace-git.sh push hyperpush-mono
+bash scripts/workspace-git.sh push both
+```
+
+The helper validates the expected `origin` remotes from `scripts/lib/repo-identity.json`, resolves the blessed sibling `../hyperpush-mono` root, and fails closed if either repo still has uncommitted changes.
+It pushes the currently checked-out branch in each target repo, so keep each repo on the branch you actually intend to publish.
+
+Manual equivalents from the blessed sibling workspace root are still just ordinary per-repo git commands:
+
+```bash
+cd mesh-lang && git push origin main
+cd ../hyperpush-mono && git push origin main
+```
