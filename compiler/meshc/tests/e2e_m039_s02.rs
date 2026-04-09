@@ -80,23 +80,36 @@ fn meshc_bin() -> PathBuf {
     PathBuf::from(env!("CARGO_BIN_EXE_meshc"))
 }
 
-fn cluster_proof_binary() -> PathBuf {
-    route_free::cluster_proof_fixture_root().join("cluster-proof")
+fn cluster_proof_fixture_dir() -> PathBuf {
+    route_free::cluster_proof_fixture_root()
 }
 
-fn assert_cluster_proof_build_succeeds() {
-    let fixture_root = route_free::cluster_proof_fixture_root();
-    let output = Command::new(meshc_bin())
-        .current_dir(repo_root())
-        .arg("build")
-        .arg(fixture_root.to_str().unwrap())
-        .output()
-        .expect("failed to invoke meshc build cluster-proof fixture");
-
-    assert_command_success(
-        &output,
-        "meshc build scripts/fixtures/clustered/cluster-proof",
+fn build_cluster_proof_binary(artifacts: &Path) -> PathBuf {
+    let package_dir = cluster_proof_fixture_dir();
+    let tracked_binary_path = package_dir.join("cluster-proof");
+    assert!(
+        !tracked_binary_path.exists(),
+        "cluster-proof fixture must stay source-only; tracked binary leaked back into {}",
+        tracked_binary_path.display()
     );
+
+    let binary_dir = artifacts.join("bin");
+    fs::create_dir_all(&binary_dir)
+        .unwrap_or_else(|error| panic!("failed to create {}: {error}", binary_dir.display()));
+    let output_path = binary_dir.join("cluster-proof");
+    let metadata = route_free::build_package_binary_to_output(&package_dir, &output_path, artifacts);
+    assert_eq!(metadata.binary_path, output_path);
+    output_path
+}
+
+fn assert_cluster_proof_build_succeeds(artifacts: &Path) -> PathBuf {
+    let binary_path = build_cluster_proof_binary(artifacts);
+    assert!(
+        binary_path.exists(),
+        "cluster-proof temp binary is missing after build at {}",
+        binary_path.display()
+    );
+    binary_path
 }
 
 fn assert_cluster_proof_tests_pass() {
@@ -176,14 +189,11 @@ fn node_log_paths(log_dir: &Path, node_basename: &str) -> (PathBuf, PathBuf) {
     (stdout_path, stderr_path)
 }
 
-fn spawn_cluster_proof(config: ClusterProofConfig, log_dir: &Path) -> SpawnedClusterProof {
-    let binary = cluster_proof_binary();
-    assert!(
-        binary.exists(),
-        "cluster-proof binary not found at {}. Run `meshc build scripts/fixtures/clustered/cluster-proof` first.",
-        binary.display()
-    );
-
+fn spawn_cluster_proof(
+    binary: &Path,
+    config: ClusterProofConfig,
+    log_dir: &Path,
+) -> SpawnedClusterProof {
     let (stdout_path, stderr_path) = node_log_paths(log_dir, &config.node_basename);
     let stdout_file = File::create(&stdout_path)
         .unwrap_or_else(|e| panic!("failed to create {}: {}", stdout_path.display(), e));
@@ -549,6 +559,7 @@ fn request_token_from_id(request_id: &str) -> u64 {
 
 fn run_remote_route_proof(
     test_name: &str,
+    binary_path: &Path,
     ingress_config: ClusterProofConfig,
     peer_config: ClusterProofConfig,
 ) -> WorkSnapshot {
@@ -557,8 +568,8 @@ fn run_remote_route_proof(
     let log_dir = proof_logs_dir(test_name);
     let response_artifact = log_dir.join(format!("{}-work.json", ingress_config.node_basename));
 
-    let mut spawned_ingress = spawn_cluster_proof(ingress_config.clone(), &log_dir);
-    let mut spawned_peer = spawn_cluster_proof(peer_config.clone(), &log_dir);
+    let mut spawned_ingress = spawn_cluster_proof(binary_path, ingress_config.clone(), &log_dir);
+    let mut spawned_peer = spawn_cluster_proof(binary_path, peer_config.clone(), &log_dir);
 
     let run_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         {
@@ -677,7 +688,6 @@ fn run_remote_route_proof(
 #[test]
 fn e2e_m039_s02_routes_work_to_peer_and_logs_execution() {
     assert_cluster_proof_tests_pass();
-    assert_cluster_proof_build_succeeds();
 
     let cluster_port_a = dual_stack_cluster_port();
     let ingress_a = ClusterProofConfig {
@@ -693,8 +703,10 @@ fn e2e_m039_s02_routes_work_to_peer_and_logs_execution() {
         http_port: unused_http_port(),
     };
 
+    let build_artifacts = proof_logs_dir("e2e-m039-s02-build-remote-route");
+    let binary_path = assert_cluster_proof_build_succeeds(&build_artifacts);
     let response_a =
-        run_remote_route_proof("e2e-m039-s02-ingress-a", ingress_a.clone(), peer_b.clone());
+        run_remote_route_proof("e2e-m039-s02-ingress-a", &binary_path, ingress_a.clone(), peer_b.clone());
     assert_eq!(response_a.ingress_node, expected_node_name(&ingress_a));
     assert_eq!(response_a.execution_node, expected_node_name(&peer_b));
 }
@@ -702,7 +714,6 @@ fn e2e_m039_s02_routes_work_to_peer_and_logs_execution() {
 #[test]
 fn e2e_m039_s02_falls_back_locally_without_peers() {
     assert_cluster_proof_tests_pass();
-    assert_cluster_proof_build_succeeds();
 
     let config = ClusterProofConfig {
         node_basename: "node-solo".to_string(),
@@ -712,8 +723,9 @@ fn e2e_m039_s02_falls_back_locally_without_peers() {
     };
     let expected_self = expected_node_name(&config);
     let log_dir = proof_logs_dir("e2e-m039-s02-solo");
+    let binary_path = assert_cluster_proof_build_succeeds(&log_dir);
     let response_artifact = log_dir.join("node-solo-work.json");
-    let mut spawned = spawn_cluster_proof(config.clone(), &log_dir);
+    let mut spawned = spawn_cluster_proof(&binary_path, config.clone(), &log_dir);
 
     let run_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         {

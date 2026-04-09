@@ -312,6 +312,13 @@ fn assert_tiny_cluster_source_contract(sources: &TinyClusterSources) {
 }
 
 fn build_tiny_cluster_binary(artifacts: &Path) -> PathBuf {
+    let tracked_binary_path = tiny_cluster_dir().join("tiny-cluster");
+    assert!(
+        !tracked_binary_path.exists(),
+        "tiny-cluster fixture must stay source-only; tracked binary leaked back into {}",
+        tracked_binary_path.display()
+    );
+
     let binary_dir = artifacts.join("bin");
     std::fs::create_dir_all(&binary_dir).expect("failed to create binary artifact dir");
     let binary_path = binary_dir.join("tiny-cluster");

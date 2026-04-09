@@ -424,6 +424,16 @@ fn build_cluster_proof_binary_to_temp(artifacts: &Path) -> route_free::BuildOutp
     let tracked_llvm_path = cluster_proof_dir().join("cluster-proof.ll");
     let tracked_binary_before = snapshot_file(&tracked_binary_path);
     let tracked_llvm_before = snapshot_file(&tracked_llvm_path);
+    assert!(
+        tracked_binary_before.is_none(),
+        "cluster-proof fixture must stay source-only; tracked binary leaked back into {}",
+        tracked_binary_path.display()
+    );
+    assert!(
+        tracked_llvm_before.is_none(),
+        "cluster-proof fixture must stay source-only; tracked LLVM output leaked back into {}",
+        tracked_llvm_path.display()
+    );
 
     let binary_dir = artifacts.join("bin");
     fs::create_dir_all(&binary_dir).expect("failed to create temp binary dir");
@@ -444,6 +454,16 @@ fn build_cluster_proof_binary_to_temp(artifacts: &Path) -> route_free::BuildOutp
 
     let tracked_binary_after = snapshot_file(&tracked_binary_path);
     let tracked_llvm_after = snapshot_file(&tracked_llvm_path);
+    assert!(
+        tracked_binary_after.is_none(),
+        "cluster-proof fixture must stay source-only after temp build; tracked binary appeared at {}",
+        tracked_binary_path.display()
+    );
+    assert!(
+        tracked_llvm_after.is_none(),
+        "cluster-proof fixture must stay source-only after temp build; tracked LLVM output appeared at {}",
+        tracked_llvm_path.display()
+    );
     assert_snapshot_unchanged(
         "tracked cluster-proof binary",
         &tracked_binary_path,

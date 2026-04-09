@@ -84,23 +84,36 @@ fn meshc_bin() -> PathBuf {
     PathBuf::from(env!("CARGO_BIN_EXE_meshc"))
 }
 
-fn cluster_proof_binary() -> PathBuf {
-    route_free::cluster_proof_fixture_root().join("cluster-proof")
+fn cluster_proof_fixture_dir() -> PathBuf {
+    route_free::cluster_proof_fixture_root()
 }
 
-fn assert_cluster_proof_build_succeeds() {
-    let fixture_root = route_free::cluster_proof_fixture_root();
-    let output = Command::new(meshc_bin())
-        .current_dir(repo_root())
-        .arg("build")
-        .arg(fixture_root.to_str().unwrap())
-        .output()
-        .expect("failed to invoke meshc build cluster-proof fixture");
-
-    assert_command_success(
-        &output,
-        "meshc build scripts/fixtures/clustered/cluster-proof",
+fn build_cluster_proof_binary(artifacts: &Path) -> PathBuf {
+    let package_dir = cluster_proof_fixture_dir();
+    let tracked_binary_path = package_dir.join("cluster-proof");
+    assert!(
+        !tracked_binary_path.exists(),
+        "cluster-proof fixture must stay source-only; tracked binary leaked back into {}",
+        tracked_binary_path.display()
     );
+
+    let binary_dir = artifacts.join("bin");
+    fs::create_dir_all(&binary_dir)
+        .unwrap_or_else(|error| panic!("failed to create {}: {error}", binary_dir.display()));
+    let output_path = binary_dir.join("cluster-proof");
+    let metadata = route_free::build_package_binary_to_output(&package_dir, &output_path, artifacts);
+    assert_eq!(metadata.binary_path, output_path);
+    output_path
+}
+
+fn assert_cluster_proof_build_succeeds(artifacts: &Path) -> PathBuf {
+    let binary_path = build_cluster_proof_binary(artifacts);
+    assert!(
+        binary_path.exists(),
+        "cluster-proof temp binary is missing after build at {}",
+        binary_path.display()
+    );
+    binary_path
 }
 
 fn assert_cluster_proof_tests_pass() {
@@ -181,17 +194,11 @@ fn node_log_paths(log_dir: &Path, node_basename: &str, incarnation: usize) -> (P
 }
 
 fn spawn_cluster_proof(
+    binary: &Path,
     config: ClusterProofConfig,
     log_dir: &Path,
     incarnation: usize,
 ) -> SpawnedClusterProof {
-    let binary = cluster_proof_binary();
-    assert!(
-        binary.exists(),
-        "cluster-proof binary not found at {}. Run `meshc build scripts/fixtures/clustered/cluster-proof` first.",
-        binary.display()
-    );
-
     let (stdout_path, stderr_path) = node_log_paths(log_dir, &config.node_basename, incarnation);
     let stdout_file = File::create(&stdout_path)
         .unwrap_or_else(|e| panic!("failed to create {}: {}", stdout_path.display(), e));
@@ -793,7 +800,6 @@ fn assert_local_work_snapshot(response: &WorkSnapshot, expected_self: &str, phas
 #[test]
 fn e2e_m039_s03_degrades_safely_and_serves_locally_after_peer_loss() {
     assert_cluster_proof_tests_pass();
-    assert_cluster_proof_build_succeeds();
 
     let cluster_port = dual_stack_cluster_port();
     let config_a = ClusterProofConfig {
@@ -812,14 +818,15 @@ fn e2e_m039_s03_degrades_safely_and_serves_locally_after_peer_loss() {
     let expected_a = expected_node_name(&config_a);
     let expected_b = expected_node_name(&config_b);
     let artifact_dir = proof_logs_dir("e2e-m039-s03-degrade");
+    let binary_path = build_cluster_proof_binary(&artifact_dir);
     let pre_loss_membership_a = artifact_dir.join("pre-loss-node-a-membership.json");
     let pre_loss_membership_b = artifact_dir.join("pre-loss-node-b-membership.json");
     let pre_loss_work = artifact_dir.join("pre-loss-work.json");
     let degraded_membership = artifact_dir.join("degraded-node-a-membership.json");
     let degraded_work = artifact_dir.join("degraded-work.json");
 
-    let mut spawned_a = Some(spawn_cluster_proof(config_a.clone(), &artifact_dir, 1));
-    let mut spawned_b_run1 = Some(spawn_cluster_proof(config_b.clone(), &artifact_dir, 1));
+    let mut spawned_a = Some(spawn_cluster_proof(&binary_path, config_a.clone(), &artifact_dir, 1));
+    let mut spawned_b_run1 = Some(spawn_cluster_proof(&binary_path, config_b.clone(), &artifact_dir, 1));
     let mut killed_b_run1_logs: Option<StoppedClusterProof> = None;
 
     let run_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -1000,7 +1007,6 @@ fn e2e_m039_s03_degrades_safely_and_serves_locally_after_peer_loss() {
 #[test]
 fn e2e_m039_s03_rejoins_and_routes_to_peer_again_without_manual_repair() {
     assert_cluster_proof_tests_pass();
-    assert_cluster_proof_build_succeeds();
 
     let cluster_port = dual_stack_cluster_port();
     let config_a = ClusterProofConfig {
@@ -1019,6 +1025,7 @@ fn e2e_m039_s03_rejoins_and_routes_to_peer_again_without_manual_repair() {
     let expected_a = expected_node_name(&config_a);
     let expected_b = expected_node_name(&config_b);
     let artifact_dir = proof_logs_dir("e2e-m039-s03-rejoin");
+    let binary_path = build_cluster_proof_binary(&artifact_dir);
     let pre_loss_membership_a = artifact_dir.join("pre-loss-node-a-membership.json");
     let pre_loss_membership_b = artifact_dir.join("pre-loss-node-b-membership.json");
     let pre_loss_work = artifact_dir.join("pre-loss-work.json");
@@ -1028,8 +1035,8 @@ fn e2e_m039_s03_rejoins_and_routes_to_peer_again_without_manual_repair() {
     let post_rejoin_membership_b = artifact_dir.join("post-rejoin-node-b-membership.json");
     let post_rejoin_work = artifact_dir.join("post-rejoin-work.json");
 
-    let mut spawned_a = Some(spawn_cluster_proof(config_a.clone(), &artifact_dir, 1));
-    let mut spawned_b_run1 = Some(spawn_cluster_proof(config_b.clone(), &artifact_dir, 1));
+    let mut spawned_a = Some(spawn_cluster_proof(&binary_path, config_a.clone(), &artifact_dir, 1));
+    let mut spawned_b_run1 = Some(spawn_cluster_proof(&binary_path, config_b.clone(), &artifact_dir, 1));
     let mut killed_b_run1_logs: Option<StoppedClusterProof> = None;
     let mut spawned_b_run2: Option<SpawnedClusterProof> = None;
 
@@ -1149,7 +1156,7 @@ fn e2e_m039_s03_rejoins_and_routes_to_peer_again_without_manual_repair() {
         assert_eq!(request_token_from_id(&degraded_response.request_id), 1);
         assert_ne!(pre_loss_response.request_id, degraded_response.request_id);
 
-        spawned_b_run2 = Some(spawn_cluster_proof(config_b.clone(), &artifact_dir, 2));
+        spawned_b_run2 = Some(spawn_cluster_proof(&binary_path, config_b.clone(), &artifact_dir, 2));
 
         {
             let a = spawned_a
