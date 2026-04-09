@@ -1,0 +1,27 @@
+{
+  "version": "m055-s01-repo-identity-v1",
+  "languageRepo": {
+    "workspaceDir": "mesh-lang",
+    "slug": "hyperpush-org/mesh-lang",
+    "repoUrl": "https://github.com/hyperpush-org/mesh-lang",
+    "gitUrl": "https://github.com/hyperpush-org/mesh-lang.git",
+    "issuesUrl": "https://github.com/hyperpush-org/mesh-lang/issues",
+    "blobBaseUrl": "https://github.com/hyperpush-org/mesh-lang/blob/main/",
+    "installerRoot": "https://meshlang.dev",
+    "docsRoot": "https://meshlang.dev/docs/"
+  },
+  "productRepo": {
+    "workspaceDir": "hyperpush-mono",
+    "slug": "hyperpush-org/hyperpush-mono",
+    "repoUrl": "https://github.com/hyperpush-org/hyperpush-mono",
+    "gitUrl": "https://github.com/hyperpush-org/hyperpush-mono.git",
+    "issuesUrl": "https://github.com/hyperpush-org/hyperpush-mono/issues",
+    "blobBaseUrl": "https://github.com/hyperpush-org/hyperpush-mono/blob/main/",
+    "installerRoot": null,
+    "docsRoot": null
+  },
+  "productHandoff": {
+    "label": "Hyperpush product repo",
+    "relativeRunbookPath": "mesher/README.md"
+  }
+}
