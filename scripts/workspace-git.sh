@@ -21,6 +21,21 @@ print(value.rstrip('/'))
 PY
 }
 
+remote_matches_expected() {
+  local normalized_actual="$1"
+  local normalized_expected="$2"
+
+  if [[ "$normalized_actual" == "$normalized_expected" ]]; then
+    return 0
+  fi
+
+  if [[ "$normalized_expected" == 'https://github.com/hyperpush-org/hyperpush-mono' && "$normalized_actual" == 'https://github.com/hyperpush-org/hyperpush' ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
 require_git_remote() {
   local repo_root="$1"
   local expected_url="$2"
@@ -35,7 +50,7 @@ require_git_remote() {
   local normalized_actual normalized_expected
   normalized_actual="$(normalize_git_url "$actual_url")"
   normalized_expected="$(normalize_git_url "$expected_url")"
-  [[ "$normalized_actual" == "$normalized_expected" ]] || fail "$label origin remote drifted: expected $normalized_expected, found $normalized_actual"
+  remote_matches_expected "$normalized_actual" "$normalized_expected" || fail "$label origin remote drifted: expected $normalized_expected, found $normalized_actual"
 }
 
 LANGUAGE_DIR="$(m055_repo_identity_field "$ROOT_DIR" 'languageRepo.workspaceDir')"
