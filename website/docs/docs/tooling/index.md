@@ -504,6 +504,12 @@ bash scripts/verify-m050-s02.sh
 
 This verifier replays the slice-owned first-contact source contract, the retained M047 docs rails plus the retained M048 and M036 tooling contracts, then performs a serial `npm --prefix website run build` and copies built HTML snapshots for Getting Started, Clustered Example, and Tooling into `.tmp/m050-s02/verify/` for diagnosis.
 
+## Routine compatibility workflow
+
+Normal PRs and `main` pushes now also fan out through `compatibility-matrix.yml`.
+That workflow is the compile-only cross-platform signal: it builds `meshc` across the release target matrix and builds `meshpkg` everywhere except the musl-only lane, but it does **not** replace the tag/manual release packaging flow.
+Use it when you want early platform breakage visibility without waiting for a version tag.
+
 ## Release Assembly Runbook
 
 When you need the full public-release acceptance flow instead of an individual tool check, run the assembled verifier from the repo root with the repo `.env` loaded:

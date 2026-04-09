@@ -1,0 +1,213 @@
+name: Cross-platform compatibility
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compatibility-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compatibility:
+    name: Compatibility (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-apple-darwin
+            os: macos-15-intel
+            llvm_method: brew
+            build_meshpkg: true
+          - target: aarch64-apple-darwin
+            os: macos-14
+            llvm_method: brew
+            build_meshpkg: true
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-24.04
+            llvm_method: tarball
+            build_meshpkg: true
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+            llvm_method: tarball
+            build_meshpkg: true
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-24.04
+            llvm_method: docker
+            build_meshpkg: false
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            llvm_method: tarball
+            build_meshpkg: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache LLVM
+        if: matrix.llvm_method == 'tarball'
+        uses: actions/cache@v4
+        id: cache-llvm
+        with:
+          path: ~/llvm
+          key: compatibility-llvm-21.1.8-v4-${{ matrix.target }}
+
+      - name: Install LLVM 21 (Homebrew)
+        if: matrix.llvm_method == 'brew'
+        run: |
+          brew install llvm@21
+          echo "LLVM_SYS_211_PREFIX=$(brew --prefix llvm@21)" >> "$GITHUB_ENV"
+
+      - name: Install LLVM 21 (Linux x86_64)
+        if: >-
+          matrix.llvm_method == 'tarball' &&
+          runner.os == 'Linux' &&
+          matrix.target != 'aarch64-unknown-linux-gnu' &&
+          steps.cache-llvm.outputs.cache-hit != 'true'
+        run: |
+          LLVM_VERSION="21.1.8"
+          LLVM_ARCHIVE="LLVM-${LLVM_VERSION}-Linux-X64.tar.xz"
+          LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/${LLVM_ARCHIVE}"
+          curl -sSfL "$LLVM_URL" -o llvm.tar.xz
+          mkdir -p "$HOME/llvm"
+          tar xf llvm.tar.xz --strip-components=1 -C "$HOME/llvm"
+          rm llvm.tar.xz
+
+      - name: Install LLVM 21 (Linux ARM64)
+        if: >-
+          matrix.llvm_method == 'tarball' &&
+          matrix.target == 'aarch64-unknown-linux-gnu' &&
+          steps.cache-llvm.outputs.cache-hit != 'true'
+        run: |
+          LLVM_VERSION="21.1.3"
+          LLVM_ARCHIVE="clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz"
+          LLVM_URL="https://github.com/ycm-core/llvm/releases/download/${LLVM_VERSION}/${LLVM_ARCHIVE}"
+          curl -sSfL "$LLVM_URL" -o llvm.tar.xz
+          mkdir -p "$HOME/llvm"
+          tar xf llvm.tar.xz --strip-components=1 -C "$HOME/llvm"
+          rm llvm.tar.xz
+
+      - name: Install LLVM 21 (Windows)
+        if: >-
+          matrix.llvm_method == 'tarball' &&
+          matrix.target == 'x86_64-pc-windows-msvc' &&
+          steps.cache-llvm.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $LLVM_VERSION = "21.1.8"
+          $LLVM_DIR = "$env:USERPROFILE\llvm"
+          $LLVM_URL = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-x86_64-pc-windows-msvc.tar.xz"
+          Invoke-WebRequest -Uri $LLVM_URL -OutFile llvm.tar.xz
+          7z x llvm.tar.xz
+          7z x llvm.tar -o"$env:USERPROFILE"
+          Rename-Item "$env:USERPROFILE\clang+llvm-${LLVM_VERSION}-x86_64-pc-windows-msvc" $LLVM_DIR
+          Remove-Item llvm.tar.xz, llvm.tar -Force
+
+          $supportLib = "$LLVM_DIR\lib\LLVMSupport.lib"
+          $llvmAr = "$LLVM_DIR\bin\llvm-ar.exe"
+          $clang = "$LLVM_DIR\bin\clang.exe"
+          if ((Test-Path $supportLib) -and (Test-Path $llvmAr)) {
+            $workDir = "$LLVM_DIR\lib\_rpmalloc_strip"
+            New-Item -ItemType Directory -Force -Path $workDir | Out-Null
+            Push-Location $workDir
+
+            & $llvmAr x $supportLib
+            $rpFiles = Get-ChildItem -Filter "*.obj" | Where-Object { $_.Name -match "rpmalloc" }
+            foreach ($f in $rpFiles) {
+              Remove-Item $f.FullName -Force
+            }
+
+            $stubC = Join-Path $workDir "rpmalloc_stub.c"
+            $stubObj = Join-Path $workDir "rpmalloc_stub.obj"
+            Set-Content $stubC "void rpmalloc_linker_reference(void) {}"
+            & $clang -c -o $stubObj $stubC
+            Remove-Item $stubC -Force
+
+            Remove-Item $supportLib -Force
+            $objs = (Get-ChildItem -Filter "*.obj").FullName
+            & $llvmAr rcs $supportLib @objs
+
+            Pop-Location
+            Remove-Item $workDir -Recurse -Force
+          }
+
+      - name: Set LLVM prefix (Linux tarball)
+        if: matrix.llvm_method == 'tarball' && runner.os == 'Linux'
+        run: echo "LLVM_SYS_211_PREFIX=$HOME/llvm" >> "$GITHUB_ENV"
+
+      - name: Set LLVM prefix (Windows tarball)
+        if: matrix.llvm_method == 'tarball' && runner.os == 'Windows'
+        shell: pwsh
+        run: echo "LLVM_SYS_211_PREFIX=$env:USERPROFILE\llvm" >> $env:GITHUB_ENV
+
+      - name: Provide libxml2 for Windows LLVM link
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          vcpkg install libxml2:x64-windows-static
+          $vcpkgLib = "$env:VCPKG_INSTALLATION_ROOT\installed\x64-windows-static\lib"
+          $dest = "$env:USERPROFILE\llvm\lib\libxml2s.lib"
+          $candidates = @("$vcpkgLib\libxml2s.lib", "$vcpkgLib\libxml2.lib", "$vcpkgLib\xml2s.lib", "$vcpkgLib\xml2.lib")
+          $src = $null
+          foreach ($c in $candidates) {
+            if (Test-Path $c) { $src = $c; break }
+          }
+          if (-not $src) {
+            Write-Error "No libxml2 .lib found in $vcpkgLib"
+            exit 1
+          }
+          Copy-Item $src $dest -Force
+
+      - name: Install Rust
+        if: matrix.llvm_method != 'docker'
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cargo cache
+        if: matrix.llvm_method != 'docker'
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: compatibility-${{ matrix.target }}
+
+      - name: Build meshc and meshpkg (Alpine/musl)
+        if: matrix.llvm_method == 'docker'
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            -w /workspace \
+            alpine:3.23 sh -c '
+              apk add --no-cache \
+                llvm21-dev llvm21-static \
+                musl-dev gcc g++ make cmake perl \
+                zlib-dev zlib-static zstd-dev zstd-static \
+                libffi-dev libxml2-dev libxml2-static \
+                openssl-dev openssl-libs-static \
+                linux-headers curl git &&
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable &&
+              source "$HOME/.cargo/env" &&
+              export LLVM_SYS_211_PREFIX=/usr/lib/llvm21 &&
+              cargo build --release --locked --target x86_64-unknown-linux-musl -p meshc
+            '
+          sudo chown -R $(id -u):$(id -g) target/
+
+      - name: Build meshc
+        if: matrix.llvm_method != 'docker'
+        run: cargo build --release --locked --target ${{ matrix.target }} -p meshc
+        env:
+          LLVM_SYS_211_PREFIX: ${{ env.LLVM_SYS_211_PREFIX }}
+
+      - name: Build meshpkg
+        if: matrix.build_meshpkg
+        run: cargo build --release --locked --target ${{ matrix.target }} -p meshpkg
+        env:
+          LLVM_SYS_211_PREFIX: ${{ env.LLVM_SYS_211_PREFIX }}
