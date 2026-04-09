@@ -13,6 +13,29 @@ permissions:
   contents: read
 
 jobs:
+  secrets-preflight:
+    name: Verify extension publish secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check marketplace secrets
+        shell: bash
+        env:
+          OPEN_VSX_TOKEN: ${{ secrets.OPEN_VSX_TOKEN }}
+          VS_MARKETPLACE_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+        run: |
+          set -euo pipefail
+          missing=0
+          if [[ -z "$OPEN_VSX_TOKEN" ]]; then
+            echo "::error title=Missing OPEN_VSX_TOKEN::publish-extension.yml runs in mesh-lang, but this repo has no OPEN_VSX_TOKEN secret. GitHub Actions secrets are repo-scoped: copy it into mesh-lang or promote it to an org secret visible to mesh-lang."
+            missing=1
+          fi
+          if [[ -z "$VS_MARKETPLACE_TOKEN" ]]; then
+            echo "::error title=Missing VS_MARKETPLACE_TOKEN::publish-extension.yml runs in mesh-lang, but this repo has no VS_MARKETPLACE_TOKEN secret. GitHub Actions secrets are repo-scoped: copy it into mesh-lang or promote it to an org secret visible to mesh-lang."
+            missing=1
+          fi
+          exit "$missing"
+
   proof:
     name: Verify extension release proof
     uses: ./.github/workflows/extension-release-proof.yml
@@ -21,6 +44,7 @@ jobs:
     name: Publish verified extension
     needs:
       - proof
+      - secrets-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

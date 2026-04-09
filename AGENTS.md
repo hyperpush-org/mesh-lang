@@ -19,6 +19,7 @@ GitHub authority is split:
 
 - `mesh-lang` owns language/toolchain/docs/installers/registry/packages/public-site surfaces.
 - `hyperpush-mono` / `hyperpush` owns `mesher/`, `mesher/landing/`, and `mesher/frontend-exp/`.
+- GitHub Actions secrets are repo-scoped: `mesh-lang` workflows cannot read secrets that exist only on `hyperpush`, so deploy/release/publish secrets must be present on `mesh-lang` itself or shared to it as organization secrets.
 
 The local `mesh-lang/mesher` path is only a compatibility symlink into the sibling product repo.
 If you edit `mesh-lang/mesher/...`, those changes belong to `../hyperpush-mono`, not to `mesh-lang`.

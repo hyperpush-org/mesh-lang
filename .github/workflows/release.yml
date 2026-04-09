@@ -2,6 +2,8 @@ name: Release
 
 on:
   push:
+    branches:
+      - main
     tags: ['v*']
   workflow_dispatch:
 
@@ -9,6 +11,30 @@ permissions:
   contents: read
 
 jobs:
+  tag-secrets-preflight:
+    name: Verify release publish secrets
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check MESH_PUBLISH_* secrets
+        shell: bash
+        env:
+          MESH_PUBLISH_OWNER: ${{ secrets.MESH_PUBLISH_OWNER }}
+          MESH_PUBLISH_TOKEN: ${{ secrets.MESH_PUBLISH_TOKEN }}
+        run: |
+          set -euo pipefail
+          missing=0
+          if [[ -z "$MESH_PUBLISH_OWNER" ]]; then
+            echo "::error title=Missing MESH_PUBLISH_OWNER::release.yml runs in mesh-lang, but this repo has no MESH_PUBLISH_OWNER secret. GitHub Actions secrets are repo-scoped: copy it into mesh-lang or promote it to an org secret visible to mesh-lang."
+            missing=1
+          fi
+          if [[ -z "$MESH_PUBLISH_TOKEN" ]]; then
+            echo "::error title=Missing MESH_PUBLISH_TOKEN::release.yml runs in mesh-lang, but this repo has no MESH_PUBLISH_TOKEN secret. GitHub Actions secrets are repo-scoped: copy it into mesh-lang or promote it to an org secret visible to mesh-lang."
+            missing=1
+          fi
+          exit "$missing"
+
   build:
     name: Build (${{ matrix.target }})
     runs-on: ${{ matrix.os }}

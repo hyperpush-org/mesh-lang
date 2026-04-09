@@ -25,6 +25,9 @@ GitHub authority is split: `mesh-lang` owns language/toolchain/docs/installers/r
 
 A local `mesh-lang/mesher -> ../hyperpush-mono/mesher` compatibility path is allowed only as local workspace assembly. It is not the canonical GitHub structure, and CI/public docs must not depend on it.
 
+GitHub Actions secrets are repo-scoped too.
+`mesh-lang` workflows cannot read repository secrets that exist only on `hyperpush-mono` / `hyperpush`, so any deploy/release/publish secret used by a `mesh-lang` workflow must also exist on `mesh-lang` itself or as an organization secret explicitly shared with `mesh-lang`.
+
 ## Repo ownership
 
 `website/`, `packages-website/`, `registry/`, installers, and evaluator-facing examples remain language-owned inside `mesh-lang` for M055.

@@ -14,8 +14,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  secrets-preflight:
+    name: Verify deploy secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check FLY_API_TOKEN
+        shell: bash
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$FLY_API_TOKEN" ]]; then
+            echo "::error title=Missing FLY_API_TOKEN::mesh-lang deploy-services.yml now runs on push to main, but this repo has no FLY_API_TOKEN secret. GitHub Actions secrets are repo-scoped: copy FLY_API_TOKEN into mesh-lang or promote it to an org secret visible to mesh-lang."
+            exit 1
+          fi
+
   deploy-registry:
     name: Deploy mesh-registry
+    needs: secrets-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
