@@ -92,28 +92,6 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
-### R133 — Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
-- Class: constraint
-- Status: active
-- Description: Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
-- Why it matters: Ownership confusion is one of the main ways cross-repo planning becomes incoherent after a split.
-- Source: user
-- Primary owning slice: M057/S01
-- Supporting slices: M057/S02, M057/S03
-- Validation: mapped
-- Notes: The split contract from M055 is authoritative for repo ownership.
-
-### R134 — After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
-- Class: quality-attribute
-- Status: active
-- Description: After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
-- Why it matters: The point of this milestone is not cosmetic cleanup; it is restoring intelligible planning truth.
-- Source: user
-- Primary owning slice: M057/S03
-- Supporting slices: M057/S01, M057/S02
-- Validation: mapped
-- Notes: This is the end-to-end acceptance bar for the milestone.
-
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -996,6 +974,28 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by M057/S02: the reconciliation batch preserved history by transferring `hyperpush#8` into `mesh-lang#19` instead of recreating it, closing shipped issues with evidence rather than deleting them, and rewriting drifted issues in place. The persisted `repo-mutation-results.json` plus `bash scripts/verify-m057-s02.sh` verify the canonical transfer mapping and final issue states live.
 - Notes: Ambiguous items should stay open with clarified scope rather than be force-closed.
 
+### R133 — Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
+- Class: constraint
+- Status: validated
+- Description: Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
+- Why it matters: Ownership confusion is one of the main ways cross-repo planning becomes incoherent after a split.
+- Source: user
+- Primary owning slice: M057/S01
+- Supporting slices: M057/S02, M057/S03
+- Validation: Validated by M057/S01-S03: S01 published explicit `workspace_path_truth`, `public_repo_truth`, and normalized destination fields in `reconciliation-evidence.json` / `reconciliation-ledger.json`; S02 applied the naming normalization live on `hyperpush#54/#55/#56`; and S03 preserved that normalized public `hyperpush` naming on the reconciled org-project rows, with live replay via `node --test scripts/tests/verify-m057-s02-results.test.mjs`, `node --test scripts/tests/verify-m057-s03-results.test.mjs`, `bash scripts/verify-m057-s02.sh`, and `bash scripts/verify-m057-s03.sh`.
+- Notes: The split contract from M055 is authoritative for repo ownership.
+
+### R134 — After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
+- Class: quality-attribute
+- Status: validated
+- Description: After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
+- Why it matters: The point of this milestone is not cosmetic cleanup; it is restoring intelligible planning truth.
+- Source: user
+- Primary owning slice: M057/S03
+- Supporting slices: M057/S01, M057/S02
+- Validation: Validated by M057/S01-S03: `reconciliation-audit.md` and `reconciliation-ledger.json` publish the canonical shipped/active/misfiled/missing tracker state, `repo-mutation-results.md` preserves the canonical issue mapping and final repo totals, and `project-mutation-results.md` plus the retained `.tmp/m057-s03/verify/` bundle explain representative done/active/next board truth without reopening prior `.gsd` archaeology; green replay is retained in `node --test scripts/tests/verify-m057-s03-results.test.mjs` and `bash scripts/verify-m057-s03.sh`.
+- Notes: This is the end-to-end acceptance bar for the milestone.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -1617,15 +1617,15 @@ This file is the explicit capability and coverage contract for the project.
 | R130 | operability | validated | M057/S03 | M057/S01, M057/S02 | Validated by M057/S03: org project #1 now matches reconciled repo truth with 55 live rows (2 Done / 3 In Progress / 50 Todo), canonical board presence for `mesh-lang#19` and `hyperpush#58`, stale cleanup row removal, inherited metadata backfill, and green replay from `node --test scripts/tests/verify-m057-s03-results.test.mjs` plus `bash scripts/verify-m057-s03.sh`. |
 | R131 | admin/support | validated | M057/S02 | M057/S01, M057/S03 | Validated by M057/S02: the derived `/pitch` tracker gap from the S01 ledger was materialized as canonical issue `hyperpush#58`, then closed as completed with milestone-backed evidence; the checked results artifact and `bash scripts/verify-m057-s02.sh` retain the canonical URL/number mapping and verify it live. |
 | R132 | quality-attribute | validated | M057/S02 | M057/S01, M057/S03 | Validated by M057/S02: the reconciliation batch preserved history by transferring `hyperpush#8` into `mesh-lang#19` instead of recreating it, closing shipped issues with evidence rather than deleting them, and rewriting drifted issues in place. The persisted `repo-mutation-results.json` plus `bash scripts/verify-m057-s02.sh` verify the canonical transfer mapping and final issue states live. |
-| R133 | constraint | active | M057/S01 | M057/S02, M057/S03 | mapped |
-| R134 | quality-attribute | active | M057/S03 | M057/S01, M057/S02 | mapped |
+| R133 | constraint | validated | M057/S01 | M057/S02, M057/S03 | Validated by M057/S01-S03: S01 published explicit `workspace_path_truth`, `public_repo_truth`, and normalized destination fields in `reconciliation-evidence.json` / `reconciliation-ledger.json`; S02 applied the naming normalization live on `hyperpush#54/#55/#56`; and S03 preserved that normalized public `hyperpush` naming on the reconciled org-project rows, with live replay via `node --test scripts/tests/verify-m057-s02-results.test.mjs`, `node --test scripts/tests/verify-m057-s03-results.test.mjs`, `bash scripts/verify-m057-s02.sh`, and `bash scripts/verify-m057-s03.sh`. |
+| R134 | quality-attribute | validated | M057/S03 | M057/S01, M057/S02 | Validated by M057/S01-S03: `reconciliation-audit.md` and `reconciliation-ledger.json` publish the canonical shipped/active/misfiled/missing tracker state, `repo-mutation-results.md` preserves the canonical issue mapping and final repo totals, and `project-mutation-results.md` plus the retained `.tmp/m057-s03/verify/` bundle explain representative done/active/next board truth without reopening prior `.gsd` archaeology; green replay is retained in `node --test scripts/tests/verify-m057-s03-results.test.mjs` and `bash scripts/verify-m057-s03.sh`. |
 | R135 | admin/support | deferred | none | none | unmapped |
 | R136 | anti-feature | out-of-scope | none | none | n/a |
 | R137 | anti-feature | out-of-scope | none | none | n/a |
 
 ## Coverage Summary
 
-- Active requirements: 10
-- Mapped to slices: 10
-- Validated: 80 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132)
+- Active requirements: 8
+- Mapped to slices: 8
+- Validated: 82 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134)
 - Unmapped active requirements: 0

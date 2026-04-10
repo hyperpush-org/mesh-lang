@@ -1,5 +1,6 @@
 # Knowledge
 
+- For M057 closeout and later tracker sanity checks, start with the maintainer-readable handoff artifacts before diving into raw verifier logs: `project-mutation-results.md` should still show representative rows `mesh-lang#19` (Done), `hyperpush#54` (In Progress), and `hyperpush#29` (Next/Todo), and any mismatch there is a fast signal that the board has drifted before you inspect `.tmp/m057-s03/verify/`.
 - For M057/S02 live repo reconciliation verification, `gh issue view 8 -R hyperpush-org/hyperpush` now fails with GraphQL `Could not resolve to an issue or pull request with the number of 8` after the `hyperpush#8 -> mesh-lang#19` transfer. Treat that source-repo lookup failure as the expected absence proof and verify the canonical destination through the persisted `repo-mutation-results.json` mapping instead of assuming `gh issue view` will follow the transfer automatically.
 - For M057/S02 live repo reconciliation apply work, `gh api` reads of a transferred issue can still succeed with HTTP 200 because GitHub follows the redirect and returns the destination-repo payload. Treat that as a successful identity-change read, and rely on the persisted canonical mapping in `repo-mutation-results.json` instead of expecting the old repo/number pair to remain a stable post-transfer locator.
 
