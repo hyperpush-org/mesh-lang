@@ -56,13 +56,13 @@
   - Do: Build a planner that consumes the S01 ledger and snapshots, generates truthful replacement titles/bodies/comments using existing repo issue shapes, excludes already-correct rows, and records the `hyperpush#8` transfer plus the retrospective `/pitch` issue creation in one deterministic manifest.
   - Verify: `python3 scripts/lib/m057_repo_mutation_plan.py --output-dir .gsd/milestones/M057/slices/S02 --check && node --test scripts/tests/verify-m057-s02-plan.test.mjs`
   - Done when: the plan artifacts exist, the contract test proves the touched set is exactly 10 closeouts + 31 open-issue rewrites/normalizations + 1 transfer + 1 create, and no already-correct closed rows enter the apply set.
-- [ ] **T02: Apply transfer, retrospective create, closeouts, and rewrites from the checked plan** `est:2h`
+- [x] **T02: Apply transfer, retrospective create, closeouts, and rewrites from the checked plan** `est:2h`
   - Why: This is the slice’s real external effect: the live GitHub repo issue sets must become truthful, history-preserving, and safe to resume if the batch stops mid-run.
   - Files: `scripts/lib/m057_repo_mutation_apply.py`, `scripts/lib/m057_repo_mutation_plan.py`, `.gsd/milestones/M057/slices/S02/repo-mutation-plan.json`, `.gsd/milestones/M057/slices/S02/repo-mutation-results.json`
   - Do: Add a plan-driven applicator with dry-run default and explicit `--apply`, run `hyperpush#8` transfer and `/pitch` create/close first so new canonical URLs are captured early, then execute the remaining closes and rewrites in deterministic order while recording every outcome and already-satisfied skip.
   - Verify: `python3 scripts/lib/m057_repo_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S02 --check && python3 scripts/lib/m057_repo_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S02 --apply`
   - Done when: the live repo mutations have been applied from the checked manifest, `repo-mutation-results.json` records old/new canonical mappings for transfer/create, and reruns do not duplicate already-satisfied repo changes.
-- [ ] **T03: Verify the live repo state and publish the S03 handoff artifacts** `est:90m`
+- [x] **T03: Verify the live repo state and publish the S03 handoff artifacts** `est:90m`
   - Why: S02 is not done when the batch finishes; it is done when read-only GH checks prove the repo issue sets now match the S01 truth buckets and S03 has the exact new canonical issue URLs it must use.
   - Files: `scripts/tests/verify-m057-s02-results.test.mjs`, `scripts/verify-m057-s02.sh`, `.gsd/milestones/M057/slices/S02/repo-mutation-results.json`, `.gsd/milestones/M057/slices/S02/repo-mutation-results.md`
   - Do: Add a results contract test and retained verifier that check repo totals, bucket-level states, transfer/create mappings, and rewritten-text expectations, then publish a compact S03 handoff markdown with the new canonical issue URLs/numbers and any remaining board-only drift.

@@ -83,6 +83,13 @@ def read_text(path: Path, label: str) -> str:
     return path.read_text(encoding="utf8")
 
 
+def path_for_artifact(value: Path, *, root: Path) -> str:
+    try:
+        return str(value.relative_to(root))
+    except ValueError:
+        return str(value)
+
+
 def repo_issue_handle(repo_slug: str, number: int) -> str:
     return f"{repo_slug.split('/')[-1]}#{number}"
 
@@ -997,10 +1004,10 @@ def build_plan(*, source_root: Path, source_dir: Path, output_dir: Path) -> tupl
         "generated_at": iso_now(),
         "source_script": SCRIPT_RELATIVE_PATH,
         "source": {
-            "ledger_path": str(ledger_path.relative_to(source_root)),
-            "audit_path": str(audit_path.relative_to(source_root)),
-            "snapshot_dir": str(source_dir.relative_to(source_root)),
-            "output_dir": str(output_dir.relative_to(source_root)),
+            "ledger_path": path_for_artifact(ledger_path, root=source_root),
+            "audit_path": path_for_artifact(audit_path, root=source_root),
+            "snapshot_dir": path_for_artifact(source_dir, root=source_root),
+            "output_dir": path_for_artifact(output_dir, root=source_root),
             "ledger_version": require_string(ledger.get("version"), "ledger.version"),
         },
         "template_context": templates,
