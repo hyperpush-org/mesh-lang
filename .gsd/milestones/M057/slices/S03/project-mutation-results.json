@@ -1,12 +1,12 @@
 {
   "version": "m057-s03-project-mutation-results-v1",
-  "generated_at": "2026-04-10T19:45:33Z",
+  "generated_at": "2026-04-10T19:48:51Z",
   "source_script": "scripts/lib/m057_project_mutation_apply.py",
   "mode": "apply",
   "output_dir": ".gsd/milestones/M057/slices/S03",
   "status": "ok",
-  "started_at": "2026-04-10T19:45:33Z",
-  "completed_at": "2026-04-10T19:45:37Z",
+  "started_at": "2026-04-10T19:48:51Z",
+  "completed_at": "2026-04-10T19:48:54Z",
   "source_plan": {
     "path": ".gsd/milestones/M057/slices/S03/project-mutation-plan.json",
     "version": "m057-s03-project-mutation-plan-v1",
@@ -88,7 +88,7 @@
   "last_attempted_issue_handle": "hyperpush#57",
   "last_attempted_project_item_id": "PVTI_lADOEExRVs4BUM59zgpjjYw",
   "initial_live_capture": {
-    "captured_at": "2026-04-10T19:45:30Z",
+    "captured_at": "2026-04-10T19:48:48Z",
     "rollup": {
       "total_items": 55,
       "repo_counts": {
@@ -110,7 +110,7 @@
     }
   },
   "final_live_capture": {
-    "captured_at": "2026-04-10T19:45:33Z",
+    "captured_at": "2026-04-10T19:48:51Z",
     "rollup": {
       "total_items": 55,
       "repo_counts": {
@@ -873,8 +873,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -994,8 +994,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1115,8 +1115,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1236,8 +1236,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1357,8 +1357,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1478,8 +1478,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1599,8 +1599,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1720,8 +1720,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1841,8 +1841,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -1962,8 +1962,8 @@
       "final_state": null,
       "project_item_id_after": null,
       "skipped_reason": "project_row_already_absent",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": []
     },
     {
@@ -2187,8 +2187,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpoujA",
       "skipped_reason": "project_row_already_present_with_matching_fields",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpoujA"
     },
@@ -2413,8 +2413,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpovuo",
       "skipped_reason": "project_row_already_present_with_matching_fields",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpovuo"
     },
@@ -2838,8 +2838,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTg8",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTg8"
     },
@@ -3263,8 +3263,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjThc",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjThc"
     },
@@ -3688,8 +3688,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjThw",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjThw"
     },
@@ -4113,8 +4113,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTiQ",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTiQ"
     },
@@ -4703,8 +4703,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTjE",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTjE"
     },
@@ -5128,8 +5128,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTj0",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTj0"
     },
@@ -5718,8 +5718,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTj8",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTj8"
     },
@@ -6308,8 +6308,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTkg",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTkg"
     },
@@ -6898,8 +6898,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTkw",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTkw"
     },
@@ -7488,8 +7488,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTlU",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTlU"
     },
@@ -8078,8 +8078,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTl0",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTl0"
     },
@@ -8668,8 +8668,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTmo",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTmo"
     },
@@ -9258,8 +9258,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTnA",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTnA"
     },
@@ -9848,8 +9848,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTnc",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTnc"
     },
@@ -10438,8 +10438,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTns",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTns"
     },
@@ -11028,8 +11028,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjToU",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjToU"
     },
@@ -11618,8 +11618,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTo8",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTo8"
     },
@@ -12208,8 +12208,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTpg",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTpg"
     },
@@ -12798,8 +12798,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTqE",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTqE"
     },
@@ -13388,8 +13388,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTsc",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTsc"
     },
@@ -13978,8 +13978,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTuA",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTuA"
     },
@@ -14568,8 +14568,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjTvk",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjTvk"
     },
@@ -14999,8 +14999,8 @@
       },
       "project_item_id_after": "PVTI_lADOEExRVs4BUM59zgpjjYw",
       "skipped_reason": "project_fields_already_match_plan",
-      "started_at": "2026-04-10T19:45:33Z",
-      "completed_at": "2026-04-10T19:45:33Z",
+      "started_at": "2026-04-10T19:48:51Z",
+      "completed_at": "2026-04-10T19:48:51Z",
       "command_log": [],
       "project_item_id": "PVTI_lADOEExRVs4BUM59zgpjjYw"
     }

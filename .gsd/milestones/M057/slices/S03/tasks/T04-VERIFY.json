@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T04",
+  "unitId": "M057/S03/T04",
+  "timestamp": 1775850525334,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "python3 scripts/lib/m057_project_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S03 --check",
+      "exitCode": 0,
+      "durationMs": 2930,
+      "verdict": "pass"
+    },
+    {
+      "command": "python3 scripts/lib/m057_project_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S03 --apply",
+      "exitCode": 0,
+      "durationMs": 5848,
+      "verdict": "pass"
+    }
+  ]
+}

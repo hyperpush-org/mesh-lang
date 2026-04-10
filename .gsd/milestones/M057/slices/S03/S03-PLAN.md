@@ -72,7 +72,7 @@ Done when: the live board changes are applied from the checked manifest, rerunni
   - Files: `scripts/lib/m057_project_mutation_apply.py`, `.gsd/milestones/M057/slices/S03/project-mutation-plan.json`, `.gsd/milestones/M057/slices/S03/project-mutation-results.json`, `.gsd/milestones/M057/slices/S03/project-mutation-results.md`
   - Verify: python3 scripts/lib/m057_project_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S03 --check && python3 scripts/lib/m057_project_mutation_apply.py --output-dir .gsd/milestones/M057/slices/S03 --apply
 
-- [ ] **T05: Replay live board truth and publish the retained S03 verifier** `est:90m`
+- [x] **T05: Replay live board truth and publish the retained S03 verifier** `est:90m`
   Why: S03 is only complete once a read-only verifier can replay the final live board state, prove it matches reconciled repo truth, and expose drift clearly for future maintainers.
 
 Do:
