@@ -1,0 +1,38 @@
+{
+  "version": "m057-s03-project-mutation-plan-v1",
+  "generated_at": "2026-04-10T17:46:22Z",
+  "source_script": "scripts/lib/m057_project_mutation_plan.py",
+  "plan_status": "blocked_preflight",
+  "source": {
+    "output_dir": ".gsd/milestones/M057/slices/S03",
+    "preflight_command": "bash /Users/sn0w/Documents/dev/mesh-lang/scripts/verify-m057-s02.sh"
+  },
+  "preflight": {
+    "status": "error",
+    "command": "bash /Users/sn0w/Documents/dev/mesh-lang/scripts/verify-m057-s02.sh",
+    "exit_code": 1,
+    "timed_out": false,
+    "started_at": "2026-04-10T17:46:20Z",
+    "completed_at": "2026-04-10T17:46:22Z",
+    "stdout": "",
+    "stderr": "issue state drifted\n",
+    "parsed": null
+  },
+  "rollup": {
+    "delete": 0,
+    "add": 0,
+    "update": 0,
+    "unchanged": 0,
+    "inherited_rows": 0,
+    "current_project_items": null,
+    "desired_project_items": null
+  },
+  "operations": {
+    "delete": [],
+    "add": [],
+    "update": []
+  },
+  "verified_noops": [],
+  "canonical_mapping_handling": {},
+  "live_capture": null
+}

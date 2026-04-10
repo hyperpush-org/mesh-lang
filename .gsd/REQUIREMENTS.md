@@ -4,18 +4,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Active
 
-### R040 — The M033 data-layer design should be shaped so SQLite-specific extras can be added later without backing out a PG-only abstraction.
-- Class: constraint
-- Status: active
-- Description: The M033 data-layer design should be shaped so SQLite-specific extras can be added later without backing out a PG-only abstraction.
-- Why it matters: The user wants a neutral code path with explicit vendor extras, not a one-off Postgres trap.
-- Source: user
-- Primary owning slice: M033/S01 (provisional)
-- Supporting slices: M033/S02 (provisional)
-- Validation: Design seam advanced by the combined M033/S01+S04 proof set: `bash scripts/verify-m033-s01.sh`, `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`; full validation still depends on later vendor-extra slices.
-- Notes: Further advanced by M033/S05: `website/docs/docs/databases/index.md` and `scripts/verify-m033-s05.sh` now enforce the portable core vs explicit `Pg.*` vs SQLite-later contract in the public docs, but runtime validation still depends on later vendor-extra slices.
-
-### R049 — Keyed work completes with at-least-once, idempotent semantics without an external durable store.
+### R049 — Mesh should support a keyed request model where retries are safe and visible completion converges correctly even if the original worker dies.
 - Class: continuity
 - Status: active
 - Description: Mesh should support a keyed request model where retries are safe and visible completion converges correctly even if the original worker dies.
@@ -26,7 +15,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This remains at-least-once with idempotent completion, not exactly-once semantics. M044 productizes the contract through declared clustered handlers instead of proof-app-specific plumbing.
 
-### R050 — In-flight continuity is replicated across live nodes with a configurable replica count and two-node safety as the default proof bar.
+### R050 — The distributed runtime should replicate enough request ownership/progress state across live nodes that a default two-node deployment can lose any one node without losing active keyed work.
 - Class: operability
 - Status: active
 - Description: The distributed runtime should replicate enough request ownership/progress state across live nodes that a default two-node deployment can lose any one node without losing active keyed work.
@@ -37,7 +26,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: Replica count should remain configurable upward even if the first proof uses two-node safety. M044 shifts this from proof-app continuity into the first-class clustered app model.
 
-### R052 — The distributed proof runs from one Docker image with a small env-driven operator surface locally and on Fly.
+### R052 — An operator should be able to run the same image locally or on Fly, provide a small set of environment variables, and get automatic cluster behavior without hand-editing per-node peer lists.
 - Class: launchability
 - Status: active
 - Description: An operator should be able to run the same image locally or on Fly, provide a small set of environment variables, and get automatic cluster behavior without hand-editing per-node peer lists.
@@ -48,205 +37,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: M044 should replace proof-app-specific env dialect with a standard Mesh clustered-app contract while preserving the same-binary operator story.
 
-### R077 — The primary clustered docs example is tiny enough that the language/runtime, not the example app, is visibly doing the distributed work.
-- Class: launchability
-- Status: validated
-- Description: Mesh should present one small clustered example whose source is mostly business logic plus minimal ingress/declaration code, not proof-app-sized distributed glue.
-- Why it matters: If the primary example is large or system-shaped, the docs still make clustering look manual even when the runtime owns more of the behavior.
-- Source: user
-- Primary owning slice: M045/S01
-- Supporting slices: M045/S04, M045/S05
-- Validation: Validated by M045/S01, S02, S04, and S05: clustered bootstrap moved behind `Node.start_from_env()` / `BootstrapStatus`, the scaffold stayed small while remote execution and completion moved into runtime/codegen, legacy `cluster-proof` glue was collapsed, and the assembled closeout `bash scripts/verify-m045-s05.sh` passed.
-- Notes: This is a docs-grade simplicity requirement, not just a code-deletion goal.
-
-### R078 — One local clustered example proves cluster formation, runtime-chosen remote execution, and failover end to end.
-- Class: core-capability
-- Status: validated
-- Description: A single local example should run on two nodes, submit work, show the runtime choosing remote execution, and continue through primary loss without switching to a different proof app.
-- Why it matters: The user wants one small example that shows the whole language-owned clustered story, not a simple demo plus a separate “real” failover example.
-- Source: user
-- Primary owning slice: M045/S02
-- Supporting slices: M045/S03
-- Validation: Validated by M045/S02 and S03: the scaffold-first two-node rail proves runtime-chosen remote execution, the retained S03 failover bundle records automatic recovery from `attempt-1` to `attempt-2` on the same request key, and the assembled closeout `bash scripts/verify-m045-s05.sh` replays that chain successfully.
-- Notes: The proof bar is local-first and end-to-end, not just fixture-level.
-
-### R079 — Example apps contain no app-owned clustering, failover, routing-choice, load-balancing, or status-truth logic.
-- Class: constraint
-- Status: validated
-- Description: All cluster state, routing choice, authority/failover, and status truth for the primary example must come from the language/runtime instead of example-side helpers, placement logic, or translation seams.
-- Why it matters: This is the core honesty boundary for M045: the example must stop helping the runtime do distributed-systems work.
-- Source: user
-- Primary owning slice: M045/S01
-- Supporting slices: M045/S03, M045/S04
-- Validation: Validated by M045/S01-S04: bootstrap, remote-owner execution, completion, failover, and status truth now live behind runtime/codegen plus `meshc cluster` CLI surfaces; the current proof rails depend on runtime CLI truth rather than app-owned status or placement helpers.
-- Notes: Any example-owned distributed logic is suspect by default in this milestone.
-
-### R080 — `meshc init --clustered` is the primary docs-grade clustered example surface.
-- Class: launchability
-- Status: validated
-- Description: The clustered scaffold should become the main example readers learn from, rather than requiring them to reverse-engineer `cluster-proof` first.
-- Why it matters: A first-class language feature needs a first-class entrypoint and teaching surface.
-- Source: user
-- Primary owning slice: M045/S02
-- Supporting slices: M045/S05
-- Validation: Validated by M045/S05: `/docs/getting-started/clustered-example/` now exists as the first-class clustered tutorial, `cargo test -p meshc --test e2e_m045_s05 m045_s05_ -- --nocapture` passed, and `npm --prefix website run build` passed inside the green assembled closeout `bash scripts/verify-m045-s05.sh`.
-- Notes: `cluster-proof` can remain as a deeper proof rail, but it should not be the main teaching abstraction.
-
-### R081 — Public docs teach the simple clustered example first and keep deeper proof rails secondary.
-- Class: quality-attribute
-- Status: validated
-- Description: The docs should center the small scaffold-first clustered example, then point to deeper proof rails only when the reader needs the underlying failover/operator detail.
-- Why it matters: Even if the runtime is truthful, the product story still feels too manual if the docs lead with the proof app instead of the simple language-owned example.
-- Source: inferred
-- Primary owning slice: M045/S05
-- Supporting slices: M045/S02
-- Validation: Validated by M045/S05: public docs/readme guidance now routes clustered readers to the scaffold-first Getting Started page before deeper proof material, the docs build passed, and `bash scripts/verify-m045-s05.sh` remained green while retaining the deeper S04/S03 proof chain as secondary evidence.
-- Notes: This requirement is about ordering and emphasis in the public teaching surface, not removing deeper verifier rails entirely.
-
-### R097 — `@cluster` and `@cluster(N)` replace `clustered(work)` as the public clustered function syntax.
-- Class: core-capability
-- Status: validated
-- Description: Mesh source should declare clustered functions with `@cluster` and `@cluster(N)` instead of the current `clustered(work)` marker.
-- Why it matters: The current syntax makes clustering look like a special proof-only mechanism instead of a normal language feature.
-- Source: user
-- Primary owning slice: M047/S01
-- Supporting slices: M047/S04, M047/S06
-- Validation: Validated by M047/S01 and M047/S04: source-first parser/compiler/LSP support landed, the hard cutover removed legacy public syntax, and the passed M047 validation + milestone closeout prove `@cluster` / `@cluster(N)` are now the supported public clustered function spellings.
-- Notes: This is a hard cutover requirement, not an additive alias.
-
-### R098 — Cluster counts mean replication counts, and omitted counts default to `2`.
-- Class: continuity
-- Status: validated
-- Description: `@cluster(3)` and route-local clustered wrappers should express replication count, and `@cluster` should mean replication count `2` by default.
-- Why it matters: If the numeric argument is ambiguous, the new syntax becomes another folklore surface instead of a clear contract.
-- Source: user
-- Primary owning slice: M047/S02
-- Supporting slices: M047/S03, M047/S04
-- Validation: Validated by M047/S02: replication counts flow into declared-handler runtime metadata and continuity truth, bare `@cluster` defaults to `2`, explicit counts are preserved, and unsupported higher fanout rejects durably instead of being silently clipped.
-- Notes: The count is about replication, not just execution width.
-
-### R099 — Clustering remains a general function capability, not an HTTP-only feature.
-- Class: constraint
-- Status: validated
-- Description: Any supported function boundary Mesh clusters today should remain clusterable through the new source-first syntax; HTTP route clustering is an important consumer of the model, not the only model.
-- Why it matters: Route-only clustering would regress the current runtime-owned startup/background/distributed work story and force non-route work back into awkward side channels.
-- Source: user
-- Primary owning slice: M047/S02
-- Supporting slices: M047/S03, M047/S04
-- Validation: Validated by M047/S01, S02, S04, and the passed milestone validation: clustering stayed a general function capability while the canonical public examples remained route-free `@cluster` first.
-- Notes: Clustered routes should lower onto the same general clustered function capability.
-
-### R100 — HTTP routes can opt into clustering with wrapper syntax like `HTTP.clustered(handler)` and `HTTP.clustered(3, handler)`.
-- Class: launchability
-- Status: validated
-- Description: Router chains should support a route-local clustered wrapper so a single route can opt into clustering without awkward handler indirection or verb-specific API explosion.
-- Why it matters: In a pipe-chained router, clustering has to be obvious where the route is declared or it becomes technically present but not obvious.
-- Source: user
-- Primary owning slice: M047/S03
-- Supporting slices: M047/S05, M047/S06
-- Validation: Validated by M047/S07 and fresh closeout replay: `HTTP.clustered(handler)` / `HTTP.clustered(N, handler)` typecheck, lower, execute, and pass `cargo test -p meshc --test e2e_m047_s07 -- --nocapture`.
-- Notes: Wrapper style is preferred over adding a separate clustered verb helper for every HTTP method.
-
-### R101 — For clustered HTTP, the route handler is the distributed boundary and normal downstream function calls run naturally inside that execution.
-- Class: core-capability
-- Status: validated
-- Description: When a route uses the clustered wrapper, Mesh should treat the route handler as the clustered unit of work and execute its normal call graph inside that clustered request execution.
-- Why it matters: This keeps the mental model honest and avoids pretending Mesh infers arbitrary deeper distributed intent from normal code.
-- Source: user
-- Primary owning slice: M047/S03
-- Supporting slices: M047/S05
-- Validation: Validated by M047/S07: continuity/runtime truth stays keyed to the real route handler runtime name, proving the route handler itself is the clustered boundary.
-- Notes: The first route model should be explicit at the handler boundary rather than fully implicit.
-
-### R102 — The old `clustered(work)` surface is removed instead of kept as a coequal public syntax.
-- Class: constraint
-- Status: validated
-- Description: Mesh should migrate examples, docs, generated scaffolds, parser/typechecker messaging, and proof rails onto the new `@cluster` model instead of teaching both syntaxes side by side.
-- Why it matters: Keeping both public models would preserve exactly the clutter and uncertainty this milestone is meant to remove.
-- Source: user
-- Primary owning slice: M047/S04
-- Supporting slices: M047/S06
-- Validation: Validated by M047/S04: legacy `clustered(work)` / `[cluster]` public surfaces were removed from examples, docs, generated outputs, and authoritative cutover rails.
-- Notes: This is a language-surface reset, not a temporary sugar layer.
-
-### R103 — Repo-owned clustered examples are dogfooded onto the new model.
-- Class: quality-attribute
-- Status: validated
-- Description: The repo’s clustered examples and proof surfaces should use plain `@cluster` functions with ordinary user-facing names like `add()` or domain-specific verbs, and should use clustered route wrappers only where that feature is actually shipped, instead of continuing to demonstrate the old clustered-work shape or an `execute_declared_work(...)` special case.
-- Why it matters: Mesh cannot claim the new syntax is the real direction if its own canonical examples keep a proof-shaped function contract.
-- Source: user
-- Primary owning slice: M047/S04
-- Supporting slices: M047/S05, M047/S06
-- Validation: Validated by M047/S04, S05, and S08: repo-owned clustered examples, scaffold output, proof packages, docs snippets, and verifier expectations now dogfood the new source-first model.
-- Notes: Dogfooding includes proof packages, generated surfaces, docs snippets, and named verifier expectations. `execute_declared_work(...)` is now an explicit drift marker on public example/scaffold surfaces.
-
-### R104 — `meshc` can scaffold a simple SQLite-backed Todo API that demonstrates ordinary `@cluster` usage, actors, rate limiting, several real routes, and a complete Dockerfile.
-- Class: launchability
-- Status: validated
-- Description: The new scaffold should generate a simple but real Todo API with SQLite, several HTTP routes, actor-backed work, an obvious plain `@cluster` function surface, and a complete Dockerfile that users can build and run directly.
-- Why it matters: The user wants a starting point, not another tiny proof package or an overbuilt pseudo-product.
-- Source: user
-- Primary owning slice: M047/S05
-- Supporting slices: M047/S06
-- Validation: Validated by M047/S05 and fresh closeout replay: the Todo scaffold generates a SQLite API with real routes, actor-backed rate limiting, native/Docker proof, and a complete Dockerfile.
-- Notes: SQLite should be used in a simple way; the point is to show syntax and app shape, not maximal infrastructure. The starter now adopts explicit-count clustered read routes only where the shipped runtime truth supports them.
-
-### R105 — The new scaffold makes clustering obvious, keeps boilerplate low, and feels like a starting point instead of a proof app.
-- Class: differentiator
-- Status: validated
-- Description: The generated app should make clustering visually obvious through plain `@cluster` function names rather than proof-shaped helpers like `execute_declared_work(...)`, avoid excessive ceremony, and read like something a user could actually begin building from.
-- Why it matters: The user explicitly called out the failure modes to avoid: technically present but not obvious clustering, too much boilerplate, and a proof-app feel.
-- Source: user
-- Primary owning slice: M047/S05
-- Supporting slices: M047/S06
-- Validation: Validated by M047/S05 and S08: the scaffold uses ordinary `@cluster` function names, low boilerplate, and selected explicit-count clustered read routes while remaining a usable starting point.
-- Notes: If the scaffold proves the runtime but still reads like a verifier harness or keeps a proof-shaped public function contract, this requirement is not met.
-
-### R106 — Public docs and migration guidance teach one source-first clustered model to both new and existing Mesh users.
-- Class: quality-attribute
-- Status: validated
-- Description: Public docs, generated README guidance, CLI help, and verifier rails should teach the new source-first clustered model consistently, use plain `@cluster` function names instead of `execute_declared_work(...)` on public example surfaces, and make the migration off `clustered(work)` understandable for existing users.
-- Why it matters: This milestone optimizes for both new Mesh users and existing users, so the new model has to be learnable and migratable at the same time.
-- Source: inferred
-- Primary owning slice: M047/S06
-- Supporting slices: M047/S04, M047/S05
-- Validation: Validated by M047/S06 and fresh `bash scripts/verify-m047-s06.sh`: public docs, README guidance, migration story, and assembled proof rails teach one coherent source-first clustered model.
-- Notes: Migration guidance should be explicit enough that the hard cutover does not feel arbitrary, and docs must stay honest about what the Todo starter proves versus what the dedicated S07 two-node wrapper rail proves.
-
-### R112 — Mesh projects keep `main.mpl` as the default executable entrypoint but may override it in `mesh.toml` with a different path and file name.
-- Class: core-capability
-- Status: validated
-- Description: A Mesh project should build, test, analyze, and package from `main.mpl` by default, but allow an optional manifest override such as `lib/start.mpl` when the project wants a different executable entry file.
-- Why it matters: The current hardcoded `main.mpl` rule leaks into compiler, editor, and package surfaces and makes ordinary project layout choices feel artificially constrained.
-- Source: user
-- Primary owning slice: M048/S01
-- Supporting slices: M048/S02
-- Validation: Validated by M048 closeout: S01 shipped the shared `[package].entrypoint` contract for compiler build and `meshc test`, S02 propagated the same override-entry truth into `mesh-lsp`, `meshc lsp`, Neovim, VS Code, and `meshpkg publish`, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s01-entrypoint`, `m048-s02-lsp-neovim`, `m048-s02-vscode`, and `m048-s02-publish` phases.
-- Notes: Keep the simple default. The new contract is default-plus-override, not a second mandatory project layout.
-
-### R113 — `meshc` and `meshpkg` expose explicit binary self-update commands through the existing release/install path.
-- Class: admin/support
-- Status: validated
-- Description: The Mesh toolchain should have intentional self-update commands for installed binaries instead of requiring users to rediscover the installer flow manually.
-- Why it matters: Updating the compiler and package manager should be part of the product surface, not tribal knowledge.
-- Source: user
-- Primary owning slice: M048/S03
-- Supporting slices: M048/S05
-- Validation: Validated by M048 closeout: `meshc update` and `meshpkg update` now ship through the shared installer-backed updater seam, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s03-toolchain-update-core`, `m048-s03-toolchain-update-help`, `m048-s03-toolchain-update-cli`, and `m048-s03-toolchain-update-e2e` phases, replaying the staged-download and installed-repair rails.
-- Notes: This requirement is about binary self-update, not project dependency upgrades.
-
-### R114 — VS Code, Vim, and init-time Mesh skills reflect the current clustered and interpolation syntax truthfully.
-- Class: quality-attribute
-- Status: validated
-- Description: Official editor grammars and the Mesh init-time LLM skill bundle should understand `@cluster`, both string interpolation forms, and the current clustered/runtime teaching model.
-- Why it matters: If the language syntax and its teaching surfaces drift apart, new evaluators see a stale or misleading language.
-- Source: user
-- Primary owning slice: M048/S04
-- Supporting slices: M048/S02, M048/S05
-- Validation: Validated by M048 closeout: S02 made manifest-first editor rooting and diagnostics truthful for override-entry projects, S04 reset grammar and skill surfaces to current `@cluster` and interpolation behavior, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s02-lsp-neovim`, `m048-s02-vscode`, `m048-s04-shared-grammar`, `m048-s04-neovim-syntax`, `m048-s04-neovim-contract`, and `m048-s04-skill-contract` phases.
-- Notes: This includes both syntax highlighting parity and clustering-aware skill content.
-
-### R115 — The Todo scaffold supports either SQLite or Postgres and uses current Mesh patterns instead of stale starter conventions.
+### R115 — `meshc init --template todo-api` should let a user choose SQLite or Postgres and generate a starter that uses modern Mesh features such as tests, ORM surfaces, pipes, and the current clustered/runtime contract where they fit honestly.
 - Class: launchability
 - Status: active
 - Description: `meshc init --template todo-api` should let a user choose SQLite or Postgres and generate a starter that uses modern Mesh features such as tests, ORM surfaces, pipes, and the current clustered/runtime contract where they fit honestly.
@@ -257,7 +48,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: Database choice is part of the public starter contract, not a hidden follow-up edit.
 
-### R116 — Checked-in generated examples replace proof-app-shaped public teaching surfaces.
+### R116 — The repo should ship evaluator-facing generated examples under a stable examples surface instead of teaching from near-duplicate proof apps like `tiny-cluster/` and `cluster-proof/`.
 - Class: quality-attribute
 - Status: active
 - Description: The repo should ship evaluator-facing generated examples under a stable examples surface instead of teaching from near-duplicate proof apps like `tiny-cluster/` and `cluster-proof/`.
@@ -268,7 +59,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: Internal fixtures may survive, but the public example story should be example-first rather than proof-app-first.
 
-### R117 — Public docs are evaluator-facing, sample-verified, and stop exposing internal proof-maze material as the main docs experience.
+### R117 — Public Mesh docs should focus on user-facing concepts and verified working samples, while internal verifier maps, milestone rails, and repo-specific proof bundles move out of the primary public docs experience.
 - Class: quality-attribute
 - Status: active
 - Description: Public Mesh docs should focus on user-facing concepts and verified working samples, while internal verifier maps, milestone rails, and repo-specific proof bundles move out of the primary public docs experience.
@@ -279,7 +70,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This is a docs-surface cleanup, not a reduction in internal proof rigor.
 
-### R118 — Cluster guidance has one primary evaluator path, and low-level distributed primitives are clearly separated from clustered-app guidance.
+### R118 — The docs should make it obvious when a reader is learning low-level distributed actors versus the newer clustered-app/runtime-owned path, instead of blending those stories together.
 - Class: launchability
 - Status: active
 - Description: The docs should make it obvious when a reader is learning low-level distributed actors versus the newer clustered-app/runtime-owned path, instead of blending those stories together.
@@ -290,18 +81,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: The primary evaluator path should stay scaffold/examples first.
 
-### R119 — `mesher` replaces `reference-backend` as the maintained deeper reference app and keeps working on current Mesh features.
-- Class: integration
-- Status: validated
-- Description: The repo should retire `reference-backend/`, keep `mesher/` healthy, and modernize it so the deeper real-app reference surface uses current Mesh features honestly and efficiently.
-- Why it matters: Maintaining both a narrow legacy backend proof app and a broader real product app splits truth and creates redundant teaching and verifier surfaces.
-- Source: user
-- Primary owning slice: M051/S01
-- Supporting slices: M051/S02, M051/S03, M051/S04, M051/S05
-- Validation: Validated by M051 end to end: S01 moved Mesher onto the current scaffold-style bootstrap/runtime contract with a dedicated maintainer runbook and live Postgres rail; S02 preserved backend-only deploy/recovery/health proof under `scripts/fixtures/backend/reference-backend/` plus `scripts/verify-m051-s02.sh`; S03 retargeted tooling/editor/LSP/formatter rails to that retained fixture; S04 made public docs, scaffold output, and bundled skills examples-first while treating Mesher as the maintainer-facing deeper app; and S05 deleted repo-root `reference-backend/` while the final acceptance replay passed via `cargo test -p meshc --test e2e_m051_s05 -- --nocapture` and `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:51798/mesh_m051_complete bash scripts/verify-m051-s05.sh`.
-- Notes: Mesher is the deeper real reference app, not the primary beginner path.
-
-### R120 — Landing page, docs, and packages surfaces present one coherent Mesh story aimed at new evaluators.
+### R120 — The public web surfaces should consistently present Mesh as a general-purpose language whose strongest proof and clearest value are fault-tolerant distributed systems, instead of describing unrelated stale product positioning or underselling the language's distinctive features.
 - Class: launchability
 - Status: active
 - Description: The public web surfaces should consistently present Mesh as a general-purpose language whose strongest proof and clearest value are fault-tolerant distributed systems, instead of describing unrelated stale product positioning or underselling the language's distinctive features.
@@ -312,29 +92,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
-### R128 — `mesh-lang` issues reflect the actual language-repo code state.
-- Class: admin/support
-- Status: active
-- Description: Open issues in `hyperpush-org/mesh-lang` should match the current language-repo code, docs, workflow, and repo-boundary state instead of preserving stale pre-split or pre-closeout roadmap assumptions.
-- Why it matters: Language-repo issues are part of the public planning surface; if they drift from shipped code, the repo stops being intelligible to maintainers and evaluators.
-- Source: user
-- Primary owning slice: M057/S02
-- Supporting slices: M057/S01
-- Validation: mapped
-- Notes: Completed work should be closed with evidence, not left open as active roadmap noise.
-
-### R129 — `hyperpush` issues reflect the actual product-repo code state.
-- Class: admin/support
-- Status: active
-- Description: Open issues in `hyperpush-org/hyperpush` should match the current product-repo reality for `mesher/`, `mesher/landing/`, and `mesher/frontend-exp`, including the post-split ownership contract.
-- Why it matters: Product planning becomes misleading if the issue set still describes a different repo shape or stale implementation baseline.
-- Source: user
-- Primary owning slice: M057/S02
-- Supporting slices: M057/S01
-- Validation: mapped
-- Notes: The local sibling workspace is the truth source for this milestone, not stale GitHub wording.
-
-### R130 — Org project #1 reflects reconciled cross-repo issue truth.
+### R130 — The Hyperpush Launch Roadmap project should accurately show what is done, active, and next across both repos after issue reconciliation instead of remaining a stale all-Todo umbrella.
 - Class: operability
 - Status: active
 - Description: The Hyperpush Launch Roadmap project should accurately show what is done, active, and next across both repos after issue reconciliation instead of remaining a stale all-Todo umbrella.
@@ -345,29 +103,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: Project status is derived from reconciled issue truth, not treated as independent evidence.
 
-### R131 — Missing tracker coverage is created where code reality has no honest issue or project item.
-- Class: admin/support
-- Status: active
-- Description: If current shipped or active code reality in either repo lacks honest tracker coverage, the reconciliation pass should create the missing issue or project item instead of forcing existing stale items to carry the wrong meaning.
-- Why it matters: A truthful tracker requires filling real gaps, not just cleaning visible clutter.
-- Source: user
-- Primary owning slice: M057/S02
-- Supporting slices: M057/S01, M057/S03
-- Validation: mapped
-- Notes: This is additive only where the audit proves a genuine gap.
-
-### R132 — Reconciliation preserves history instead of hiding drift.
-- Class: quality-attribute
-- Status: active
-- Description: Completed items should be closed with evidence, and drifted items should be rewritten or split in a way that preserves the historical record instead of silently repurposing tracker entries.
-- Why it matters: Tracker cleanup that destroys history makes the repos cleaner-looking but less truthful.
-- Source: inferred
-- Primary owning slice: M057/S02
-- Supporting slices: M057/S01, M057/S03
-- Validation: mapped
-- Notes: Ambiguous items should stay open with clarified scope rather than be force-closed.
-
-### R133 — Repo ownership and naming are normalized across tracker surfaces.
+### R133 — Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
 - Class: constraint
 - Status: active
 - Description: Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
@@ -378,7 +114,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: The split contract from M055 is authoritative for repo ownership.
 
-### R134 — A fresh maintainer can understand shipped, active, and deferred work from GitHub surfaces alone.
+### R134 — After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
 - Class: quality-attribute
 - Status: active
 - Description: After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
@@ -389,315 +125,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This is the end-to-end acceptance bar for the milestone.
 
-### R121 — The packages site is part of the normal CI/deploy contract for the public Mesh surface.
-- Class: operability
-- Status: validated
-- Description: The packages website should be verified and deployed as part of the normal public release/deploy story rather than feeling bolted on beside the main docs and site surfaces.
-- Why it matters: A separate packages experience that is not clearly inside the main deploy contract makes the ecosystem look unfinished.
-- Source: user
-- Primary owning slice: M053/S03
-- Supporting slices: M053/S04, M053/S05, M053/S06
-- Validation: Validated by M053/S03-S06: `bash scripts/verify-m053-s03.sh` is green, `.tmp/m053-s03/verify/status.txt` is `ok`, and `remote-runs.json` shows fresh successful `authoritative-verification.yml`, `deploy-services.yml`, and `release.yml` runs aligned on shipped SHA `e5fb36a6fe7e9e56f3a608a608abbaaab6764167`.
-- Notes: The repo already deploys this surface; M053 closed the gap by making it part of the normal main/tag evidence chain instead of a separate hosted surface.
-
-### R122 — The Postgres scaffold gets the truthful clustered deploy proof, while SQLite stays an explicitly local starter.
-- Class: integration
-- Status: validated
-- Description: The Postgres starter should be proven through a real clustered deployment with endpoint exercise and operator truth, while the SQLite starter remains explicitly local/single-node and never implies shared clustered durability.
-- Why it matters: This preserves an honest serious production path without asking SQLite to carry a fake shared-storage story.
-- Source: user
-- Primary owning slice: M053/S02
-- Supporting slices: M053/S01, M053/S03, M053/S05, M053/S06
-- Validation: Validated by M053/S01-S06: the generated Postgres starter staged deploy rail, dual-node failover rail, and hosted closeout all passed; `bash scripts/verify-m053-s02.sh` is green and the retained S02 bundle proves deploy-artifact CRUD, operator truth, automatic promotion/recovery, stale-primary fencing, and fenced rejoin while SQLite stays explicitly local-only.
-- Notes: Fly can remain the current proving ground, but the public contract stays platform-agnostic and must not imply shared SQLite durability.
-
-### R123 — Mesh explains current load balancing honestly and implements follow-through if the current server-side story is insufficient.
-- Class: operability
-- Status: validated
-- Description: Mesh should document how load balancing actually works today across Mesh runtime behavior and the current proving environments, then implement runtime/platform follow-through if the current behavior is not enough for the clustered-app story being told publicly.
-- Why it matters: Load balancing is one of the language's distinctive public claims, so the story has to be both accurate and good enough.
-- Source: user
-- Primary owning slice: M054/S03
-- Supporting slices: M054/S01, M054/S02, M053/S02
-- Validation: Validated by M054/S01-S03: `bash scripts/verify-m054-s01.sh` proves the serious Postgres starter’s one-public-URL ingress truth with retained ingress/owner/replica/execution evidence for the same real request; `bash scripts/verify-m054-s02.sh`, `cargo test -p mesh-rt m054_s02_ -- --nocapture`, and `cargo test -p meshc --test e2e_m047_s07 -- --nocapture` prove the runtime-owned `X-Mesh-Continuity-Request-Key` direct-correlation seam on both low-level and serious-starter rails; and `node --test scripts/tests/verify-m054-s03-contract.test.mjs`, `cargo test -p meshc --test e2e_m054_s03 -- --nocapture`, `npm --prefix website run generate:og`, `npm --prefix website run build`, and `bash scripts/verify-m054-s03.sh` prove the homepage/distributed-proof/starter/OG contract stays aligned to that bounded load-balancing model.
-- Notes: The public contract stays platform-agnostic and server-side first: one public URL may choose ingress, runtime placement begins after ingress, `meshc cluster` remains the operator truth surface, and Fly is evidence rather than the product contract.
-
 ## Validated
-
-### R085 — Clustered work declaration supports both manifest and source decorator forms.
-- Class: core-capability
-- Status: validated
-- Description: Mesh should let app authors mark clustered work either in `mesh.toml` or directly in Mesh source with a decorator, with both forms compiling to the same declared runtime boundary.
-- Why it matters: The user wants the language surface itself to denote what work gets replicated instead of forcing manifest-only configuration.
-- Source: user
-- Primary owning slice: M046/S01
-- Supporting slices: M046/S05
-- Validation: Validated by M046/S01: `cargo test -p mesh-parser --test parser_tests m046_s01_parser_ -- --nocapture`, `cargo test -p mesh-pkg m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s01 m046_s01_ -- --nocapture`, `cargo test -p mesh-lsp m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m044_s01 m044_s01_ -- --nocapture`, and `cargo test -p meshc --test e2e_m044_s02 m044_s02_ -- --nocapture` proved source `clustered(work)` and manifest declarations converge on the same declared-handler runtime boundary.
-- Notes: Public docs lead with the decorator while manifest support remains first-class.
-
-### R086 — App code only marks clustered work; the runtime owns triggering, placement, replication, failover, recovery, and status semantics.
-- Class: constraint
-- Status: validated
-- Description: Once work is marked clustered, Mesh runtime/tooling should own when it starts, where it runs, how it is replicated, how failover/recovery happen, how status truth is surfaced, and any proof-only timing or pending-window control needed to observe those behaviors.
-- Why it matters: If app code still submits continuity work, chooses replica behavior, defines status semantics, or carries proof-only timing helpers, the clustered story is still not truly language-owned.
-- Source: user
-- Primary owning slice: M046/S02
-- Supporting slices: M046/S03, M046/S04, M046/S06
-- Validation: Validated by the assembled M046 closeout: S02 moved startup triggering/status truth into runtime/tooling, S03/S04 kept proof apps at `clustered(work)` + `Node.start_from_env()` only, and `bash scripts/verify-m046-s06.sh` plus `.gsd/milestones/M046/M046-VALIDATION.md` proved runtime-owned startup, placement, failover, recovery, and status semantics across scaffold, `tiny-cluster/`, and rebuilt `cluster-proof`.
-- Notes: This stricter M046 bar moved the remaining trigger/control seam and failover-observability timing seam out of example apps and user-authored setup.
-
-### R087 — Runtime/tooling can trigger clustered work without app-owned HTTP or explicit app-side continuity submission calls.
-- Class: launchability
-- Status: validated
-- Description: A clustered proof app should be able to start, auto-run its clustered work, and expose proof only through runtime/tooling surfaces without app-owned HTTP submission routes or direct `Continuity.submit_declared_work(...)` calls in app code.
-- Why it matters: The user explicitly wants route-free proofs where Mesh itself triggers and manages the clustered work lifecycle.
-- Source: user
-- Primary owning slice: M046/S02
-- Supporting slices: M046/S03, M046/S04
-- Validation: Validated by M046/S02 and carried through M046/S06: `cargo test -p mesh-rt startup_work_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s02 m046_s02_cli_ -- --nocapture`, and `cargo test -p meshc --test e2e_m046_s02 m046_s02_ -- --nocapture` proved route-free startup submission and inspection with no app-owned HTTP submit/status routes or explicit app-side `Continuity.submit_declared_work(...)` calls.
-- Notes: The proof apps now start the work automatically on startup.
-
-### R088 — `tiny-cluster/` exists as a local-first, route-free clustered proof using trivial `1 + 1` work.
-- Class: launchability
-- Status: validated
-- Description: The repo should ship a new local `tiny-cluster/` package whose clustered work is intentionally trivial — effectively `1 + 1` — with no user-authored delay/sleep helpers or env normalization in package code, so any remaining complexity in the proof comes from Mesh rather than from the app.
-- Why it matters: The user wants a brutally small local proof surface that makes platform complexity impossible to hide behind app code.
-- Source: user
-- Primary owning slice: M046/S03
-- Supporting slices: M046/S05, M046/S06
-- Validation: Validated by M046/S03 and retained in M046/S06: `cargo run -q -p meshc -- build tiny-cluster`, `cargo run -q -p meshc -- test tiny-cluster/tests`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_package_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_startup_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_failover_ -- --nocapture`, and `bash scripts/verify-m046-s03.sh` proved `tiny-cluster/` is the shipped local-first route-free proof with trivial work and no app-owned timing hooks.
-- Notes: No HTTP routes or app-owned timing hooks belong in this package.
-
-### R089 — `cluster-proof/` is fully rebuilt as a tiny packaged proof app with no app-owned clustering, failover, routing, or status logic.
-- Class: quality-attribute
-- Status: validated
-- Description: The existing packaged `cluster-proof/` surface should be deleted and rebuilt from zero around the same tiny route-free clustered-work contract instead of carrying forward legacy proof-app seams.
-- Why it matters: The user explicitly asked to completely nuke `cluster-proof/` and start fresh because the current package still exposes too much app-shaped clustered behavior.
-- Source: user
-- Primary owning slice: M046/S04
-- Supporting slices: M046/S06
-- Validation: Validated by M046/S04 and retained in M046/S06: `cargo run -q -p meshc -- build cluster-proof`, `cargo run -q -p meshc -- test cluster-proof/tests && docker build -f cluster-proof/Dockerfile -t mesh-cluster-proof:m046-s04-local .`, `cargo test -p meshc --test e2e_m046_s04 m046_s04_ -- --nocapture`, `bash scripts/verify-m046-s04.sh`, and delegated M044/M045 wrapper rails proved `cluster-proof/` was rebuilt as the tiny packaged route-free proof with no app-owned clustering, failover, routing, or status logic.
-- Notes: This preserves a packaged/deeper proof rail without preserving the old package shape.
-
-### R090 — `meshc init --clustered`, `tiny-cluster/`, and rebuilt `cluster-proof/` remain equally canonical clustered examples.
-- Class: quality-attribute
-- Status: validated
-- Description: The generated scaffold, the local proof package, and the packaged proof package should all express the same clustered-work story and be kept in behavioral lockstep instead of drifting into separate models.
-- Why it matters: The user rejected a single primary example; all three surfaces must stay equally trustworthy.
-- Source: user
-- Primary owning slice: M046/S05
-- Supporting slices: M046/S03, M046/S04, M046/S06
-- Validation: Validated by M046/S05 and retained in M046/S06: `cargo test -p mesh-pkg scaffold_clustered_project_writes_public_cluster_contract -- --nocapture`, `cargo test -p meshc --test tooling_e2e test_init_clustered_creates_project -- --nocapture`, the M044/M045 scaffold guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` proved `meshc init --clustered`, `tiny-cluster/`, and `cluster-proof/` stay behaviorally locked to one route-free clustered-work contract.
-- Notes: Docs and verification now treat these as equal clustered-example surfaces, not “real” versus “toy” paths.
-
-### R091 — Runtime-owned tooling surfaces are sufficient to inspect work state and failover truth for the route-free proof apps.
-- Class: admin/support
-- Status: validated
-- Description: Built-in runtime/tooling surfaces should be sufficient to inspect cluster membership, work state, and failover truth for the tiny proof apps without app-owned status or operator endpoints.
-- Why it matters: Route-free proof apps only stay usable if the runtime inspection surfaces are complete enough to replace custom status routes and proof-only app timing tricks.
-- Source: inferred
-- Primary owning slice: M046/S02
-- Supporting slices: M046/S06
-- Validation: Validated by M046/S02, S03, S04, and the assembled M046/S06 closeout: runtime-owned `meshc cluster status|continuity|diagnostics` surfaces were proven sufficient for startup and failover truth by the S02/S03/S04 rails and preserved under `.tmp/m046-s06/verify/latest-proof-bundle.txt` and `.gsd/milestones/M046/M046-VALIDATION.md`.
-- Notes: `meshc cluster ...` is now the primary inspection path for the route-free proof apps.
-
-### R092 — The public clustered story no longer depends on HTTP routes for proof or operator truth.
-- Class: quality-attribute
-- Status: validated
-- Description: Mesh should teach and verify clustered behavior through language/runtime and tooling surfaces rather than through app-authored HTTP submission or status contracts.
-- Why it matters: The user explicitly wants the proof story to stop depending on app routes as a stand-in for runtime ownership.
-- Source: user
-- Primary owning slice: M046/S05
-- Supporting slices: M046/S06
-- Validation: Validated by M046/S05 and M046/S06: `npm --prefix website run build`, routeful-string/content guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s06 m046_s06_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` / `bash scripts/verify-m046-s06.sh` proved the public clustered story and closeout rails no longer depend on HTTP routes for proof or operator truth.
-- Notes: This is about the public proof story and docs emphasis, not forbidding HTTP in unrelated Mesh apps.
-
-### R093 — The canonical clustered proof workload stays intentionally trivial so remaining complexity is attributable to Mesh.
-- Class: differentiator
-- Status: validated
-- Description: The canonical proof workload should remain as small as possible — literally `1 + 1` or equivalent trivial arithmetic — so any remaining orchestration or failure-handling complexity is clearly Mesh-owned.
-- Why it matters: A non-trivial proof payload or proof-only app timing helper would make it too easy to confuse app complexity with platform complexity.
-- Source: user
-- Primary owning slice: M046/S03
-- Supporting slices: M046/S04
-- Validation: Validated by M046/S03, S04, and S06: `tiny-cluster/work.mpl` and `cluster-proof/work.mpl` keep the canonical clustered proof workload at trivial `1 + 1`, while failover observability moved into Mesh-owned runtime seams and the retained S06 bundles replay both proofs under the final milestone pointer.
-- Notes: This is a proof-shape requirement, not a claim that real apps should be this small. Proof-only timing or observability seams stay out of app code so the workload remains genuinely trivial.
-
-### R061 — Clustered mode is an app-level opt-in declared in `mesh.toml` using the standard Mesh clustered-app contract.
-- Class: core-capability
-- Status: validated
-- Description: An ordinary Mesh app should become clustered by opting in through `mesh.toml` and standard app metadata rather than by copying proof-app-specific clustering glue.
-- Why it matters: The clustered story is not productized if activation still depends on hand-built app wiring or a proof-app env dialect.
-- Source: user
-- Primary owning slice: M044/S01
-- Supporting slices: M044/S03
-- Validation: Validated by M044/S01: optional `[cluster]` manifest parsing, shared compiler/LSP validation, `cluster-proof/mesh.toml`, the named `m044_s01_clustered_manifest_` / `m044_s01_manifest_` rails, and green `bash scripts/verify-m044-s01.sh`.
-- Notes: The activation boundary should be metadata-driven and shared across clustered apps.
-
-### R062 — Declared clustered handlers compile against typed public continuity and authority surfaces with no app-level continuity JSON parsing.
-- Class: core-capability
-- Status: validated
-- Description: Mesh app code should receive typed values for continuity records, submit decisions, authority status, and promotion results instead of parsing JSON or working through `Result<String, String>` shims.
-- Why it matters: A first-class clustered app model cannot depend on stringly proof-app translation code.
-- Source: user
-- Primary owning slice: M044/S01
-- Supporting slices: M044/S02, M044/S05
-- Validation: Validated by M044/S01: typed Mesh-facing `ContinuityAuthorityStatus`, `ContinuityRecord`, and `ContinuitySubmitDecision` values across typeck/MIR/codegen/runtime plus `cluster-proof` dogfood, proved by `m044_s01_typed_continuity_`, `m044_s01_continuity_compile_fail_`, and the S01 shim-absence checks.
-- Notes: This requirement covers the public Mesh-facing API, not just the existing typed Rust structs already present in `mesh-rt`.
-
-### R063 — Only declared clustered service/message/work handlers receive continuity and failover semantics; undeclared code stays ordinary local Mesh code.
-- Class: constraint
-- Status: validated
-- Description: Mesh should make clustered execution explicit at the handler/message/work-unit boundary so that declared clustered handlers get continuity/failover guarantees while ordinary code continues to run locally with no distributed claim.
-- Why it matters: Replicating “all server work” or “every function” would overclaim the platform and blur the safety boundary.
-- Source: user
-- Primary owning slice: M044/S01
-- Supporting slices: M044/S02
-- Validation: Validated by M044/S02: declared work/service handlers are the only clustered runtime path, undeclared behavior stays local, and the contract is proved by `m044_s02_declared_work_`, `m044_s02_service_`, `m044_s02_cluster_proof_`, and `bash scripts/verify-m044-s02.sh`.
-- Notes: The honest product line is “clustered where declared, ordinary everywhere else.”
-
-### R064 — The runtime owns placement, continuity replication, attempt fencing, authority state, and failover for declared clustered handlers.
-- Class: continuity
-- Status: validated
-- Description: Once a handler is declared clustered, the runtime should decide placement, replicate the continuity record, fence stale attempts, track authority, and apply failover rules without app-authored clustering logic.
-- Why it matters: If those mechanics stay in app code, Mesh has not actually become a clustered-app platform.
-- Source: user
-- Primary owning slice: M044/S02
-- Supporting slices: M044/S04
-- Validation: Validated by M044/S02+S04 closeout: runtime-owned declared-handler placement/submission/dispatch from S02 plus runtime-owned authority/failover/recovery/fencing from S04, proved by `bash scripts/verify-m044-s02.sh`, `automatic_promotion_`, `automatic_recovery_`, `m044_s04_auto_promotion_`, `m044_s04_auto_resume_`, and the assembled S04/S05 verifiers.
-- Notes: This is the runtime-owned execution contract behind the language-owned declaration model.
-
-### R065 — Clustered apps get built-in operator surfaces with runtime API first, CLI second, and HTTP optional.
-- Class: admin/support
-- Status: validated
-- Description: A clustered Mesh app should expose standard operator truth for membership, authority, continuity status, and failover diagnostics through built-in runtime surfaces, with CLI support on top and HTTP exposure only when needed.
-- Why it matters: App authors should not have to invent their own operator/debug contract for every clustered app.
-- Source: user
-- Primary owning slice: M044/S03
-- Supporting slices: M044/S05
-- Validation: Validated by M044/S03 and carried through S05: runtime-owned transient operator query transport plus `meshc cluster status|continuity|diagnostics --json`, proved by `operator_query_`, `operator_diagnostics_`, `m044_s03_operator_`, `bash scripts/verify-m044-s03.sh`, and the scaffold-first public operator story in S05.
-- Notes: The default operator story is runtime API first, CLI second, HTTP optional.
-
-### R066 — `meshc init --clustered` scaffolds a real clustered app that uses only public clustered-app surfaces.
-- Class: launchability
-- Status: validated
-- Description: Mesh should be able to scaffold a clustered app whose business logic uses the public clustered declaration model and built-in operator surfaces without copying `cluster-proof` internals.
-- Why it matters: The platform is not productized if the only path is reverse-engineering the proof app.
-- Source: user
-- Primary owning slice: M044/S03
-- Supporting slices: M044/S05
-- Validation: Validated by M044/S03: `meshc init --clustered` scaffolds a real clustered app on the public `MESH_*` contract, proved by `test_init_clustered_creates_project`, `m044_s03_scaffold_`, and `bash scripts/verify-m044-s03.sh`; reinforced by S05 docs/closeout.
-- Notes: The scaffold should prove the standard config, declaration boundary, and default operator story together.
-
-### R067 — Automatic promotion is auto-only, bounded, epoch/fencing-based, and fail-closed on ambiguity.
-- Class: continuity
-- Status: validated
-- Description: The runtime may automatically promote a standby only when its explicit bounded safety rules are satisfied, and it must not promote when the situation is ambiguous.
-- Why it matters: Automatic promotion is only credible if it stays inside a strict fail-closed contract instead of becoming naive timeout-based failover.
-- Source: user
-- Primary owning slice: M044/S04
-- Supporting slices: none
-- Validation: Validated by M044/S04: failover is auto-only, bounded, epoch/fencing-based, and manual promotion stays disabled, proved by `automatic_promotion_`, `m044_s04_auto_promotion_`, `m044_s04_manual_surface_`, and `bash scripts/verify-m044-s04.sh`.
-- Notes: M044 explicitly excludes any manual promotion or operator override path.
-
-### R068 — Declared clustered handler work survives primary loss through bounded automatic promotion when the runtime can prove the transition is safe.
-- Class: continuity
-- Status: validated
-- Description: A clustered Mesh app should be able to lose the active primary and continue declared clustered work on the standby when the runtime has mirrored state, can advance authority safely, and can fence the stale primary on rejoin.
-- Why it matters: This is the concrete product outcome ordinary app authors care about, not just typed APIs or internal runtime state.
-- Source: user
-- Primary owning slice: M044/S04
-- Supporting slices: M044/S05
-- Validation: Validated by M044/S04 and replayed in S05: declared clustered work survives primary loss through safe automatic promotion/recovery with stale-primary fencing, proved by `automatic_recovery_`, `m044_s04_auto_resume_`, retained failover artifacts, and `bash scripts/verify-m044-s04.sh` / `bash scripts/verify-m044-s05.sh`.
-- Notes: Ambiguous cases should remain unavailable rather than overclaiming failover safety.
-
-### R069 — `cluster-proof` is fully rewritten onto the new clustered-app standard and no longer carries the old explicit clustering path in its code.
-- Class: quality-attribute
-- Status: validated
-- Description: The proof app should consume the same public clustered declaration model, runtime-owned operator surfaces, and bounded auto-promotion contract that ordinary apps use.
-- Why it matters: The milestone is not done if the proof app still needs the old internal path to function.
-- Source: user
-- Primary owning slice: M044/S05
-- Supporting slices: M044/S01, M044/S02, M044/S03, M044/S04
-- Validation: Validated by M044/S05: `cluster-proof` now uses the public clustered-app `MESH_*` contract directly, the legacy explicit clustering path is gone, and the rewrite is proved by `cargo test -p meshc --test e2e_m044_s05 -- --nocapture`, `cargo run -q -p meshc -- build cluster-proof`, `cargo run -q -p meshc -- test cluster-proof/tests`, `test ! -e cluster-proof/work_legacy.mpl`, and `bash scripts/verify-m044-s05.sh`.
-- Notes: This is a full dogfood rewrite, not a compatibility wrapper.
-
-### R070 — The public docs and proof surfaces teach “build a clustered Mesh app” as the primary story.
-- Class: launchability
-- Status: validated
-- Description: Mesh should present clustered apps as a first-class platform capability above the low-level distributed primitives, with docs and verifiers centered on the declared-handler model.
-- Why it matters: The product story is still incomplete if users must begin with `cluster-proof` folklore instead of the public clustered-app path.
-- Source: user
-- Primary owning slice: M044/S05
-- Supporting slices: M044/S03
-- Validation: Validated by M044/S05: README + distributed/tooling/proof docs now teach `meshc init --clustered` and `meshc cluster` as the primary clustered-app story, proved by `cargo test -p meshc --test e2e_m044_s05 -- --nocapture`, `bash scripts/verify-m044-s05.sh`, and `npm --prefix website run build`.
-- Notes: The distributed primitives remain available, but they are no longer the primary onboarding story.
-
-### R051 — Full loss of the active cluster remains survivable through live replication to a standby cluster.
-- Class: continuity
-- Status: validated
-- Description: Mesh should be able to replicate continuity state from an active primary cluster to a standby cluster so that full loss of the primary cluster does not destroy all active request truth.
-- Why it matters: This is the user's real end goal for the language's distributed-runtime credibility.
-- Source: user
-- Primary owning slice: M043/S01
-- Supporting slices: M043/S02, M043/S03, M043/S04
-- Validation: Validated by M043. S01 proved mirrored primary→standby continuity truth with runtime-owned `cluster_role`, `promotion_epoch`, and `replication_health` on `/membership` and `/work/:request_key`; S02 then passed `bash scripts/verify-m043-s02.sh`, preserving `.tmp/m043-s02/verify/07-failover-artifacts/` that show explicit promotion to epoch 1, runtime-owned attempt rollover on the promoted standby, successful completion there, and fenced/deposed old-primary rejoin. S03 packaged the same contract into the same-image operator rail, and S04 aligned the public/read-only proof surfaces to that shipped failover boundary.
-- Notes: M043 closes the bounded local/public disaster-continuity contract for explicit primary/standby failover. Automatic promotion, active-active intake, and destructive hosted failover remain out of scope.
-
-### R045 — Mesh nodes form a cluster automatically through a general discovery seam without manual peer lists.
-- Class: core-capability
-- Status: validated
-- Description: Mesh nodes should be able to discover live peers and form a cluster automatically through a general discovery contract, with DNS-based discovery as the first canonical provider.
-- Why it matters: The repo already claims distributed clustering; manual peer lists are not an honest bar for that claim.
-- Source: user
-- Primary owning slice: M039/S01
-- Supporting slices: M039/S04
-- Validation: Validated by `bash scripts/verify-m039-s04.sh`, whose `.tmp/m039-s04/verify/05-dns-preflight/` and `06-pre-loss/pre-loss-node-a-membership.json` artifacts prove two nodes formed one cluster automatically from a shared DNS seed without manual peer lists.
-- Notes: Fly is only a proof environment; the discovery architecture must stay general.
-
-### R046 — Cluster membership is truthful and updates on join, loss, and rejoin.
-- Class: failure-visibility
-- Status: validated
-- Description: A running Mesh cluster should expose membership state that reflects reality when nodes appear, disappear, partition, and rejoin.
-- Why it matters: Fake or laggy membership makes every higher-level balancing or durability claim untrustworthy.
-- Source: user
-- Primary owning slice: M039/S01
-- Supporting slices: M039/S03, M039/S04
-- Validation: Validated by the assembled M039 continuity proof: `bash scripts/verify-m039-s03.sh` and `bash scripts/verify-m039-s04.sh` preserve truthful `/membership` artifacts showing join, self-only shrinkage after node loss, and two-node restoration after same-identity rejoin (`.tmp/m039-s04/verify/07-degraded/degraded-node-a-membership.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-node-a-membership.json`).
-- Notes: This must be rechecked in local and Fly-backed proof environments.
-
-### R047 — Mesh distributes work through runtime-native internal balancing rather than relying on an external front door as the real balancing mechanism.
-- Class: differentiator
-- Status: validated
-- Description: Requests may enter through ordinary HTTP, but the runtime itself must be able to move work across nodes and prove which node accepted and which node executed the work.
-- Why it matters: Front-door round robin alone would not prove Mesh is a distributed runtime.
-- Source: user
-- Primary owning slice: M039/S02
-- Supporting slices: M039/S03
-- Validation: Validated by `bash scripts/verify-m039-s02.sh` and re-proved by `bash scripts/verify-m039-s04.sh`; the preserved `/work` artifacts show distinct ingress and execution nodes with `routed_remotely=true` before loss and after rejoin (`.tmp/m039-s04/verify/06-pre-loss/pre-loss-work.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-work.json`).
-- Notes: Public proof must distinguish ingress-node spread from internal work redistribution.
-
-### R048 — A single Mesh cluster survives node failure and clean rejoin without manual repair.
-- Class: continuity
-- Status: validated
-- Description: If an individual node dies or rejoins, the cluster should degrade safely, keep serving new work, and restore healthy membership without manual peer repair steps.
-- Why it matters: A cluster that only works on the happy path is not a serious distributed story.
-- Source: user
-- Primary owning slice: M039/S03
-- Supporting slices: M039/S04
-- Validation: Validated by `bash scripts/verify-m039-s03.sh`, then re-proved from one image by `bash scripts/verify-m039-s04.sh`; the artifacts show safe self-only degrade after node loss, continued local work acceptance, same-identity rejoin, and restored remote routing without manual repair.
-- Notes: This is single-cluster continuity only; cross-cluster disaster recovery is later.
-
-### R053 — Public distributed-language claims are backed by canonical docs, verifiers, and replayable proof surfaces.
-- Class: launchability
-- Status: validated
-- Description: Mesh should only claim what the distributed proof app, local verifiers, and Fly replay can actually prove.
-- Why it matters: The current docs/runtime surface is ahead of the app-level proof surface; M039+ must close that gap instead of widening it.
-- Source: inferred
-- Primary owning slice: M039/S04
-- Supporting slices: M041/S03 (provisional)
-- Validation: Validated by `bash scripts/verify-m039-s04-proof-surface.sh`, `npm --prefix website run build`, `cluster-proof/README.md`, and `website/docs/docs/distributed-proof/index.md`, which now mechanically tie public distributed claims to the canonical verifier and runbook surfaces.
-- Notes: README and distributed docs should reconcile to the canonical proof path when the milestone chain lands.
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
 - Class: launchability
@@ -996,6 +424,578 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`.
 - Notes: Validated by the helper-driven Mesher schema path: the initial migration now uses neutral `Migration.*` helpers for honest portable cases plus explicit `Pg.*` helpers for `pgcrypto`, the partitioned `events` parent, and the `idx_events_tags` GIN/jsonb_path_ops index, while runtime retention/startup partition lifecycle moved into `Storage.Schema` over `Pg.create_daily_partitions_ahead`, `Pg.list_daily_partitions_before`, and `Pg.drop_partition`. Catalog inspection and truly dynamic DDL can still remain explicit escape hatches when a dedicated surface would be dishonest or overly specific.
 
+### R040 — The M033 data-layer design should be shaped so SQLite-specific extras can be added later without backing out a PG-only abstraction.
+- Class: constraint
+- Status: validated
+- Description: The M033 data-layer design should be shaped so SQLite-specific extras can be added later without backing out a PG-only abstraction.
+- Why it matters: The user wants a neutral code path with explicit vendor extras, not a one-off Postgres trap.
+- Source: user
+- Primary owning slice: M033/S01 (provisional)
+- Supporting slices: M033/S02 (provisional)
+- Validation: Validated by `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`.
+- Notes: Further advanced by M033/S05: `website/docs/docs/databases/index.md` and `scripts/verify-m033-s05.sh` now enforce the portable core vs explicit `Pg.*` vs SQLite-later contract in the public docs, but runtime validation still depends on later vendor-extra slices.
+
+### R045 — Mesh nodes should be able to discover live peers and form a cluster automatically through a general discovery contract, with DNS-based discovery as the first canonical provider.
+- Class: core-capability
+- Status: validated
+- Description: Mesh nodes should be able to discover live peers and form a cluster automatically through a general discovery contract, with DNS-based discovery as the first canonical provider.
+- Why it matters: The repo already claims distributed clustering; manual peer lists are not an honest bar for that claim.
+- Source: user
+- Primary owning slice: M039/S01
+- Supporting slices: M039/S04
+- Validation: Validated by `bash scripts/verify-m039-s04.sh`, whose `.tmp/m039-s04/verify/05-dns-preflight/` and `06-pre-loss/pre-loss-node-a-membership.json` artifacts prove two nodes formed one cluster automatically from a shared DNS seed without manual peer lists.
+- Notes: Fly is only a proof environment; the discovery architecture must stay general.
+
+### R046 — A running Mesh cluster should expose membership state that reflects reality when nodes appear, disappear, partition, and rejoin.
+- Class: failure-visibility
+- Status: validated
+- Description: A running Mesh cluster should expose membership state that reflects reality when nodes appear, disappear, partition, and rejoin.
+- Why it matters: Fake or laggy membership makes every higher-level balancing or durability claim untrustworthy.
+- Source: user
+- Primary owning slice: M039/S01
+- Supporting slices: M039/S03, M039/S04
+- Validation: Validated by the assembled M039 continuity proof: `bash scripts/verify-m039-s03.sh` and `bash scripts/verify-m039-s04.sh` preserve truthful `/membership` artifacts showing join, self-only shrinkage after node loss, and two-node restoration after same-identity rejoin (`.tmp/m039-s04/verify/07-degraded/degraded-node-a-membership.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-node-a-membership.json`).
+- Notes: This must be rechecked in local and Fly-backed proof environments.
+
+### R047 — Requests may enter through ordinary HTTP, but the runtime itself must be able to move work across nodes and prove which node accepted and which node executed the work.
+- Class: differentiator
+- Status: validated
+- Description: Requests may enter through ordinary HTTP, but the runtime itself must be able to move work across nodes and prove which node accepted and which node executed the work.
+- Why it matters: Front-door round robin alone would not prove Mesh is a distributed runtime.
+- Source: user
+- Primary owning slice: M039/S02
+- Supporting slices: M039/S03
+- Validation: Validated by `bash scripts/verify-m039-s02.sh` and re-proved by `bash scripts/verify-m039-s04.sh`; the preserved `/work` artifacts show distinct ingress and execution nodes with `routed_remotely=true` before loss and after rejoin (`.tmp/m039-s04/verify/06-pre-loss/pre-loss-work.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-work.json`).
+- Notes: Public proof must distinguish ingress-node spread from internal work redistribution.
+
+### R048 — If an individual node dies or rejoins, the cluster should degrade safely, keep serving new work, and restore healthy membership without manual peer repair steps.
+- Class: continuity
+- Status: validated
+- Description: If an individual node dies or rejoins, the cluster should degrade safely, keep serving new work, and restore healthy membership without manual peer repair steps.
+- Why it matters: A cluster that only works on the happy path is not a serious distributed story.
+- Source: user
+- Primary owning slice: M039/S03
+- Supporting slices: M039/S04
+- Validation: Validated by `bash scripts/verify-m039-s03.sh`, then re-proved from one image by `bash scripts/verify-m039-s04.sh`; the artifacts show safe self-only degrade after node loss, continued local work acceptance, same-identity rejoin, and restored remote routing without manual repair.
+- Notes: This is single-cluster continuity only; cross-cluster disaster recovery is later.
+
+### R051 — Mesh should be able to replicate continuity state from an active primary cluster to a standby cluster so that full loss of the primary cluster does not destroy all active request truth.
+- Class: continuity
+- Status: validated
+- Description: Mesh should be able to replicate continuity state from an active primary cluster to a standby cluster so that full loss of the primary cluster does not destroy all active request truth.
+- Why it matters: This is the user's real end goal for the language's distributed-runtime credibility.
+- Source: user
+- Primary owning slice: M043/S01
+- Supporting slices: M043/S02, M043/S03, M043/S04
+- Validation: Validated by M043. S01 proved mirrored primary→standby continuity truth with runtime-owned `cluster_role`, `promotion_epoch`, and `replication_health` on `/membership` and `/work/:request_key`; S02 then passed `bash scripts/verify-m043-s02.sh`, preserving `.tmp/m043-s02/verify/07-failover-artifacts/` that show explicit promotion to epoch 1, runtime-owned attempt rollover on the promoted standby, successful completion there, and fenced/deposed old-primary rejoin. S03 packaged the same contract into the same-image operator rail, and S04 aligned the public/read-only proof surfaces to that shipped failover boundary.
+- Notes: M043 closes the bounded local/public disaster-continuity contract for explicit primary/standby failover. Automatic promotion, active-active intake, and destructive hosted failover remain out of scope.
+
+### R053 — Mesh should only claim what the distributed proof app, local verifiers, and Fly replay can actually prove.
+- Class: launchability
+- Status: validated
+- Description: Mesh should only claim what the distributed proof app, local verifiers, and Fly replay can actually prove.
+- Why it matters: The current docs/runtime surface is ahead of the app-level proof surface; M039+ must close that gap instead of widening it.
+- Source: inferred
+- Primary owning slice: M039/S04
+- Supporting slices: M041/S03 (provisional)
+- Validation: Validated by `bash scripts/verify-m039-s04-proof-surface.sh`, `npm --prefix website run build`, `cluster-proof/README.md`, and `website/docs/docs/distributed-proof/index.md`, which now mechanically tie public distributed claims to the canonical verifier and runbook surfaces.
+- Notes: README and distributed docs should reconcile to the canonical proof path when the milestone chain lands.
+
+### R061 — An ordinary Mesh app should become clustered by opting in through `mesh.toml` and standard app metadata rather than by copying proof-app-specific clustering glue.
+- Class: core-capability
+- Status: validated
+- Description: An ordinary Mesh app should become clustered by opting in through `mesh.toml` and standard app metadata rather than by copying proof-app-specific clustering glue.
+- Why it matters: The clustered story is not productized if activation still depends on hand-built app wiring or a proof-app env dialect.
+- Source: user
+- Primary owning slice: M044/S01
+- Supporting slices: M044/S03
+- Validation: Validated by M044/S01: optional `[cluster]` manifest parsing, shared compiler/LSP validation, `cluster-proof/mesh.toml`, the named `m044_s01_clustered_manifest_` / `m044_s01_manifest_` rails, and green `bash scripts/verify-m044-s01.sh`.
+- Notes: The activation boundary should be metadata-driven and shared across clustered apps.
+
+### R062 — Mesh app code should receive typed values for continuity records, submit decisions, authority status, and promotion results instead of parsing JSON or working through `Result<String, String>` shims.
+- Class: core-capability
+- Status: validated
+- Description: Mesh app code should receive typed values for continuity records, submit decisions, authority status, and promotion results instead of parsing JSON or working through `Result<String, String>` shims.
+- Why it matters: A first-class clustered app model cannot depend on stringly proof-app translation code.
+- Source: user
+- Primary owning slice: M044/S01
+- Supporting slices: M044/S02, M044/S05
+- Validation: Validated by M044/S01: typed Mesh-facing `ContinuityAuthorityStatus`, `ContinuityRecord`, and `ContinuitySubmitDecision` values across typeck/MIR/codegen/runtime plus `cluster-proof` dogfood, proved by `m044_s01_typed_continuity_`, `m044_s01_continuity_compile_fail_`, and the S01 shim-absence checks.
+- Notes: This requirement covers the public Mesh-facing API, not just the existing typed Rust structs already present in `mesh-rt`.
+
+### R063 — Mesh should make clustered execution explicit at the handler/message/work-unit boundary so that declared clustered handlers get continuity/failover guarantees while ordinary code continues to run locally with no distributed claim.
+- Class: constraint
+- Status: validated
+- Description: Mesh should make clustered execution explicit at the handler/message/work-unit boundary so that declared clustered handlers get continuity/failover guarantees while ordinary code continues to run locally with no distributed claim.
+- Why it matters: Replicating “all server work” or “every function” would overclaim the platform and blur the safety boundary.
+- Source: user
+- Primary owning slice: M044/S01
+- Supporting slices: M044/S02
+- Validation: Validated by M044/S02: declared work/service handlers are the only clustered runtime path, undeclared behavior stays local, and the contract is proved by `m044_s02_declared_work_`, `m044_s02_service_`, `m044_s02_cluster_proof_`, and `bash scripts/verify-m044-s02.sh`.
+- Notes: The honest product line is “clustered where declared, ordinary everywhere else.”
+
+### R064 — Once a handler is declared clustered, the runtime should decide placement, replicate the continuity record, fence stale attempts, track authority, and apply failover rules without app-authored clustering logic.
+- Class: continuity
+- Status: validated
+- Description: Once a handler is declared clustered, the runtime should decide placement, replicate the continuity record, fence stale attempts, track authority, and apply failover rules without app-authored clustering logic.
+- Why it matters: If those mechanics stay in app code, Mesh has not actually become a clustered-app platform.
+- Source: user
+- Primary owning slice: M044/S02
+- Supporting slices: M044/S04
+- Validation: Validated by M044/S02+S04 closeout: runtime-owned declared-handler placement/submission/dispatch from S02 plus runtime-owned authority/failover/recovery/fencing from S04, proved by `bash scripts/verify-m044-s02.sh`, `automatic_promotion_`, `automatic_recovery_`, `m044_s04_auto_promotion_`, `m044_s04_auto_resume_`, and the assembled S04/S05 verifiers.
+- Notes: This is the runtime-owned execution contract behind the language-owned declaration model.
+
+### R065 — A clustered Mesh app should expose standard operator truth for membership, authority, continuity status, and failover diagnostics through built-in runtime surfaces, with CLI support on top and HTTP exposure only when needed.
+- Class: admin/support
+- Status: validated
+- Description: A clustered Mesh app should expose standard operator truth for membership, authority, continuity status, and failover diagnostics through built-in runtime surfaces, with CLI support on top and HTTP exposure only when needed.
+- Why it matters: App authors should not have to invent their own operator/debug contract for every clustered app.
+- Source: user
+- Primary owning slice: M044/S03
+- Supporting slices: M044/S05
+- Validation: Validated by M044/S03 and carried through S05: runtime-owned transient operator query transport plus `meshc cluster status|continuity|diagnostics --json`, proved by `operator_query_`, `operator_diagnostics_`, `m044_s03_operator_`, `bash scripts/verify-m044-s03.sh`, and the scaffold-first public operator story in S05.
+- Notes: The default operator story is runtime API first, CLI second, HTTP optional.
+
+### R066 — Mesh should be able to scaffold a clustered app whose business logic uses the public clustered declaration model and built-in operator surfaces without copying `cluster-proof` internals.
+- Class: launchability
+- Status: validated
+- Description: Mesh should be able to scaffold a clustered app whose business logic uses the public clustered declaration model and built-in operator surfaces without copying `cluster-proof` internals.
+- Why it matters: The platform is not productized if the only path is reverse-engineering the proof app.
+- Source: user
+- Primary owning slice: M044/S03
+- Supporting slices: M044/S05
+- Validation: Validated by M044/S03: `meshc init --clustered` scaffolds a real clustered app on the public `MESH_*` contract, proved by `test_init_clustered_creates_project`, `m044_s03_scaffold_`, and `bash scripts/verify-m044-s03.sh`; reinforced by S05 docs/closeout.
+- Notes: The scaffold should prove the standard config, declaration boundary, and default operator story together.
+
+### R067 — The runtime may automatically promote a standby only when its explicit bounded safety rules are satisfied, and it must not promote when the situation is ambiguous.
+- Class: continuity
+- Status: validated
+- Description: The runtime may automatically promote a standby only when its explicit bounded safety rules are satisfied, and it must not promote when the situation is ambiguous.
+- Why it matters: Automatic promotion is only credible if it stays inside a strict fail-closed contract instead of becoming naive timeout-based failover.
+- Source: user
+- Primary owning slice: M044/S04
+- Supporting slices: none
+- Validation: Validated by M044/S04: failover is auto-only, bounded, epoch/fencing-based, and manual promotion stays disabled, proved by `automatic_promotion_`, `m044_s04_auto_promotion_`, `m044_s04_manual_surface_`, and `bash scripts/verify-m044-s04.sh`.
+- Notes: M044 explicitly excludes any manual promotion or operator override path.
+
+### R068 — A clustered Mesh app should be able to lose the active primary and continue declared clustered work on the standby when the runtime has mirrored state, can advance authority safely, and can fence the stale primary on rejoin.
+- Class: continuity
+- Status: validated
+- Description: A clustered Mesh app should be able to lose the active primary and continue declared clustered work on the standby when the runtime has mirrored state, can advance authority safely, and can fence the stale primary on rejoin.
+- Why it matters: This is the concrete product outcome ordinary app authors care about, not just typed APIs or internal runtime state.
+- Source: user
+- Primary owning slice: M044/S04
+- Supporting slices: M044/S05
+- Validation: Validated by M044/S04 and replayed in S05: declared clustered work survives primary loss through safe automatic promotion/recovery with stale-primary fencing, proved by `automatic_recovery_`, `m044_s04_auto_resume_`, retained failover artifacts, and `bash scripts/verify-m044-s04.sh` / `bash scripts/verify-m044-s05.sh`.
+- Notes: Ambiguous cases should remain unavailable rather than overclaiming failover safety.
+
+### R069 — The proof app should consume the same public clustered declaration model, runtime-owned operator surfaces, and bounded auto-promotion contract that ordinary apps use.
+- Class: quality-attribute
+- Status: validated
+- Description: The proof app should consume the same public clustered declaration model, runtime-owned operator surfaces, and bounded auto-promotion contract that ordinary apps use.
+- Why it matters: The milestone is not done if the proof app still needs the old internal path to function.
+- Source: user
+- Primary owning slice: M044/S05
+- Supporting slices: M044/S01, M044/S02, M044/S03, M044/S04
+- Validation: Validated by M044/S05: `cluster-proof` now uses the public clustered-app `MESH_*` contract directly, the legacy explicit clustering path is gone, and the rewrite is proved by `cargo test -p meshc --test e2e_m044_s05 -- --nocapture`, `cargo run -q -p meshc -- build cluster-proof`, `cargo run -q -p meshc -- test cluster-proof/tests`, `test ! -e cluster-proof/work_legacy.mpl`, and `bash scripts/verify-m044-s05.sh`.
+- Notes: This is a full dogfood rewrite, not a compatibility wrapper.
+
+### R070 — Mesh should present clustered apps as a first-class platform capability above the low-level distributed primitives, with docs and verifiers centered on the declared-handler model.
+- Class: launchability
+- Status: validated
+- Description: Mesh should present clustered apps as a first-class platform capability above the low-level distributed primitives, with docs and verifiers centered on the declared-handler model.
+- Why it matters: The product story is still incomplete if users must begin with `cluster-proof` folklore instead of the public clustered-app path.
+- Source: user
+- Primary owning slice: M044/S05
+- Supporting slices: M044/S03
+- Validation: Validated by M044/S05: README + distributed/tooling/proof docs now teach `meshc init --clustered` and `meshc cluster` as the primary clustered-app story, proved by `cargo test -p meshc --test e2e_m044_s05 -- --nocapture`, `bash scripts/verify-m044-s05.sh`, and `npm --prefix website run build`.
+- Notes: The distributed primitives remain available, but they are no longer the primary onboarding story.
+
+### R077 — Mesh should present one small clustered example whose source is mostly business logic plus minimal ingress/declaration code, not proof-app-sized distributed glue.
+- Class: launchability
+- Status: validated
+- Description: Mesh should present one small clustered example whose source is mostly business logic plus minimal ingress/declaration code, not proof-app-sized distributed glue.
+- Why it matters: If the primary example is large or system-shaped, the docs still make clustering look manual even when the runtime owns more of the behavior.
+- Source: user
+- Primary owning slice: M045/S01
+- Supporting slices: M045/S04, M045/S05
+- Validation: Validated by M045/S01, S02, S04, and S05: clustered bootstrap moved behind `Node.start_from_env()` / `BootstrapStatus`, the scaffold stayed small while remote execution and completion moved into runtime/codegen, legacy `cluster-proof` glue was collapsed, and the assembled closeout `bash scripts/verify-m045-s05.sh` passed.
+- Notes: This is a docs-grade simplicity requirement, not just a code-deletion goal.
+
+### R078 — A single local example should run on two nodes, submit work, show the runtime choosing remote execution, and continue through primary loss without switching to a different proof app.
+- Class: core-capability
+- Status: validated
+- Description: A single local example should run on two nodes, submit work, show the runtime choosing remote execution, and continue through primary loss without switching to a different proof app.
+- Why it matters: The user wants one small example that shows the whole language-owned clustered story, not a simple demo plus a separate “real” failover example.
+- Source: user
+- Primary owning slice: M045/S02
+- Supporting slices: M045/S03
+- Validation: Validated by M045/S02 and S03: the scaffold-first two-node rail proves runtime-chosen remote execution, the retained S03 failover bundle records automatic recovery from `attempt-1` to `attempt-2` on the same request key, and the assembled closeout `bash scripts/verify-m045-s05.sh` replays that chain successfully.
+- Notes: The proof bar is local-first and end-to-end, not just fixture-level.
+
+### R079 — All cluster state, routing choice, authority/failover, and status truth for the primary example must come from the language/runtime instead of example-side helpers, placement logic, or translation seams.
+- Class: constraint
+- Status: validated
+- Description: All cluster state, routing choice, authority/failover, and status truth for the primary example must come from the language/runtime instead of example-side helpers, placement logic, or translation seams.
+- Why it matters: This is the core honesty boundary for M045: the example must stop helping the runtime do distributed-systems work.
+- Source: user
+- Primary owning slice: M045/S01
+- Supporting slices: M045/S03, M045/S04
+- Validation: Validated by M045/S01-S04: bootstrap, remote-owner execution, completion, failover, and status truth now live behind runtime/codegen plus `meshc cluster` CLI surfaces; the current proof rails depend on runtime CLI truth rather than app-owned status or placement helpers.
+- Notes: Any example-owned distributed logic is suspect by default in this milestone.
+
+### R080 — The clustered scaffold should become the main example readers learn from, rather than requiring them to reverse-engineer `cluster-proof` first.
+- Class: launchability
+- Status: validated
+- Description: The clustered scaffold should become the main example readers learn from, rather than requiring them to reverse-engineer `cluster-proof` first.
+- Why it matters: A first-class language feature needs a first-class entrypoint and teaching surface.
+- Source: user
+- Primary owning slice: M045/S02
+- Supporting slices: M045/S05
+- Validation: Validated by M045/S05: `/docs/getting-started/clustered-example/` now exists as the first-class clustered tutorial, `cargo test -p meshc --test e2e_m045_s05 m045_s05_ -- --nocapture` passed, and `npm --prefix website run build` passed inside the green assembled closeout `bash scripts/verify-m045-s05.sh`.
+- Notes: `cluster-proof` can remain as a deeper proof rail, but it should not be the main teaching abstraction.
+
+### R081 — The docs should center the small scaffold-first clustered example, then point to deeper proof rails only when the reader needs the underlying failover/operator detail.
+- Class: quality-attribute
+- Status: validated
+- Description: The docs should center the small scaffold-first clustered example, then point to deeper proof rails only when the reader needs the underlying failover/operator detail.
+- Why it matters: Even if the runtime is truthful, the product story still feels too manual if the docs lead with the proof app instead of the simple language-owned example.
+- Source: inferred
+- Primary owning slice: M045/S05
+- Supporting slices: M045/S02
+- Validation: Validated by M045/S05: public docs/readme guidance now routes clustered readers to the scaffold-first Getting Started page before deeper proof material, the docs build passed, and `bash scripts/verify-m045-s05.sh` remained green while retaining the deeper S04/S03 proof chain as secondary evidence.
+- Notes: This requirement is about ordering and emphasis in the public teaching surface, not removing deeper verifier rails entirely.
+
+### R085 — Mesh should let app authors mark clustered work either in `mesh.toml` or directly in Mesh source with a decorator, with both forms compiling to the same declared runtime boundary.
+- Class: core-capability
+- Status: validated
+- Description: Mesh should let app authors mark clustered work either in `mesh.toml` or directly in Mesh source with a decorator, with both forms compiling to the same declared runtime boundary.
+- Why it matters: The user wants the language surface itself to denote what work gets replicated instead of forcing manifest-only configuration.
+- Source: user
+- Primary owning slice: M046/S01
+- Supporting slices: M046/S05
+- Validation: Validated by M046/S01: `cargo test -p mesh-parser --test parser_tests m046_s01_parser_ -- --nocapture`, `cargo test -p mesh-pkg m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s01 m046_s01_ -- --nocapture`, `cargo test -p mesh-lsp m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m044_s01 m044_s01_ -- --nocapture`, and `cargo test -p meshc --test e2e_m044_s02 m044_s02_ -- --nocapture` proved source `clustered(work)` and manifest declarations converge on the same declared-handler runtime boundary.
+- Notes: Public docs lead with the decorator while manifest support remains first-class.
+
+### R086 — Once work is marked clustered, Mesh runtime/tooling should own when it starts, where it runs, how it is replicated, how failover/recovery happen, how status truth is surfaced, and any proof-only timing or pending-window control needed to observe those behaviors.
+- Class: constraint
+- Status: validated
+- Description: Once work is marked clustered, Mesh runtime/tooling should own when it starts, where it runs, how it is replicated, how failover/recovery happen, how status truth is surfaced, and any proof-only timing or pending-window control needed to observe those behaviors.
+- Why it matters: If app code still submits continuity work, chooses replica behavior, defines status semantics, or carries proof-only timing helpers, the clustered story is still not truly language-owned.
+- Source: user
+- Primary owning slice: M046/S02
+- Supporting slices: M046/S03, M046/S04, M046/S06
+- Validation: Validated by the assembled M046 closeout: S02 moved startup triggering/status truth into runtime/tooling, S03/S04 kept proof apps at `clustered(work)` + `Node.start_from_env()` only, and `bash scripts/verify-m046-s06.sh` plus `.gsd/milestones/M046/M046-VALIDATION.md` proved runtime-owned startup, placement, failover, recovery, and status semantics across scaffold, `tiny-cluster/`, and rebuilt `cluster-proof`.
+- Notes: This stricter M046 bar moved the remaining trigger/control seam and failover-observability timing seam out of example apps and user-authored setup.
+
+### R087 — A clustered proof app should be able to start, auto-run its clustered work, and expose proof only through runtime/tooling surfaces without app-owned HTTP submission routes or direct `Continuity.submit_declared_work(...)` calls in app code.
+- Class: launchability
+- Status: validated
+- Description: A clustered proof app should be able to start, auto-run its clustered work, and expose proof only through runtime/tooling surfaces without app-owned HTTP submission routes or direct `Continuity.submit_declared_work(...)` calls in app code.
+- Why it matters: The user explicitly wants route-free proofs where Mesh itself triggers and manages the clustered work lifecycle.
+- Source: user
+- Primary owning slice: M046/S02
+- Supporting slices: M046/S03, M046/S04
+- Validation: Validated by M046/S02 and carried through M046/S06: `cargo test -p mesh-rt startup_work_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s02 m046_s02_cli_ -- --nocapture`, and `cargo test -p meshc --test e2e_m046_s02 m046_s02_ -- --nocapture` proved route-free startup submission and inspection with no app-owned HTTP submit/status routes or explicit app-side `Continuity.submit_declared_work(...)` calls.
+- Notes: The proof apps now start the work automatically on startup.
+
+### R088 — The repo should ship a new local `tiny-cluster/` package whose clustered work is intentionally trivial — effectively `1 + 1` — with no user-authored delay/sleep helpers or env normalization in package code, so any remaining complexity in the proof comes from Mesh rather than from the app.
+- Class: launchability
+- Status: validated
+- Description: The repo should ship a new local `tiny-cluster/` package whose clustered work is intentionally trivial — effectively `1 + 1` — with no user-authored delay/sleep helpers or env normalization in package code, so any remaining complexity in the proof comes from Mesh rather than from the app.
+- Why it matters: The user wants a brutally small local proof surface that makes platform complexity impossible to hide behind app code.
+- Source: user
+- Primary owning slice: M046/S03
+- Supporting slices: M046/S05, M046/S06
+- Validation: Validated by M046/S03 and retained in M046/S06: `cargo run -q -p meshc -- build tiny-cluster`, `cargo run -q -p meshc -- test tiny-cluster/tests`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_package_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_startup_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_failover_ -- --nocapture`, and `bash scripts/verify-m046-s03.sh` proved `tiny-cluster/` is the shipped local-first route-free proof with trivial work and no app-owned timing hooks.
+- Notes: No HTTP routes or app-owned timing hooks belong in this package.
+
+### R089 — The existing packaged `cluster-proof/` surface should be deleted and rebuilt from zero around the same tiny route-free clustered-work contract instead of carrying forward legacy proof-app seams.
+- Class: quality-attribute
+- Status: validated
+- Description: The existing packaged `cluster-proof/` surface should be deleted and rebuilt from zero around the same tiny route-free clustered-work contract instead of carrying forward legacy proof-app seams.
+- Why it matters: The user explicitly asked to completely nuke `cluster-proof/` and start fresh because the current package still exposes too much app-shaped clustered behavior.
+- Source: user
+- Primary owning slice: M046/S04
+- Supporting slices: M046/S06
+- Validation: Validated by M046/S04 and retained in M046/S06: `cargo run -q -p meshc -- build cluster-proof`, `cargo run -q -p meshc -- test cluster-proof/tests && docker build -f cluster-proof/Dockerfile -t mesh-cluster-proof:m046-s04-local .`, `cargo test -p meshc --test e2e_m046_s04 m046_s04_ -- --nocapture`, `bash scripts/verify-m046-s04.sh`, and delegated M044/M045 wrapper rails proved `cluster-proof/` was rebuilt as the tiny packaged route-free proof with no app-owned clustering, failover, routing, or status logic.
+- Notes: This preserves a packaged/deeper proof rail without preserving the old package shape.
+
+### R090 — The generated scaffold, the local proof package, and the packaged proof package should all express the same clustered-work story and be kept in behavioral lockstep instead of drifting into separate models.
+- Class: quality-attribute
+- Status: validated
+- Description: The generated scaffold, the local proof package, and the packaged proof package should all express the same clustered-work story and be kept in behavioral lockstep instead of drifting into separate models.
+- Why it matters: The user rejected a single primary example; all three surfaces must stay equally trustworthy.
+- Source: user
+- Primary owning slice: M046/S05
+- Supporting slices: M046/S03, M046/S04, M046/S06
+- Validation: Validated by M046/S05 and retained in M046/S06: `cargo test -p mesh-pkg scaffold_clustered_project_writes_public_cluster_contract -- --nocapture`, `cargo test -p meshc --test tooling_e2e test_init_clustered_creates_project -- --nocapture`, the M044/M045 scaffold guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` proved `meshc init --clustered`, `tiny-cluster/`, and `cluster-proof/` stay behaviorally locked to one route-free clustered-work contract.
+- Notes: Docs and verification now treat these as equal clustered-example surfaces, not “real” versus “toy” paths.
+
+### R091 — Built-in runtime/tooling surfaces should be sufficient to inspect cluster membership, work state, and failover truth for the tiny proof apps without app-owned status or operator endpoints.
+- Class: admin/support
+- Status: validated
+- Description: Built-in runtime/tooling surfaces should be sufficient to inspect cluster membership, work state, and failover truth for the tiny proof apps without app-owned status or operator endpoints.
+- Why it matters: Route-free proof apps only stay usable if the runtime inspection surfaces are complete enough to replace custom status routes and proof-only app timing tricks.
+- Source: inferred
+- Primary owning slice: M046/S02
+- Supporting slices: M046/S06
+- Validation: Validated by M046/S02, S03, S04, and the assembled M046/S06 closeout: runtime-owned `meshc cluster status|continuity|diagnostics` surfaces were proven sufficient for startup and failover truth by the S02/S03/S04 rails and preserved under `.tmp/m046-s06/verify/latest-proof-bundle.txt` and `.gsd/milestones/M046/M046-VALIDATION.md`.
+- Notes: `meshc cluster ...` is now the primary inspection path for the route-free proof apps.
+
+### R092 — Mesh should teach and verify clustered behavior through language/runtime and tooling surfaces rather than through app-authored HTTP submission or status contracts.
+- Class: quality-attribute
+- Status: validated
+- Description: Mesh should teach and verify clustered behavior through language/runtime and tooling surfaces rather than through app-authored HTTP submission or status contracts.
+- Why it matters: The user explicitly wants the proof story to stop depending on app routes as a stand-in for runtime ownership.
+- Source: user
+- Primary owning slice: M046/S05
+- Supporting slices: M046/S06
+- Validation: Validated by M046/S05 and M046/S06: `npm --prefix website run build`, routeful-string/content guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s06 m046_s06_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` / `bash scripts/verify-m046-s06.sh` proved the public clustered story and closeout rails no longer depend on HTTP routes for proof or operator truth.
+- Notes: This is about the public proof story and docs emphasis, not forbidding HTTP in unrelated Mesh apps.
+
+### R093 — The canonical proof workload should remain as small as possible — literally `1 + 1` or equivalent trivial arithmetic — so any remaining orchestration or failure-handling complexity is clearly Mesh-owned.
+- Class: differentiator
+- Status: validated
+- Description: The canonical proof workload should remain as small as possible — literally `1 + 1` or equivalent trivial arithmetic — so any remaining orchestration or failure-handling complexity is clearly Mesh-owned.
+- Why it matters: A non-trivial proof payload or proof-only app timing helper would make it too easy to confuse app complexity with platform complexity.
+- Source: user
+- Primary owning slice: M046/S03
+- Supporting slices: M046/S04
+- Validation: Validated by M046/S03, S04, and S06: `tiny-cluster/work.mpl` and `cluster-proof/work.mpl` keep the canonical clustered proof workload at trivial `1 + 1`, while failover observability moved into Mesh-owned runtime seams and the retained S06 bundles replay both proofs under the final milestone pointer.
+- Notes: This is a proof-shape requirement, not a claim that real apps should be this small. Proof-only timing or observability seams stay out of app code so the workload remains genuinely trivial.
+
+### R097 — Mesh source should declare clustered functions with `@cluster` and `@cluster(N)` instead of the current `clustered(work)` marker.
+- Class: core-capability
+- Status: validated
+- Description: Mesh source should declare clustered functions with `@cluster` and `@cluster(N)` instead of the current `clustered(work)` marker.
+- Why it matters: The current syntax makes clustering look like a special proof-only mechanism instead of a normal language feature.
+- Source: user
+- Primary owning slice: M047/S01
+- Supporting slices: M047/S04, M047/S06
+- Validation: Validated by M047/S01 and M047/S04: source-first parser/compiler/LSP support landed, the hard cutover removed legacy public syntax, and the passed M047 validation + milestone closeout prove `@cluster` / `@cluster(N)` are now the supported public clustered function spellings.
+- Notes: This is a hard cutover requirement, not an additive alias.
+
+### R098 — `@cluster(3)` and route-local clustered wrappers should express replication count, and `@cluster` should mean replication count `2` by default.
+- Class: continuity
+- Status: validated
+- Description: `@cluster(3)` and route-local clustered wrappers should express replication count, and `@cluster` should mean replication count `2` by default.
+- Why it matters: If the numeric argument is ambiguous, the new syntax becomes another folklore surface instead of a clear contract.
+- Source: user
+- Primary owning slice: M047/S02
+- Supporting slices: M047/S03, M047/S04
+- Validation: Validated by M047/S02: replication counts flow into declared-handler runtime metadata and continuity truth, bare `@cluster` defaults to `2`, explicit counts are preserved, and unsupported higher fanout rejects durably instead of being silently clipped.
+- Notes: The count is about replication, not just execution width.
+
+### R099 — Any supported function boundary Mesh clusters today should remain clusterable through the new source-first syntax; HTTP route clustering is an important consumer of the model, not the only model.
+- Class: constraint
+- Status: validated
+- Description: Any supported function boundary Mesh clusters today should remain clusterable through the new source-first syntax; HTTP route clustering is an important consumer of the model, not the only model.
+- Why it matters: Route-only clustering would regress the current runtime-owned startup/background/distributed work story and force non-route work back into awkward side channels.
+- Source: user
+- Primary owning slice: M047/S02
+- Supporting slices: M047/S03, M047/S04
+- Validation: Validated by M047/S01, S02, S04, and the passed milestone validation: clustering stayed a general function capability while the canonical public examples remained route-free `@cluster` first.
+- Notes: Clustered routes should lower onto the same general clustered function capability.
+
+### R100 — Router chains should support a route-local clustered wrapper so a single route can opt into clustering without awkward handler indirection or verb-specific API explosion.
+- Class: launchability
+- Status: validated
+- Description: Router chains should support a route-local clustered wrapper so a single route can opt into clustering without awkward handler indirection or verb-specific API explosion.
+- Why it matters: In a pipe-chained router, clustering has to be obvious where the route is declared or it becomes technically present but not obvious.
+- Source: user
+- Primary owning slice: M047/S03
+- Supporting slices: M047/S05, M047/S06
+- Validation: Validated by M047/S07 and fresh closeout replay: `HTTP.clustered(handler)` / `HTTP.clustered(N, handler)` typecheck, lower, execute, and pass `cargo test -p meshc --test e2e_m047_s07 -- --nocapture`.
+- Notes: Wrapper style is preferred over adding a separate clustered verb helper for every HTTP method.
+
+### R101 — When a route uses the clustered wrapper, Mesh should treat the route handler as the clustered unit of work and execute its normal call graph inside that clustered request execution.
+- Class: core-capability
+- Status: validated
+- Description: When a route uses the clustered wrapper, Mesh should treat the route handler as the clustered unit of work and execute its normal call graph inside that clustered request execution.
+- Why it matters: This keeps the mental model honest and avoids pretending Mesh infers arbitrary deeper distributed intent from normal code.
+- Source: user
+- Primary owning slice: M047/S03
+- Supporting slices: M047/S05
+- Validation: Validated by M047/S07: continuity/runtime truth stays keyed to the real route handler runtime name, proving the route handler itself is the clustered boundary.
+- Notes: The first route model should be explicit at the handler boundary rather than fully implicit.
+
+### R102 — Mesh should migrate examples, docs, generated scaffolds, parser/typechecker messaging, and proof rails onto the new `@cluster` model instead of teaching both syntaxes side by side.
+- Class: constraint
+- Status: validated
+- Description: Mesh should migrate examples, docs, generated scaffolds, parser/typechecker messaging, and proof rails onto the new `@cluster` model instead of teaching both syntaxes side by side.
+- Why it matters: Keeping both public models would preserve exactly the clutter and uncertainty this milestone is meant to remove.
+- Source: user
+- Primary owning slice: M047/S04
+- Supporting slices: M047/S06
+- Validation: Validated by M047/S04: legacy `clustered(work)` / `[cluster]` public surfaces were removed from examples, docs, generated outputs, and authoritative cutover rails.
+- Notes: This is a language-surface reset, not a temporary sugar layer.
+
+### R103 — The repo’s clustered examples and proof surfaces should use plain `@cluster` functions with ordinary user-facing names like `add()` or domain-specific verbs, and should use clustered route wrappers only where that feature is actually shipped, instead of continuing to demonstrate the old clustered-work shape or an `execute_declared_work(...)` special case.
+- Class: quality-attribute
+- Status: validated
+- Description: The repo’s clustered examples and proof surfaces should use plain `@cluster` functions with ordinary user-facing names like `add()` or domain-specific verbs, and should use clustered route wrappers only where that feature is actually shipped, instead of continuing to demonstrate the old clustered-work shape or an `execute_declared_work(...)` special case.
+- Why it matters: Mesh cannot claim the new syntax is the real direction if its own canonical examples keep a proof-shaped function contract.
+- Source: user
+- Primary owning slice: M047/S04
+- Supporting slices: M047/S05, M047/S06
+- Validation: Validated by M047/S04, S05, and S08: repo-owned clustered examples, scaffold output, proof packages, docs snippets, and verifier expectations now dogfood the new source-first model.
+- Notes: Dogfooding includes proof packages, generated surfaces, docs snippets, and named verifier expectations. `execute_declared_work(...)` is now an explicit drift marker on public example/scaffold surfaces.
+
+### R104 — The new scaffold should generate a simple but real Todo API with SQLite, several HTTP routes, actor-backed work, an obvious plain `@cluster` function surface, and a complete Dockerfile that users can build and run directly.
+- Class: launchability
+- Status: validated
+- Description: The new scaffold should generate a simple but real Todo API with SQLite, several HTTP routes, actor-backed work, an obvious plain `@cluster` function surface, and a complete Dockerfile that users can build and run directly.
+- Why it matters: The user wants a starting point, not another tiny proof package or an overbuilt pseudo-product.
+- Source: user
+- Primary owning slice: M047/S05
+- Supporting slices: M047/S06
+- Validation: Validated by M047/S05 and fresh closeout replay: the Todo scaffold generates a SQLite API with real routes, actor-backed rate limiting, native/Docker proof, and a complete Dockerfile.
+- Notes: SQLite should be used in a simple way; the point is to show syntax and app shape, not maximal infrastructure. The starter now adopts explicit-count clustered read routes only where the shipped runtime truth supports them.
+
+### R105 — The generated app should make clustering visually obvious through plain `@cluster` function names rather than proof-shaped helpers like `execute_declared_work(...)`, avoid excessive ceremony, and read like something a user could actually begin building from.
+- Class: differentiator
+- Status: validated
+- Description: The generated app should make clustering visually obvious through plain `@cluster` function names rather than proof-shaped helpers like `execute_declared_work(...)`, avoid excessive ceremony, and read like something a user could actually begin building from.
+- Why it matters: The user explicitly called out the failure modes to avoid: technically present but not obvious clustering, too much boilerplate, and a proof-app feel.
+- Source: user
+- Primary owning slice: M047/S05
+- Supporting slices: M047/S06
+- Validation: Validated by M047/S05 and S08: the scaffold uses ordinary `@cluster` function names, low boilerplate, and selected explicit-count clustered read routes while remaining a usable starting point.
+- Notes: If the scaffold proves the runtime but still reads like a verifier harness or keeps a proof-shaped public function contract, this requirement is not met.
+
+### R106 — Public docs, generated README guidance, CLI help, and verifier rails should teach the new source-first clustered model consistently, use plain `@cluster` function names instead of `execute_declared_work(...)` on public example surfaces, and make the migration off `clustered(work)` understandable for existing users.
+- Class: quality-attribute
+- Status: validated
+- Description: Public docs, generated README guidance, CLI help, and verifier rails should teach the new source-first clustered model consistently, use plain `@cluster` function names instead of `execute_declared_work(...)` on public example surfaces, and make the migration off `clustered(work)` understandable for existing users.
+- Why it matters: This milestone optimizes for both new Mesh users and existing users, so the new model has to be learnable and migratable at the same time.
+- Source: inferred
+- Primary owning slice: M047/S06
+- Supporting slices: M047/S04, M047/S05
+- Validation: Validated by M047/S06 and fresh `bash scripts/verify-m047-s06.sh`: public docs, README guidance, migration story, and assembled proof rails teach one coherent source-first clustered model.
+- Notes: Migration guidance should be explicit enough that the hard cutover does not feel arbitrary, and docs must stay honest about what the Todo starter proves versus what the dedicated S07 two-node wrapper rail proves.
+
+### R112 — A Mesh project should build, test, analyze, and package from `main.mpl` by default, but allow an optional manifest override such as `lib/start.mpl` when the project wants a different executable entry file.
+- Class: core-capability
+- Status: validated
+- Description: A Mesh project should build, test, analyze, and package from `main.mpl` by default, but allow an optional manifest override such as `lib/start.mpl` when the project wants a different executable entry file.
+- Why it matters: The current hardcoded `main.mpl` rule leaks into compiler, editor, and package surfaces and makes ordinary project layout choices feel artificially constrained.
+- Source: user
+- Primary owning slice: M048/S01
+- Supporting slices: M048/S02
+- Validation: Validated by M048 closeout: S01 shipped the shared `[package].entrypoint` contract for compiler build and `meshc test`, S02 propagated the same override-entry truth into `mesh-lsp`, `meshc lsp`, Neovim, VS Code, and `meshpkg publish`, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s01-entrypoint`, `m048-s02-lsp-neovim`, `m048-s02-vscode`, and `m048-s02-publish` phases.
+- Notes: Keep the simple default. The new contract is default-plus-override, not a second mandatory project layout.
+
+### R113 — The Mesh toolchain should have intentional self-update commands for installed binaries instead of requiring users to rediscover the installer flow manually.
+- Class: admin/support
+- Status: validated
+- Description: The Mesh toolchain should have intentional self-update commands for installed binaries instead of requiring users to rediscover the installer flow manually.
+- Why it matters: Updating the compiler and package manager should be part of the product surface, not tribal knowledge.
+- Source: user
+- Primary owning slice: M048/S03
+- Supporting slices: M048/S05
+- Validation: Validated by M048 closeout: `meshc update` and `meshpkg update` now ship through the shared installer-backed updater seam, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s03-toolchain-update-core`, `m048-s03-toolchain-update-help`, `m048-s03-toolchain-update-cli`, and `m048-s03-toolchain-update-e2e` phases, replaying the staged-download and installed-repair rails.
+- Notes: This requirement is about binary self-update, not project dependency upgrades.
+
+### R114 — Official editor grammars and the Mesh init-time LLM skill bundle should understand `@cluster`, both string interpolation forms, and the current clustered/runtime teaching model.
+- Class: quality-attribute
+- Status: validated
+- Description: Official editor grammars and the Mesh init-time LLM skill bundle should understand `@cluster`, both string interpolation forms, and the current clustered/runtime teaching model.
+- Why it matters: If the language syntax and its teaching surfaces drift apart, new evaluators see a stale or misleading language.
+- Source: user
+- Primary owning slice: M048/S04
+- Supporting slices: M048/S02, M048/S05
+- Validation: Validated by M048 closeout: S02 made manifest-first editor rooting and diagnostics truthful for override-entry projects, S04 reset grammar and skill surfaces to current `@cluster` and interpolation behavior, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s02-lsp-neovim`, `m048-s02-vscode`, `m048-s04-shared-grammar`, `m048-s04-neovim-syntax`, `m048-s04-neovim-contract`, and `m048-s04-skill-contract` phases.
+- Notes: This includes both syntax highlighting parity and clustering-aware skill content.
+
+### R119 — The repo should retire `reference-backend/`, keep `mesher/` healthy, and modernize it so the deeper real-app reference surface uses current Mesh features honestly and efficiently.
+- Class: integration
+- Status: validated
+- Description: The repo should retire `reference-backend/`, keep `mesher/` healthy, and modernize it so the deeper real-app reference surface uses current Mesh features honestly and efficiently.
+- Why it matters: Maintaining both a narrow legacy backend proof app and a broader real product app splits truth and creates redundant teaching and verifier surfaces.
+- Source: user
+- Primary owning slice: M051/S01
+- Supporting slices: M051/S02, M051/S03, M051/S04, M051/S05
+- Validation: Validated by M051 end to end: S01 moved Mesher onto the current scaffold-style bootstrap/runtime contract with a dedicated maintainer runbook and live Postgres rail; S02 preserved backend-only deploy/recovery/health proof under `scripts/fixtures/backend/reference-backend/` plus `scripts/verify-m051-s02.sh`; S03 retargeted tooling/editor/LSP/formatter rails to that retained fixture; S04 made public docs, scaffold output, and bundled skills examples-first while treating Mesher as the maintainer-facing deeper app; and S05 deleted repo-root `reference-backend/` while the final acceptance replay passed via `cargo test -p meshc --test e2e_m051_s05 -- --nocapture` and `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:51798/mesh_m051_complete bash scripts/verify-m051-s05.sh`.
+- Notes: Mesher is the deeper real reference app, not the primary beginner path.
+
+### R121 — The packages website should be verified and deployed as part of the normal public release/deploy story rather than feeling bolted on beside the main docs and site surfaces.
+- Class: operability
+- Status: validated
+- Description: The packages website should be verified and deployed as part of the normal public release/deploy story rather than feeling bolted on beside the main docs and site surfaces.
+- Why it matters: A separate packages experience that is not clearly inside the main deploy contract makes the ecosystem look unfinished.
+- Source: user
+- Primary owning slice: M053/S03
+- Supporting slices: M053/S04, M053/S05, M053/S06
+- Validation: Validated by M053/S03-S06: `bash scripts/verify-m053-s03.sh` is green, `.tmp/m053-s03/verify/status.txt` is `ok`, and `remote-runs.json` shows fresh successful `authoritative-verification.yml`, `deploy-services.yml`, and `release.yml` runs aligned on shipped SHA `e5fb36a6fe7e9e56f3a608a608abbaaab6764167`.
+- Notes: The repo already deploys this surface; M053 closed the gap by making it part of the normal main/tag evidence chain instead of a separate hosted surface.
+
+### R122 — The Postgres starter should be proven through a real clustered deployment with endpoint exercise and operator truth, while the SQLite starter remains explicitly local/single-node and never implies shared clustered durability.
+- Class: integration
+- Status: validated
+- Description: The Postgres starter should be proven through a real clustered deployment with endpoint exercise and operator truth, while the SQLite starter remains explicitly local/single-node and never implies shared clustered durability.
+- Why it matters: This preserves an honest serious production path without asking SQLite to carry a fake shared-storage story.
+- Source: user
+- Primary owning slice: M053/S02
+- Supporting slices: M053/S01, M053/S03, M053/S05, M053/S06
+- Validation: Validated by M053/S01-S06: the generated Postgres starter staged deploy rail, dual-node failover rail, and hosted closeout all passed; `bash scripts/verify-m053-s02.sh` is green and the retained S02 bundle proves deploy-artifact CRUD, operator truth, automatic promotion/recovery, stale-primary fencing, and fenced rejoin while SQLite stays explicitly local-only.
+- Notes: Fly can remain the current proving ground, but the public contract stays platform-agnostic and must not imply shared SQLite durability.
+
+### R123 — Mesh should document how load balancing actually works today across Mesh runtime behavior and the current proving environments, then implement runtime/platform follow-through if the current behavior is not enough for the clustered-app story being told publicly.
+- Class: operability
+- Status: validated
+- Description: Mesh should document how load balancing actually works today across Mesh runtime behavior and the current proving environments, then implement runtime/platform follow-through if the current behavior is not enough for the clustered-app story being told publicly.
+- Why it matters: Load balancing is one of the language's distinctive public claims, so the story has to be both accurate and good enough.
+- Source: user
+- Primary owning slice: M054/S03
+- Supporting slices: M054/S01, M054/S02, M053/S02
+- Validation: Validated by M054/S01-S03: `bash scripts/verify-m054-s01.sh` proves the serious Postgres starter’s one-public-URL ingress truth with retained ingress/owner/replica/execution evidence for the same real request; `bash scripts/verify-m054-s02.sh`, `cargo test -p mesh-rt m054_s02_ -- --nocapture`, and `cargo test -p meshc --test e2e_m047_s07 -- --nocapture` prove the runtime-owned `X-Mesh-Continuity-Request-Key` direct-correlation seam on both low-level and serious-starter rails; and `node --test scripts/tests/verify-m054-s03-contract.test.mjs`, `cargo test -p meshc --test e2e_m054_s03 -- --nocapture`, `npm --prefix website run generate:og`, `npm --prefix website run build`, and `bash scripts/verify-m054-s03.sh` prove the homepage/distributed-proof/starter/OG contract stays aligned to that bounded load-balancing model.
+- Notes: The public contract stays platform-agnostic and server-side first: one public URL may choose ingress, runtime placement begins after ingress, `meshc cluster` remains the operator truth surface, and Fly is evidence rather than the product contract.
+
+### R128 — Open issues in `hyperpush-org/mesh-lang` should match the current language-repo code, docs, workflow, and repo-boundary state instead of preserving stale pre-split or pre-closeout roadmap assumptions.
+- Class: admin/support
+- Status: validated
+- Description: Open issues in `hyperpush-org/mesh-lang` should match the current language-repo code, docs, workflow, and repo-boundary state instead of preserving stale pre-split or pre-closeout roadmap assumptions.
+- Why it matters: Language-repo issues are part of the public planning surface; if they drift from shipped code, the repo stops being intelligible to maintainers and evaluators.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01
+- Validation: Validated by M057/S02: `node --test scripts/tests/verify-m057-s02-plan.test.mjs`, `node --test scripts/tests/verify-m057-s02-results.test.mjs`, and `bash scripts/verify-m057-s02.sh` passed after the live repo mutation batch closed the 10 shipped `mesh-lang` issues, preserved the `hyperpush#8 -> mesh-lang#19` transfer mapping, and verified final mesh-lang totals of 17 issues (7 open / 10 closed) against the persisted results artifact and live GitHub state.
+- Notes: Completed work should be closed with evidence, not left open as active roadmap noise.
+
+### R129 — Open issues in `hyperpush-org/hyperpush` should match the current product-repo reality for `mesher/`, `mesher/landing/`, and `mesher/frontend-exp`, including the post-split ownership contract.
+- Class: admin/support
+- Status: validated
+- Description: Open issues in `hyperpush-org/hyperpush` should match the current product-repo reality for `mesher/`, `mesher/landing/`, and `mesher/frontend-exp`, including the post-split ownership contract.
+- Why it matters: Product planning becomes misleading if the issue set still describes a different repo shape or stale implementation baseline.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01
+- Validation: Validated by M057/S02: `node --test scripts/tests/verify-m057-s02-plan.test.mjs`, `node --test scripts/tests/verify-m057-s02-results.test.mjs`, and `bash scripts/verify-m057-s02.sh` passed after the live repo mutation batch rewrote 21 `rewrite_scope` rows, kept 7 mock-backed follow-through rows open with truthful wording, normalized public naming on `hyperpush#54/#55/#56`, created and closed retrospective `/pitch` issue `hyperpush#58`, and verified final hyperpush totals of 52 issues (47 open / 5 closed) against live GitHub state.
+- Notes: The local sibling workspace is the truth source for this milestone, not stale GitHub wording.
+
+### R131 — If current shipped or active code reality in either repo lacks honest tracker coverage, the reconciliation pass should create the missing issue or project item instead of forcing existing stale items to carry the wrong meaning.
+- Class: admin/support
+- Status: validated
+- Description: If current shipped or active code reality in either repo lacks honest tracker coverage, the reconciliation pass should create the missing issue or project item instead of forcing existing stale items to carry the wrong meaning.
+- Why it matters: A truthful tracker requires filling real gaps, not just cleaning visible clutter.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01, M057/S03
+- Validation: Validated by M057/S02: the derived `/pitch` tracker gap from the S01 ledger was materialized as canonical issue `hyperpush#58`, then closed as completed with milestone-backed evidence; the checked results artifact and `bash scripts/verify-m057-s02.sh` retain the canonical URL/number mapping and verify it live.
+- Notes: This is additive only where the audit proves a genuine gap.
+
+### R132 — Completed items should be closed with evidence, and drifted items should be rewritten or split in a way that preserves the historical record instead of silently repurposing tracker entries.
+- Class: quality-attribute
+- Status: validated
+- Description: Completed items should be closed with evidence, and drifted items should be rewritten or split in a way that preserves the historical record instead of silently repurposing tracker entries.
+- Why it matters: Tracker cleanup that destroys history makes the repos cleaner-looking but less truthful.
+- Source: inferred
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01, M057/S03
+- Validation: Validated by M057/S02: the reconciliation batch preserved history by transferring `hyperpush#8` into `mesh-lang#19` instead of recreating it, closing shipped issues with evidence rather than deleting them, and rewriting drifted issues in place. The persisted `repo-mutation-results.json` plus `bash scripts/verify-m057-s02.sh` verify the canonical transfer mapping and final issue states live.
+- Notes: Ambiguous items should stay open with clarified scope rather than be force-closed.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -1064,7 +1064,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: M033 should shape the extension points so this later work is straightforward.
 
-### R054 — Additional discovery providers beyond the DNS-first provider should remain possible once the core distributed proof path is established.
+### R054 — Mesh should remain open to later discovery adapters such as seed-node, gossip, or control-plane-backed discovery after the DNS-first proof path is real.
 - Class: admin/support
 - Status: deferred
 - Description: Mesh should remain open to later discovery adapters such as seed-node, gossip, or control-plane-backed discovery after the DNS-first proof path is real.
@@ -1075,7 +1075,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: The first wave should prove the abstraction seam and the DNS provider, not every future adapter.
 
-### R055 — Active-active request intake across clusters may be added later after active-primary disaster continuity is proven.
+### R055 — Mesh may later accept and coordinate work intake across multiple active clusters, but this is not the first disaster-recovery proof target.
 - Class: operability
 - Status: deferred
 - Description: Mesh may later accept and coordinate work intake across multiple active clusters, but this is not the first disaster-recovery proof target.
@@ -1086,7 +1086,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: The first honest disaster shape is primary with live replication to standby.
 
-### R056 — Stronger exactly-once completion semantics may be explored later if the at-least-once idempotent model proves insufficient.
+### R056 — The platform may later pursue stronger exactly-once visible completion semantics, but the first truthful target is at-least-once with idempotent completion.
 - Class: continuity
 - Status: deferred
 - Description: The platform may later pursue stronger exactly-once visible completion semantics, but the first truthful target is at-least-once with idempotent completion.
@@ -1097,8 +1097,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: Current user direction explicitly accepted at-least-once plus idempotency for the first honest design.
 
-
-### R071 — Clustered apps may later gain richer operator controls beyond the built-in inspection and diagnostics surfaces.
+### R071 — Mesh may later add broader operator controls, richer remediation tools, or a deeper clustered-app admin cockpit once the core clustered model is productized.
 - Class: admin/support
 - Status: deferred
 - Description: Mesh may later add broader operator controls, richer remediation tools, or a deeper clustered-app admin cockpit once the core clustered model is productized.
@@ -1109,7 +1108,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: M044 focuses on truthful inspection, diagnostics, and bounded automatic failover.
 
-### R072 — Mesh may later support broader failover topologies than one active primary plus one standby.
+### R072 — Mesh may later expand beyond the bounded primary/standby model once the first clustered-app execution model is proven honestly.
 - Class: operability
 - Status: deferred
 - Description: Mesh may later expand beyond the bounded primary/standby model once the first clustered-app execution model is proven honestly.
@@ -1120,7 +1119,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: M044 stays strictly inside the one-primary/one-standby topology.
 
-### R082 — Hosted and same-image operator rails may remain as deeper proof surfaces after the simple clustered example is cleaned up.
+### R082 — Mesh may continue to ship deeper Docker/Fly/operator proof rails for clustered apps, but those should remain secondary to the simple local language-owned example.
 - Class: admin/support
 - Status: deferred
 - Description: Mesh may continue to ship deeper Docker/Fly/operator proof rails for clustered apps, but those should remain secondary to the simple local language-owned example.
@@ -1131,7 +1130,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: This preserves room for deeper verifier and deployment surfaces without making them the primary docs story.
 
-### R094 — A general-purpose decorator or annotation system beyond clustered-work declaration can wait until the clustered decorator shape is proven.
+### R094 — Mesh may later generalize decorators/annotations beyond clustered-work declaration, but M046 only needs the decorator shape required to mark clustered work in source.
 - Class: core-capability
 - Status: deferred
 - Description: Mesh may later generalize decorators/annotations beyond clustered-work declaration, but M046 only needs the decorator shape required to mark clustered work in source.
@@ -1142,7 +1141,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: Prove the clustered-work decorator first; generalize later only if the shape holds up.
 
-### R107 — The scaffold may grow into broader production surfaces later, but M047 does not need to include auth, external integrations, or a heavier app platform.
+### R107 — Broader production surfaces such as auth, external services, admin panels, or richer platform features can be added later if the simpler clustered Todo starting point proves insufficient.
 - Class: launchability
 - Status: deferred
 - Description: Broader production surfaces such as auth, external services, admin panels, or richer platform features can be added later if the simpler clustered Todo starting point proves insufficient.
@@ -1153,7 +1152,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: SQLite stays in scope for M047; heavier production concerns are deferred.
 
-### R108 — Additional route ergonomics beyond the first wrapper form can wait until real usage shows they are necessary.
+### R108 — Broader route-decorator shapes or verb-specific clustered helpers can be revisited later if the first wrapper form still feels awkward in practice.
 - Class: admin/support
 - Status: deferred
 - Description: Broader route-decorator shapes or verb-specific clustered helpers can be revisited later if the first wrapper form still feels awkward in practice.
@@ -1164,7 +1163,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: M047 should prove the wrapper form before designing a bigger route-annotation family.
 
-### R124 — Frontend-aware node-selection adapters are deferred unless the load-balancing deep dive proves server-side/runtime routing is not enough.
+### R124 — Mesh may later add frontend-aware adapters or client-side node-selection guidance if the current Fly Proxy plus runtime/server-side story proves insufficient for real clustered-app behavior.
 - Class: integration
 - Status: deferred
 - Description: Mesh may later add frontend-aware adapters or client-side node-selection guidance if the current Fly Proxy plus runtime/server-side story proves insufficient for real clustered-app behavior.
@@ -1175,7 +1174,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: The current expectation is server-side truth first; client-side awareness is a fallback, not a starting assumption.
 
-### R135 — Tracker reconciliation may later be automated once the truthful manual contract is proven.
+### R135 — The project may later add automation that keeps repo issues and org project state in sync with code and workflow reality, but M057 should first prove the manual reconciliation contract and taxonomy.
 - Class: admin/support
 - Status: deferred
 - Description: The project may later add automation that keeps repo issues and org project state in sync with code and workflow reality, but M057 should first prove the manual reconciliation contract and taxonomy.
@@ -1265,7 +1264,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Narrow app changes are acceptable only when required to dogfood the repaired or expanded platform path.
 
-### R057 — Mesh will not claim generic consensus-backed global state for arbitrary application data in this planning wave.
+### R057 — The distributed-runtime milestones should not quietly expand into a general-purpose consensus platform for all application data.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The distributed-runtime milestones should not quietly expand into a general-purpose consensus platform for all application data.
@@ -1276,7 +1275,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The target is truthful clustered work routing and continuity, not a universal distributed database.
 
-### R058 — The project will not claim durability when no surviving replica exists anywhere.
+### R058 — If every replica holding the continuity state is gone, Mesh should not pretend the request truth still exists.
 - Class: constraint
 - Status: out-of-scope
 - Description: If every replica holding the continuity state is gone, Mesh should not pretend the request truth still exists.
@@ -1287,7 +1286,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Disaster continuity depends on surviving replicas, not magic resurrection.
 
-### R059 — Front-door HTTP spreading alone does not count as proof of Mesh runtime-native balancing.
+### R059 — External request distribution by a proxy or platform is not sufficient evidence that Mesh itself is balancing work across nodes.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: External request distribution by a proxy or platform is not sufficient evidence that Mesh itself is balancing work across nodes.
@@ -1298,7 +1297,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The proof app must show ingress-node truth separately from execution-node truth.
 
-### R060 — Fly-specific clustering behavior is not the architecture.
+### R060 — Fly may be used as a real proof environment, but the discovery and runtime design must not collapse into Fly-only assumptions.
 - Class: constraint
 - Status: out-of-scope
 - Description: Fly may be used as a real proof environment, but the discovery and runtime design must not collapse into Fly-only assumptions.
@@ -1309,8 +1308,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: DNS is the first provider because it generalizes beyond Fly.
 
-
-### R073 — M044 will not ship a manual promotion or operator-override failover path.
+### R073 — The first-class clustered-app model will not expose a manual promotion boundary in M044.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The first-class clustered-app model will not expose a manual promotion boundary in M044.
@@ -1321,7 +1319,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: If the runtime cannot prove promotion is safe, it must not promote.
 
-### R074 — M044 will not claim active-active writes or general replicated application state.
+### R074 — The clustered-app platform will not claim that arbitrary app state or active-active writes are replicated safely across nodes.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The clustered-app platform will not claim that arbitrary app state or active-active writes are replicated safely across nodes.
@@ -1332,7 +1330,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The target is declared clustered handlers with continuity records, not universal replicated app state.
 
-### R075 — M044 will not introduce a consensus-backed global control plane or arbitrary distributed transactions.
+### R075 — The clustered-app model will not expand into quorum-managed global state, general elections, or arbitrary distributed transaction semantics.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The clustered-app model will not expand into quorum-managed global state, general elections, or arbitrary distributed transaction semantics.
@@ -1343,7 +1341,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Automatic promotion must stay bounded, epoch-based, and fail-closed.
 
-### R076 — M044 will not claim exactly-once execution semantics.
+### R076 — Mesh will not claim exactly-once completion or side-effect semantics for clustered work in this milestone.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: Mesh will not claim exactly-once completion or side-effect semantics for clustered work in this milestone.
@@ -1354,7 +1352,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The honest target remains at-least-once with idempotent completion.
 
-### R083 — M045 will not expand the clustered model into a broader active-active balancing or new consensus feature set.
+### R083 — The example-simplification milestone will not quietly turn into a new distributed-systems feature wave beyond the existing clustered-app runtime contract.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The example-simplification milestone will not quietly turn into a new distributed-systems feature wave beyond the existing clustered-app runtime contract.
@@ -1365,7 +1363,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: If broader balancing or consensus work is needed later, it should land as a separate milestone with its own proof bar.
 
-### R084 — M045 will not preserve example-side distributed mechanics just to keep the old proof-app structure intact.
+### R084 — Example-owned bootstrap, placement, failover, routing, or status layers should not survive merely because the old proof app happened to grow them.
 - Class: constraint
 - Status: out-of-scope
 - Description: Example-owned bootstrap, placement, failover, routing, or status layers should not survive merely because the old proof app happened to grow them.
@@ -1376,7 +1374,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The cleanup bar is language/runtime ownership, not compatibility with legacy proof-app shape.
 
-### R095 — M046 will not invent stronger distributed guarantees just to make the tiny proofs look more magical.
+### R095 — M046 will not claim new consensus, active-active, or stronger delivery semantics unless the runtime truly proves them as part of the work.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: M046 will not claim new consensus, active-active, or stronger delivery semantics unless the runtime truly proves them as part of the work.
@@ -1387,7 +1385,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: M046 is allowed to improve runtime ownership, not to overclaim a broader distributed model.
 
-### R096 — M046 will not preserve legacy `cluster-proof` HTTP or operator routes just for compatibility with the old proof package shape.
+### R096 — Route-based proof and operator surfaces in `cluster-proof` should not survive merely to preserve the old package contract once runtime/tooling-owned proof exists.
 - Class: constraint
 - Status: out-of-scope
 - Description: Route-based proof and operator surfaces in `cluster-proof` should not survive merely to preserve the old package contract once runtime/tooling-owned proof exists.
@@ -1398,7 +1396,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: If route-free runtime/tooling proof is insufficient, M046 should improve Mesh rather than keep legacy routes.
 
-### R109 — `mesh.toml` will not remain a second clustered declaration surface in the new public model.
+### R109 — M047 will not preserve or redesign manifest-based clustered declarations as a coequal way to declare clustering.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: M047 will not preserve or redesign manifest-based clustered declarations as a coequal way to declare clustering.
@@ -1409,7 +1407,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The clustering model is source-first after this milestone.
 
-### R110 — Mesh will not keep `clustered(work)` as a long-term coequal public syntax.
+### R110 — The old `clustered(work)` syntax is not meant to survive as an equal public option after the new `@cluster` model lands.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The old `clustered(work)` syntax is not meant to survive as an equal public option after the new `@cluster` model lands.
@@ -1420,7 +1418,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Historical compatibility can be handled during execution if needed, but it is not part of the desired end state.
 
-### R111 — Mesh will not make clustering fully implicit for arbitrary code paths without an explicit clustered function or route wrapper boundary.
+### R111 — M047 will not claim that Mesh can infer distributed intent from arbitrary normal code without either `@cluster` or a clustered route wrapper boundary.
 - Class: constraint
 - Status: out-of-scope
 - Description: M047 will not claim that Mesh can infer distributed intent from arbitrary normal code without either `@cluster` or a clustered route wrapper boundary.
@@ -1431,7 +1429,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: The explicit boundary is the clustered function or clustered route handler.
 
-### R125 — Mesh will not pretend that two Fly nodes share one durable SQLite state without an explicit replication layer.
+### R125 — The repo will not claim that a two-node SQLite deployment automatically provides shared durable multi-writer state or transparent failover-persistent storage if the underlying deployment still relies on node-local volumes.
 - Class: constraint
 - Status: out-of-scope
 - Description: The repo will not claim that a two-node SQLite deployment automatically provides shared durable multi-writer state or transparent failover-persistent storage if the underlying deployment still relies on node-local volumes.
@@ -1442,7 +1440,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Truthful single-writer or node-affined storage semantics are in scope; fake shared durability is not.
 
-### R126 — Public docs will not keep milestone verifier maps and proof-rail pages as part of the main evaluator-facing docs experience.
+### R126 — Public docs will not keep repo-internal verifier maps, milestone closeout rails, and proof-bundle-oriented pages as the default learning path for Mesh users.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: Public docs will not keep repo-internal verifier maps, milestone closeout rails, and proof-bundle-oriented pages as the default learning path for Mesh users.
@@ -1453,7 +1451,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Internal proof rails can still exist in the repo; they just stop being the public docs experience.
 
-### R127 — `tiny-cluster`, `cluster-proof`, and `reference-backend` will not remain coequal public onboarding surfaces after the reset wave.
+### R127 — The repo will not keep those older proof-oriented packages as coequal public teaching entrypoints once evaluator-facing examples, scaffolds, and Mesher's deeper reference role are in place.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The repo will not keep those older proof-oriented packages as coequal public teaching entrypoints once evaluator-facing examples, scaffolds, and Mesher's deeper reference role are in place.
@@ -1464,7 +1462,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Public teaching should be scaffold/examples first, Mesher second, and deeper/internal proof rails separate.
 
-### R136 — M057 will not implement stale roadmap items as part of tracker reconciliation.
+### R136 — This milestone will not turn tracker cleanup into a stealth feature-delivery milestone by implementing old roadmap items just to make GitHub look truthful.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: This milestone will not turn tracker cleanup into a stealth feature-delivery milestone by implementing old roadmap items just to make GitHub look truthful.
@@ -1475,7 +1473,7 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Reconciliation changes trackers, not product/runtime scope.
 
-### R137 — M057 will not change code solely to make stale issues appear accurate.
+### R137 — The codebase will not be reshaped just to preserve old issue wording; tracker truth must move toward code truth, not the other way around.
 - Class: anti-feature
 - Status: out-of-scope
 - Description: The codebase will not be reshaped just to preserve old issue wording; tracker truth must move toward code truth, not the other way around.
@@ -1527,18 +1525,19 @@ This file is the explicit capability and coverage contract for the project.
 | R037 | integration | validated | M033/S02 | M033/S03, M033/S04 | Validated by `cargo test -p meshc --test e2e_m033_s02 -- --nocapture`, `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, `bash scripts/verify-m033-s02.sh`, and `bash scripts/verify-m033-s04.sh`. |
 | R038 | quality-attribute | validated | M033/S03 (provisional) | M033/S04, M033/S05 (provisional) | Validated by `npm --prefix website run build`, `bash scripts/verify-m033-s05.sh`, the exact-string docs-truth sweep over `website/docs/docs/databases/index.md`, and the serial replay of `bash scripts/verify-m033-s02.sh`, `bash scripts/verify-m033-s03.sh`, and `bash scripts/verify-m033-s04.sh`, which together prove the public contract, the explicit `Pg.*` boundary, and the short named raw SQL/DDL keep-list stay honest. |
 | R039 | launchability | validated | M033/S04 (provisional) | M033/S02 (provisional) | Validated by `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`. |
-| R040 | constraint | active | M033/S01 (provisional) | M033/S02 (provisional) | Design seam advanced by the combined M033/S01+S04 proof set: `bash scripts/verify-m033-s01.sh`, `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`; full validation still depends on later vendor-extra slices. |
+| R040 | constraint | validated | M033/S01 (provisional) | M033/S02 (provisional) | Validated by `cargo test -p meshc --test e2e_m033_s04 -- --nocapture`, `cargo run -q -p meshc -- fmt --check mesher`, `cargo run -q -p meshc -- build mesher`, and `bash scripts/verify-m033-s04.sh`. |
 | R041 | integration | deferred | none | none | unmapped |
 | R043 | anti-feature | out-of-scope | none | none | n/a |
-| R045 | core-capability | validated | M039/S01 | M039/S04 | validated |
-| R046 | failure-visibility | validated | M039/S01 | M039/S03, M039/S04 | validated |
-| R047 | differentiator | validated | M039/S02 | M039/S03 | validated |
-| R048 | continuity | validated | M039/S03 | M039/S04 | validated |
+| R044 | constraint | out-of-scope | none | none | n/a |
+| R045 | core-capability | validated | M039/S01 | M039/S04 | Validated by `bash scripts/verify-m039-s04.sh`, whose `.tmp/m039-s04/verify/05-dns-preflight/` and `06-pre-loss/pre-loss-node-a-membership.json` artifacts prove two nodes formed one cluster automatically from a shared DNS seed without manual peer lists. |
+| R046 | failure-visibility | validated | M039/S01 | M039/S03, M039/S04 | Validated by the assembled M039 continuity proof: `bash scripts/verify-m039-s03.sh` and `bash scripts/verify-m039-s04.sh` preserve truthful `/membership` artifacts showing join, self-only shrinkage after node loss, and two-node restoration after same-identity rejoin (`.tmp/m039-s04/verify/07-degraded/degraded-node-a-membership.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-node-a-membership.json`). |
+| R047 | differentiator | validated | M039/S02 | M039/S03 | Validated by `bash scripts/verify-m039-s02.sh` and re-proved by `bash scripts/verify-m039-s04.sh`; the preserved `/work` artifacts show distinct ingress and execution nodes with `routed_remotely=true` before loss and after rejoin (`.tmp/m039-s04/verify/06-pre-loss/pre-loss-work.json`, `.tmp/m039-s04/verify/08-post-rejoin/post-rejoin-work.json`). |
+| R048 | continuity | validated | M039/S03 | M039/S04 | Validated by `bash scripts/verify-m039-s03.sh`, then re-proved from one image by `bash scripts/verify-m039-s04.sh`; the artifacts show safe self-only degrade after node loss, continued local work acceptance, same-identity rejoin, and restored remote routing without manual repair. |
 | R049 | continuity | active | M044/S02 | M044/S04 | mapped |
 | R050 | operability | active | M044/S02 | M044/S04 | mapped |
-| R051 | continuity | validated | M043/S01 | M043/S02, M043/S03, M043/S04 | validated |
+| R051 | continuity | validated | M043/S01 | M043/S02, M043/S03, M043/S04 | Validated by M043. S01 proved mirrored primary→standby continuity truth with runtime-owned `cluster_role`, `promotion_epoch`, and `replication_health` on `/membership` and `/work/:request_key`; S02 then passed `bash scripts/verify-m043-s02.sh`, preserving `.tmp/m043-s02/verify/07-failover-artifacts/` that show explicit promotion to epoch 1, runtime-owned attempt rollover on the promoted standby, successful completion there, and fenced/deposed old-primary rejoin. S03 packaged the same contract into the same-image operator rail, and S04 aligned the public/read-only proof surfaces to that shipped failover boundary. |
 | R052 | launchability | active | M044/S03 | M044/S05 | mapped |
-| R053 | launchability | validated | M039/S04 | M041/S03 (provisional) | validated |
+| R053 | launchability | validated | M039/S04 | M041/S03 (provisional) | Validated by `bash scripts/verify-m039-s04-proof-surface.sh`, `npm --prefix website run build`, `cluster-proof/README.md`, and `website/docs/docs/distributed-proof/index.md`, which now mechanically tie public distributed claims to the canonical verifier and runbook surfaces. |
 | R054 | admin/support | deferred | none | none | unmapped |
 | R055 | operability | deferred | none | none | unmapped |
 | R056 | continuity | deferred | none | none | unmapped |
@@ -1562,63 +1561,62 @@ This file is the explicit capability and coverage contract for the project.
 | R074 | anti-feature | out-of-scope | none | none | n/a |
 | R075 | anti-feature | out-of-scope | none | none | n/a |
 | R076 | anti-feature | out-of-scope | none | none | n/a |
-| R077 | launchability | validated | M045/S01 | M045/S04, M045/S05 | validated |
-| R078 | core-capability | validated | M045/S02 | M045/S03 | validated |
-| R079 | constraint | validated | M045/S01 | M045/S03, M045/S04 | validated |
-| R080 | launchability | validated | M045/S02 | M045/S05 | validated |
-| R081 | quality-attribute | validated | M045/S05 | M045/S02 | validated |
+| R077 | launchability | validated | M045/S01 | M045/S04, M045/S05 | Validated by M045/S01, S02, S04, and S05: clustered bootstrap moved behind `Node.start_from_env()` / `BootstrapStatus`, the scaffold stayed small while remote execution and completion moved into runtime/codegen, legacy `cluster-proof` glue was collapsed, and the assembled closeout `bash scripts/verify-m045-s05.sh` passed. |
+| R078 | core-capability | validated | M045/S02 | M045/S03 | Validated by M045/S02 and S03: the scaffold-first two-node rail proves runtime-chosen remote execution, the retained S03 failover bundle records automatic recovery from `attempt-1` to `attempt-2` on the same request key, and the assembled closeout `bash scripts/verify-m045-s05.sh` replays that chain successfully. |
+| R079 | constraint | validated | M045/S01 | M045/S03, M045/S04 | Validated by M045/S01-S04: bootstrap, remote-owner execution, completion, failover, and status truth now live behind runtime/codegen plus `meshc cluster` CLI surfaces; the current proof rails depend on runtime CLI truth rather than app-owned status or placement helpers. |
+| R080 | launchability | validated | M045/S02 | M045/S05 | Validated by M045/S05: `/docs/getting-started/clustered-example/` now exists as the first-class clustered tutorial, `cargo test -p meshc --test e2e_m045_s05 m045_s05_ -- --nocapture` passed, and `npm --prefix website run build` passed inside the green assembled closeout `bash scripts/verify-m045-s05.sh`. |
+| R081 | quality-attribute | validated | M045/S05 | M045/S02 | Validated by M045/S05: public docs/readme guidance now routes clustered readers to the scaffold-first Getting Started page before deeper proof material, the docs build passed, and `bash scripts/verify-m045-s05.sh` remained green while retaining the deeper S04/S03 proof chain as secondary evidence. |
 | R082 | admin/support | deferred | none | none | unmapped |
 | R083 | anti-feature | out-of-scope | none | none | n/a |
 | R084 | constraint | out-of-scope | none | none | n/a |
-| R085 | core-capability | validated | M046/S01 | M046/S05 | validated |
-| R086 | constraint | validated | M046/S02 | M046/S03, M046/S04, M046/S06 | validated |
-| R087 | launchability | validated | M046/S02 | M046/S03, M046/S04 | validated |
-| R088 | launchability | validated | M046/S03 | M046/S05, M046/S06 | validated |
-| R089 | quality-attribute | validated | M046/S04 | M046/S06 | validated |
-| R090 | quality-attribute | validated | M046/S05 | M046/S03, M046/S04, M046/S06 | validated |
-| R091 | admin/support | validated | M046/S02 | M046/S06 | validated |
-| R092 | quality-attribute | validated | M046/S05 | M046/S06 | validated |
-| R093 | differentiator | validated | M046/S03 | M046/S04 | validated |
+| R085 | core-capability | validated | M046/S01 | M046/S05 | Validated by M046/S01: `cargo test -p mesh-parser --test parser_tests m046_s01_parser_ -- --nocapture`, `cargo test -p mesh-pkg m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s01 m046_s01_ -- --nocapture`, `cargo test -p mesh-lsp m046_s01_ -- --nocapture`, `cargo test -p meshc --test e2e_m044_s01 m044_s01_ -- --nocapture`, and `cargo test -p meshc --test e2e_m044_s02 m044_s02_ -- --nocapture` proved source `clustered(work)` and manifest declarations converge on the same declared-handler runtime boundary. |
+| R086 | constraint | validated | M046/S02 | M046/S03, M046/S04, M046/S06 | Validated by the assembled M046 closeout: S02 moved startup triggering/status truth into runtime/tooling, S03/S04 kept proof apps at `clustered(work)` + `Node.start_from_env()` only, and `bash scripts/verify-m046-s06.sh` plus `.gsd/milestones/M046/M046-VALIDATION.md` proved runtime-owned startup, placement, failover, recovery, and status semantics across scaffold, `tiny-cluster/`, and rebuilt `cluster-proof`. |
+| R087 | launchability | validated | M046/S02 | M046/S03, M046/S04 | Validated by M046/S02 and carried through M046/S06: `cargo test -p mesh-rt startup_work_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s02 m046_s02_cli_ -- --nocapture`, and `cargo test -p meshc --test e2e_m046_s02 m046_s02_ -- --nocapture` proved route-free startup submission and inspection with no app-owned HTTP submit/status routes or explicit app-side `Continuity.submit_declared_work(...)` calls. |
+| R088 | launchability | validated | M046/S03 | M046/S05, M046/S06 | Validated by M046/S03 and retained in M046/S06: `cargo run -q -p meshc -- build tiny-cluster`, `cargo run -q -p meshc -- test tiny-cluster/tests`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_package_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_startup_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s03 m046_s03_tiny_cluster_failover_ -- --nocapture`, and `bash scripts/verify-m046-s03.sh` proved `tiny-cluster/` is the shipped local-first route-free proof with trivial work and no app-owned timing hooks. |
+| R089 | quality-attribute | validated | M046/S04 | M046/S06 | Validated by M046/S04 and retained in M046/S06: `cargo run -q -p meshc -- build cluster-proof`, `cargo run -q -p meshc -- test cluster-proof/tests && docker build -f cluster-proof/Dockerfile -t mesh-cluster-proof:m046-s04-local .`, `cargo test -p meshc --test e2e_m046_s04 m046_s04_ -- --nocapture`, `bash scripts/verify-m046-s04.sh`, and delegated M044/M045 wrapper rails proved `cluster-proof/` was rebuilt as the tiny packaged route-free proof with no app-owned clustering, failover, routing, or status logic. |
+| R090 | quality-attribute | validated | M046/S05 | M046/S03, M046/S04, M046/S06 | Validated by M046/S05 and retained in M046/S06: `cargo test -p mesh-pkg scaffold_clustered_project_writes_public_cluster_contract -- --nocapture`, `cargo test -p meshc --test tooling_e2e test_init_clustered_creates_project -- --nocapture`, the M044/M045 scaffold guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` proved `meshc init --clustered`, `tiny-cluster/`, and `cluster-proof/` stay behaviorally locked to one route-free clustered-work contract. |
+| R091 | admin/support | validated | M046/S02 | M046/S06 | Validated by M046/S02, S03, S04, and the assembled M046/S06 closeout: runtime-owned `meshc cluster status|continuity|diagnostics` surfaces were proven sufficient for startup and failover truth by the S02/S03/S04 rails and preserved under `.tmp/m046-s06/verify/latest-proof-bundle.txt` and `.gsd/milestones/M046/M046-VALIDATION.md`. |
+| R092 | quality-attribute | validated | M046/S05 | M046/S06 | Validated by M046/S05 and M046/S06: `npm --prefix website run build`, routeful-string/content guards, `cargo test -p meshc --test e2e_m046_s05 m046_s05_ -- --nocapture`, `cargo test -p meshc --test e2e_m046_s06 m046_s06_ -- --nocapture`, and `bash scripts/verify-m046-s05.sh` / `bash scripts/verify-m046-s06.sh` proved the public clustered story and closeout rails no longer depend on HTTP routes for proof or operator truth. |
+| R093 | differentiator | validated | M046/S03 | M046/S04 | Validated by M046/S03, S04, and S06: `tiny-cluster/work.mpl` and `cluster-proof/work.mpl` keep the canonical clustered proof workload at trivial `1 + 1`, while failover observability moved into Mesh-owned runtime seams and the retained S06 bundles replay both proofs under the final milestone pointer. |
 | R094 | core-capability | deferred | none | none | unmapped |
 | R095 | anti-feature | out-of-scope | none | none | n/a |
 | R096 | constraint | out-of-scope | none | none | n/a |
-
-| R097 | core-capability | validated | M047/S01 | M047/S04, M047/S06 | mapped |
-| R098 | continuity | validated | M047/S02 | M047/S03, M047/S04 | mapped |
-| R099 | constraint | validated | M047/S02 | M047/S03, M047/S04 | mapped |
-| R100 | launchability | validated | M047/S03 | M047/S05, M047/S06 | mapped |
-| R101 | core-capability | validated | M047/S03 | M047/S05 | mapped |
-| R102 | constraint | validated | M047/S04 | M047/S06 | mapped |
-| R103 | quality-attribute | validated | M047/S04 | M047/S06 | mapped |
-| R104 | launchability | validated | M047/S05 | M047/S03, M047/S06 | mapped |
-| R105 | differentiator | validated | M047/S05 | M047/S06 | mapped |
-| R106 | quality-attribute | validated | M047/S06 | M047/S04, M047/S05 | mapped |
+| R097 | core-capability | validated | M047/S01 | M047/S04, M047/S06 | Validated by M047/S01 and M047/S04: source-first parser/compiler/LSP support landed, the hard cutover removed legacy public syntax, and the passed M047 validation + milestone closeout prove `@cluster` / `@cluster(N)` are now the supported public clustered function spellings. |
+| R098 | continuity | validated | M047/S02 | M047/S03, M047/S04 | Validated by M047/S02: replication counts flow into declared-handler runtime metadata and continuity truth, bare `@cluster` defaults to `2`, explicit counts are preserved, and unsupported higher fanout rejects durably instead of being silently clipped. |
+| R099 | constraint | validated | M047/S02 | M047/S03, M047/S04 | Validated by M047/S01, S02, S04, and the passed milestone validation: clustering stayed a general function capability while the canonical public examples remained route-free `@cluster` first. |
+| R100 | launchability | validated | M047/S03 | M047/S05, M047/S06 | Validated by M047/S07 and fresh closeout replay: `HTTP.clustered(handler)` / `HTTP.clustered(N, handler)` typecheck, lower, execute, and pass `cargo test -p meshc --test e2e_m047_s07 -- --nocapture`. |
+| R101 | core-capability | validated | M047/S03 | M047/S05 | Validated by M047/S07: continuity/runtime truth stays keyed to the real route handler runtime name, proving the route handler itself is the clustered boundary. |
+| R102 | constraint | validated | M047/S04 | M047/S06 | Validated by M047/S04: legacy `clustered(work)` / `[cluster]` public surfaces were removed from examples, docs, generated outputs, and authoritative cutover rails. |
+| R103 | quality-attribute | validated | M047/S04 | M047/S05, M047/S06 | Validated by M047/S04, S05, and S08: repo-owned clustered examples, scaffold output, proof packages, docs snippets, and verifier expectations now dogfood the new source-first model. |
+| R104 | launchability | validated | M047/S05 | M047/S06 | Validated by M047/S05 and fresh closeout replay: the Todo scaffold generates a SQLite API with real routes, actor-backed rate limiting, native/Docker proof, and a complete Dockerfile. |
+| R105 | differentiator | validated | M047/S05 | M047/S06 | Validated by M047/S05 and S08: the scaffold uses ordinary `@cluster` function names, low boilerplate, and selected explicit-count clustered read routes while remaining a usable starting point. |
+| R106 | quality-attribute | validated | M047/S06 | M047/S04, M047/S05 | Validated by M047/S06 and fresh `bash scripts/verify-m047-s06.sh`: public docs, README guidance, migration story, and assembled proof rails teach one coherent source-first clustered model. |
 | R107 | launchability | deferred | none | none | unmapped |
 | R108 | admin/support | deferred | none | none | unmapped |
 | R109 | anti-feature | out-of-scope | none | none | n/a |
 | R110 | anti-feature | out-of-scope | none | none | n/a |
 | R111 | constraint | out-of-scope | none | none | n/a |
-| R112 | core-capability | validated | M048/S01 | M048/S02 | validated |
-| R113 | admin/support | validated | M048/S03 | M048/S05 | validated |
-| R114 | quality-attribute | validated | M048/S04 | M048/S02, M048/S05 | validated |
+| R112 | core-capability | validated | M048/S01 | M048/S02 | Validated by M048 closeout: S01 shipped the shared `[package].entrypoint` contract for compiler build and `meshc test`, S02 propagated the same override-entry truth into `mesh-lsp`, `meshc lsp`, Neovim, VS Code, and `meshpkg publish`, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s01-entrypoint`, `m048-s02-lsp-neovim`, `m048-s02-vscode`, and `m048-s02-publish` phases. |
+| R113 | admin/support | validated | M048/S03 | M048/S05 | Validated by M048 closeout: `meshc update` and `meshpkg update` now ship through the shared installer-backed updater seam, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s03-toolchain-update-core`, `m048-s03-toolchain-update-help`, `m048-s03-toolchain-update-cli`, and `m048-s03-toolchain-update-e2e` phases, replaying the staged-download and installed-repair rails. |
+| R114 | quality-attribute | validated | M048/S04 | M048/S02, M048/S05 | Validated by M048 closeout: S02 made manifest-first editor rooting and diagnostics truthful for override-entry projects, S04 reset grammar and skill surfaces to current `@cluster` and interpolation behavior, and fresh `bash scripts/verify-m048-s05.sh` passed the `m048-s02-lsp-neovim`, `m048-s02-vscode`, `m048-s04-shared-grammar`, `m048-s04-neovim-syntax`, `m048-s04-neovim-contract`, and `m048-s04-skill-contract` phases. |
 | R115 | launchability | active | M049/S01 (provisional) | M049/S02 (provisional) | mapped |
 | R116 | quality-attribute | active | M049/S02 (provisional) | M049/S01 (provisional) | mapped |
 | R117 | quality-attribute | active | M050/S01 (provisional) | M050/S02 (provisional) | mapped |
 | R118 | launchability | active | M050/S02 (provisional) | M050/S01 (provisional) | mapped |
-| R119 | integration | validated | M051/S01 | M051/S02, M051/S03, M051/S04, M051/S05 | validated |
+| R119 | integration | validated | M051/S01 | M051/S02, M051/S03, M051/S04, M051/S05 | Validated by M051 end to end: S01 moved Mesher onto the current scaffold-style bootstrap/runtime contract with a dedicated maintainer runbook and live Postgres rail; S02 preserved backend-only deploy/recovery/health proof under `scripts/fixtures/backend/reference-backend/` plus `scripts/verify-m051-s02.sh`; S03 retargeted tooling/editor/LSP/formatter rails to that retained fixture; S04 made public docs, scaffold output, and bundled skills examples-first while treating Mesher as the maintainer-facing deeper app; and S05 deleted repo-root `reference-backend/` while the final acceptance replay passed via `cargo test -p meshc --test e2e_m051_s05 -- --nocapture` and `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:51798/mesh_m051_complete bash scripts/verify-m051-s05.sh`. |
 | R120 | launchability | active | M052/S01 (provisional) | M050/S01 (provisional), M052/S02 (provisional) | mapped |
-| R121 | operability | validated | M053/S03 | M053/S04, M053/S05, M053/S06 | validated |
-| R122 | integration | validated | M053/S02 | M053/S01, M053/S03, M053/S05, M053/S06 | validated |
-| R123 | operability | validated | M054/S03 | M054/S01, M054/S02, M053/S02 | validated |
+| R121 | operability | validated | M053/S03 | M053/S04, M053/S05, M053/S06 | Validated by M053/S03-S06: `bash scripts/verify-m053-s03.sh` is green, `.tmp/m053-s03/verify/status.txt` is `ok`, and `remote-runs.json` shows fresh successful `authoritative-verification.yml`, `deploy-services.yml`, and `release.yml` runs aligned on shipped SHA `e5fb36a6fe7e9e56f3a608a608abbaaab6764167`. |
+| R122 | integration | validated | M053/S02 | M053/S01, M053/S03, M053/S05, M053/S06 | Validated by M053/S01-S06: the generated Postgres starter staged deploy rail, dual-node failover rail, and hosted closeout all passed; `bash scripts/verify-m053-s02.sh` is green and the retained S02 bundle proves deploy-artifact CRUD, operator truth, automatic promotion/recovery, stale-primary fencing, and fenced rejoin while SQLite stays explicitly local-only. |
+| R123 | operability | validated | M054/S03 | M054/S01, M054/S02, M053/S02 | Validated by M054/S01-S03: `bash scripts/verify-m054-s01.sh` proves the serious Postgres starter’s one-public-URL ingress truth with retained ingress/owner/replica/execution evidence for the same real request; `bash scripts/verify-m054-s02.sh`, `cargo test -p mesh-rt m054_s02_ -- --nocapture`, and `cargo test -p meshc --test e2e_m047_s07 -- --nocapture` prove the runtime-owned `X-Mesh-Continuity-Request-Key` direct-correlation seam on both low-level and serious-starter rails; and `node --test scripts/tests/verify-m054-s03-contract.test.mjs`, `cargo test -p meshc --test e2e_m054_s03 -- --nocapture`, `npm --prefix website run generate:og`, `npm --prefix website run build`, and `bash scripts/verify-m054-s03.sh` prove the homepage/distributed-proof/starter/OG contract stays aligned to that bounded load-balancing model. |
 | R124 | integration | deferred | none | none | unmapped |
 | R125 | constraint | out-of-scope | none | none | n/a |
 | R126 | anti-feature | out-of-scope | none | none | n/a |
 | R127 | anti-feature | out-of-scope | none | none | n/a |
-| R128 | admin/support | active | M057/S02 | M057/S01 | mapped |
-| R129 | admin/support | active | M057/S02 | M057/S01 | mapped |
+| R128 | admin/support | validated | M057/S02 | M057/S01 | Validated by M057/S02: `node --test scripts/tests/verify-m057-s02-plan.test.mjs`, `node --test scripts/tests/verify-m057-s02-results.test.mjs`, and `bash scripts/verify-m057-s02.sh` passed after the live repo mutation batch closed the 10 shipped `mesh-lang` issues, preserved the `hyperpush#8 -> mesh-lang#19` transfer mapping, and verified final mesh-lang totals of 17 issues (7 open / 10 closed) against the persisted results artifact and live GitHub state. |
+| R129 | admin/support | validated | M057/S02 | M057/S01 | Validated by M057/S02: `node --test scripts/tests/verify-m057-s02-plan.test.mjs`, `node --test scripts/tests/verify-m057-s02-results.test.mjs`, and `bash scripts/verify-m057-s02.sh` passed after the live repo mutation batch rewrote 21 `rewrite_scope` rows, kept 7 mock-backed follow-through rows open with truthful wording, normalized public naming on `hyperpush#54/#55/#56`, created and closed retrospective `/pitch` issue `hyperpush#58`, and verified final hyperpush totals of 52 issues (47 open / 5 closed) against live GitHub state. |
 | R130 | operability | active | M057/S03 | M057/S01, M057/S02 | mapped |
-| R131 | admin/support | active | M057/S02 | M057/S01, M057/S03 | mapped |
-| R132 | quality-attribute | active | M057/S02 | M057/S01, M057/S03 | mapped |
+| R131 | admin/support | validated | M057/S02 | M057/S01, M057/S03 | Validated by M057/S02: the derived `/pitch` tracker gap from the S01 ledger was materialized as canonical issue `hyperpush#58`, then closed as completed with milestone-backed evidence; the checked results artifact and `bash scripts/verify-m057-s02.sh` retain the canonical URL/number mapping and verify it live. |
+| R132 | quality-attribute | validated | M057/S02 | M057/S01, M057/S03 | Validated by M057/S02: the reconciliation batch preserved history by transferring `hyperpush#8` into `mesh-lang#19` instead of recreating it, closing shipped issues with evidence rather than deleting them, and rewriting drifted issues in place. The persisted `repo-mutation-results.json` plus `bash scripts/verify-m057-s02.sh` verify the canonical transfer mapping and final issue states live. |
 | R133 | constraint | active | M057/S01 | M057/S02, M057/S03 | mapped |
 | R134 | quality-attribute | active | M057/S03 | M057/S01, M057/S02 | mapped |
 | R135 | admin/support | deferred | none | none | unmapped |
@@ -1627,7 +1625,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 16
-- Mapped to slices: 16
-- Validated: 74
+- Active requirements: 11
+- Mapped to slices: 11
+- Validated: 79 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R131, R132)
 - Unmapped active requirements: 0
