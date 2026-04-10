@@ -215,7 +215,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Docs', link: '/docs/' },
-      { text: 'Packages', link: '/packages/' },
+      { text: 'Packages', link: 'https://packages.meshlang.dev', target: '_blank' },
     ],
     search: { provider: 'local' },
     editLink: {
