@@ -588,6 +588,54 @@ docker run --rm \
   -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/__NAME__ \
   __NAME__
 ```
+
+## Docker Compose (clustered)
+
+The generated `docker-compose.yml` runs a two-node cluster with a shared PostgreSQL instance. Apply migrations, build the binary, then start the cluster:
+
+```bash
+meshc build .
+docker compose up -d
+```
+
+**Note for macOS/Windows users**: If you see "exec format error", you need to build for Linux:
+```bash
+# Install Linux target (one-time setup)
+rustup target add x86_64-unknown-linux-gnu
+
+# Build for Linux
+meshc build --target x86_64-unknown-linux-gnu .
+
+# Then start the cluster
+docker compose up -d
+```
+
+The compose file uses a shared DNS alias (`mesh-cluster`) so every node can discover its peers through `MESH_DISCOVERY_SEED=mesh-cluster`. Each container's hostname becomes its node identity automatically — no manual `MESH_NODE_NAME` construction is required. Set `MESH_NODE_HOST` to the container's reachable hostname or IP when the system hostname is not routable.
+
+### Bootstrap environment contract
+
+| Variable | Required | Default | Purpose |
+|---|---|---|---|
+| `MESH_CLUSTER_COOKIE` | Yes (cluster) | — | Shared HMAC-SHA256 secret for node authentication |
+| `MESH_DISCOVERY_SEED` | Yes (cluster) | — | DNS name that resolves to all node IPs |
+| `MESH_CLUSTER_PORT` | No | `4370` | TCP port for inter-node communication |
+| `MESH_NODE_NAME` | No | auto | Explicit `name@host:port` identity (overrides auto) |
+| `MESH_NODE_HOST` | No | hostname | Advertised address peers use to reach this node |
+| `MESH_CONTINUITY_ROLE` | No | `primary` | `primary` or `standby` continuity role |
+| `MESH_CONTINUITY_PROMOTION_EPOCH` | No | `0` | Monotonic counter for split-brain prevention |
+| `MESH_DISCOVERY_INTERVAL_MS` | No | `5000` | DNS re-resolution interval in milliseconds |
+
+Identity resolution order: `MESH_NODE_NAME` > `FLY_*` env > hostname + `MESH_NODE_HOST`.
+
+### Operator inspection
+
+When the cluster is running, inspect it from within the Compose network with the cluster cookie:
+
+```bash
+docker compose exec node1 meshc cluster status     node1@node1:4370 --cookie change-me-in-production --json
+docker compose exec node1 meshc cluster continuity node1@node1:4370 --cookie change-me-in-production --json
+docker compose exec node1 meshc cluster diagnostics node1@node1:4370 --cookie change-me-in-production --json
+```
 "#
     .replace("__NAME__", name)
     .replace("__MIGRATION__", TODO_POSTGRES_MIGRATION_FILENAME)
@@ -607,6 +655,92 @@ ENV TODO_RATE_LIMIT_MAX_REQUESTS=5
 ENV MESH_CLUSTER_PORT=4370
 EXPOSE 8080 4370
 ENTRYPOINT ["/usr/local/bin/__NAME__"]
+"#
+    .replace("__NAME__", name)
+}
+
+fn postgres_todo_docker_compose(name: &str) -> String {
+    r#"# Two-node clustered deployment of the __NAME__ starter.
+#
+# Prerequisites:
+#   meshc build .          # compile the Mesh binary
+#   docker compose up -d   # start the cluster
+#
+# The shared network alias "mesh-cluster" lets every node resolve all peers
+# through a single MESH_DISCOVERY_SEED value. Each container's hostname
+# becomes its node basename via the runtime's automatic identity path, so
+# MESH_NODE_NAME is not required.
+#
+# Operator inspection (while the cluster is running):
+#   meshc cluster status   node1@node1:4370 --json
+#   meshc cluster status   node2@node2:4370 --json
+#   meshc cluster continuity node1@node1:4370 --json
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: __NAME__
+    ports:
+      - "5432:5432"
+    networks:
+      - mesh
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "__NAME__"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  node1:
+    build: .
+    hostname: node1
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/__NAME__
+      PORT: "8080"
+      MESH_CLUSTER_COOKIE: change-me-in-production
+      MESH_DISCOVERY_SEED: mesh-cluster
+      MESH_CLUSTER_PORT: "4370"
+      MESH_NODE_HOST: node1
+      MESH_CONTINUITY_ROLE: primary
+      MESH_CONTINUITY_PROMOTION_EPOCH: "0"
+    ports:
+      - "8080:8080"
+      - "4370:4370"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      mesh:
+        aliases:
+          - mesh-cluster
+
+  node2:
+    build: .
+    hostname: node2
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/__NAME__
+      PORT: "8080"
+      MESH_CLUSTER_COOKIE: change-me-in-production
+      MESH_DISCOVERY_SEED: mesh-cluster
+      MESH_CLUSTER_PORT: "4370"
+      MESH_NODE_HOST: node2
+      MESH_CONTINUITY_ROLE: standby
+      MESH_CONTINUITY_PROMOTION_EPOCH: "0"
+    ports:
+      - "8081:8080"
+      - "4371:4370"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      mesh:
+        aliases:
+          - mesh-cluster
+
+networks:
+  mesh:
 "#
     .replace("__NAME__", name)
 }
@@ -669,6 +803,9 @@ MESH_DISCOVERY_SEED=localhost
 MESH_CLUSTER_PORT=4370
 MESH_CONTINUITY_ROLE=primary
 MESH_CONTINUITY_PROMOTION_EPOCH=0
+# In Docker/Kubernetes, set MESH_NODE_HOST instead of MESH_NODE_NAME.
+# The runtime derives node identity from hostname + MESH_NODE_HOST automatically.
+# MESH_NODE_HOST=node1
 "#
     .replace("__NAME__", name)
 }
@@ -1642,6 +1779,10 @@ end deriving(Json)
     write_project_file(
         &project_dir.join("Dockerfile"),
         &postgres_todo_dockerfile(name),
+    )?;
+    write_project_file(
+        &project_dir.join("docker-compose.yml"),
+        &postgres_todo_docker_compose(name),
     )?;
     write_project_file(
         &project_dir.join(".dockerignore"),

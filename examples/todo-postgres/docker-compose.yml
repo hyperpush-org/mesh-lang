@@ -1,0 +1,82 @@
+# Two-node clustered deployment of the todo-postgres starter.
+#
+# Prerequisites:
+#   meshc build .          # compile the Mesh binary
+#   docker compose up -d   # start the cluster
+#
+# The shared network alias "mesh-cluster" lets every node resolve all peers
+# through a single MESH_DISCOVERY_SEED value. Each container's hostname
+# becomes its node basename via the runtime's automatic identity path, so
+# MESH_NODE_NAME is not required.
+#
+# Operator inspection (while the cluster is running, from a container on the
+# `mesh` network):
+#   docker compose exec node1 meshc cluster status node1@node1:4370 --json
+#   docker compose exec node1 meshc cluster status node2@node2:4370 --json
+#   docker compose exec node1 meshc cluster continuity node1@node1:4370 --json
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo-postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - mesh
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "todo-postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  node1:
+    build: .
+    hostname: node1
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/todo-postgres
+      PORT: "8080"
+      MESH_CLUSTER_COOKIE: change-me-in-production
+      MESH_DISCOVERY_SEED: mesh-cluster
+      MESH_CLUSTER_PORT: "4370"
+      MESH_NODE_HOST: node1
+      MESH_CONTINUITY_ROLE: primary
+      MESH_CONTINUITY_PROMOTION_EPOCH: "0"
+    ports:
+      - "8080:8080"
+      - "4370:4370"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      mesh:
+        aliases:
+          - mesh-cluster
+
+  node2:
+    build: .
+    hostname: node2
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/todo-postgres
+      PORT: "8080"
+      MESH_CLUSTER_COOKIE: change-me-in-production
+      MESH_DISCOVERY_SEED: mesh-cluster
+      MESH_CLUSTER_PORT: "4370"
+      MESH_NODE_HOST: node2
+      MESH_CONTINUITY_ROLE: standby
+      MESH_CONTINUITY_PROMOTION_EPOCH: "0"
+    ports:
+      - "8081:8080"
+      - "4371:4370"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      mesh:
+        aliases:
+          - mesh-cluster
+
+networks:
+  mesh:

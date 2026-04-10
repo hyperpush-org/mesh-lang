@@ -40,6 +40,8 @@ rustls-pki-types = "1"
 # Phase 64: ring for ECDSA key generation (ephemeral TLS certs for node connections)
 # Already compiled as transitive dep of rustls -- zero additional compile time.
 ring = "0.17"
+# Hostname-based auto-identity for generic Docker/container deployments.
+hostname = "0.4"
 
 [dev-dependencies]
 tempfile = "3"
