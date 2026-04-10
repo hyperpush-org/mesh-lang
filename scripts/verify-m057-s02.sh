@@ -30,9 +30,25 @@ EXPECTED = {
     'rewrite_scope_count': 21,
     'mock_follow_count': 7,
     'mesh_total': 17,
+    'mesh_open': 7,
+    'mesh_closed': 10,
     'hyperpush_total': 52,
+    'hyperpush_open': 47,
+    'hyperpush_closed': 5,
     'combined_total': 69,
     'naming_handles': ['hyperpush#54', 'hyperpush#55', 'hyperpush#56'],
+    'closed_close_handles': [
+        'mesh-lang#4',
+        'mesh-lang#5',
+        'mesh-lang#6',
+        'mesh-lang#8',
+        'mesh-lang#9',
+        'mesh-lang#10',
+        'mesh-lang#11',
+        'mesh-lang#13',
+        'mesh-lang#14',
+    ],
+    'reopened_close_handle': 'mesh-lang#3',
     'transfer_operation_id': 'transfer-hyperpush-8',
     'create_operation_id': 'create-pitch-retrospective-issue',
     'transfer_destination': {
@@ -40,6 +56,9 @@ EXPECTED = {
         'issue_url': 'https://github.com/hyperpush-org/mesh-lang/issues/19',
         'repo_slug': 'hyperpush-org/mesh-lang',
         'number': 19,
+        'state': 'CLOSED',
+        'closed_at': '2026-04-10T17:09:24Z',
+        'state_reason': 'completed',
     },
     'create_destination': {
         'issue_handle': 'hyperpush#58',
@@ -86,6 +105,13 @@ def now_iso() -> str:
 
 def normalize_multiline(value: str | None) -> str:
     return (value or '').replace('\r\n', '\n').strip()
+
+
+def normalize_state_reason(value: str | None) -> str | None:
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip().lower()
+    return normalized or None
 
 
 def require(condition: bool, phase: str, target: str, message: str) -> None:
@@ -279,12 +305,29 @@ def validate_artifacts(results: dict[str, Any], plan: dict[str, Any], ledger: di
     )
     require(derived_naming_handles == EXPECTED['naming_handles'], phase, 'naming-normalization', 'unexpected rewrite handles outside ledger rewrite_scope/mock-follow buckets')
 
+    close_handles = sorted(operation['canonical_issue_handle'] for operation in close_ops)
+    require(
+        close_handles == sorted([*EXPECTED['closed_close_handles'], EXPECTED['reopened_close_handle']]),
+        phase,
+        'close-ops',
+        'close operation handle set drifted',
+    )
+
     for operation in close_ops:
         target = operation['canonical_issue_handle']
         require(operation['status'] == 'already_satisfied', phase, target, 'close operation should be already_satisfied in the rerun snapshot')
-        require(operation['final_state']['state'] == 'CLOSED', phase, target, 'close operation final state must be CLOSED')
         comment = (operation.get('matching_comment') or {}).get('body')
         require(isinstance(comment, str) and 'Closing as shipped.' in comment, phase, target, 'close operation lost the shipped closeout comment')
+
+        if target == EXPECTED['reopened_close_handle']:
+            require(operation['final_state']['state'] == 'OPEN', phase, target, 'reopened close-bucket issue must currently be OPEN')
+            require(operation['final_state']['closed_at'] is None, phase, target, 'reopened close-bucket issue should not retain a closed_at timestamp')
+            require(operation['final_state']['state_reason'] == 'reopened', phase, target, 'reopened close-bucket issue should carry reopened state_reason')
+            continue
+
+        require(operation['final_state']['state'] == 'CLOSED', phase, target, 'close operation final state must be CLOSED')
+        require(bool(operation['final_state']['closed_at']), phase, target, 'closed close-bucket issue lost its closed_at timestamp')
+        require(operation['final_state']['state_reason'] == 'completed', phase, target, 'closed close-bucket issue lost its completed state_reason')
 
     for operation in rewrite_ops:
         target = operation['canonical_issue_handle']
@@ -309,7 +352,9 @@ def validate_artifacts(results: dict[str, Any], plan: dict[str, Any], ledger: di
     require(transfer['final_state']['repo_slug'] == EXPECTED['transfer_destination']['repo_slug'], phase, 'transfer.final_state.repo_slug', 'transfer repo slug drifted')
     require(transfer['final_state']['issue_handle'] == EXPECTED['transfer_destination']['issue_handle'], phase, 'transfer.final_state.issue_handle', 'transfer canonical handle drifted')
     require(transfer['final_state']['issue_url'] == EXPECTED['transfer_destination']['issue_url'], phase, 'transfer.final_state.issue_url', 'transfer canonical url drifted')
-    require(transfer['final_state']['state'] == 'OPEN', phase, 'transfer.final_state.state', 'transferred issue must stay open')
+    require(transfer['final_state']['state'] == EXPECTED['transfer_destination']['state'], phase, 'transfer.final_state.state', 'transferred issue state drifted from the retained live truth snapshot')
+    require(transfer['final_state']['closed_at'] == EXPECTED['transfer_destination']['closed_at'], phase, 'transfer.final_state.closed_at', 'transferred issue close timestamp drifted')
+    require(transfer['final_state']['state_reason'] == EXPECTED['transfer_destination']['state_reason'], phase, 'transfer.final_state.state_reason', 'transferred issue state_reason drifted')
 
     require(create['identity']['changes_identity'] is True, phase, EXPECTED['create_operation_id'], 'create result must preserve identity change')
     require(create['final_state']['repo_slug'] == EXPECTED['create_destination']['repo_slug'], phase, 'create.final_state.repo_slug', 'create repo slug drifted')
@@ -319,7 +364,9 @@ def validate_artifacts(results: dict[str, Any], plan: dict[str, Any], ledger: di
     require('already shipped during M056' in (create.get('matching_comment') or {}).get('body', ''), phase, EXPECTED['create_operation_id'], 'retrospective /pitch close comment missing')
 
     return {
-        'close_handles': sorted(operation['canonical_issue_handle'] for operation in close_ops),
+        'close_handles': close_handles,
+        'closed_close_handles': EXPECTED['closed_close_handles'],
+        'reopened_close_handles': [EXPECTED['reopened_close_handle']],
         'rewrite_scope_handles': rewrite_scope_handles,
         'mock_follow_handles': mock_follow_handles,
         'naming_handles': EXPECTED['naming_handles'],
@@ -350,16 +397,25 @@ def verify_repo_totals() -> dict[str, Any]:
     require(EXPECTED['transfer_destination']['number'] in mesh_numbers, phase, 'mesh-lang#19', 'mesh-lang repo totals do not include the transferred issue number')
     require(EXPECTED['create_destination']['number'] in hyperpush_numbers, phase, 'hyperpush#58', 'hyperpush repo totals do not include the retrospective /pitch issue number')
 
+    mesh_open = sum(1 for item in mesh_items if item['state'] == 'OPEN')
+    mesh_closed = sum(1 for item in mesh_items if item['state'] == 'CLOSED')
+    hyperpush_open = sum(1 for item in hyperpush_items if item['state'] == 'OPEN')
+    hyperpush_closed = sum(1 for item in hyperpush_items if item['state'] == 'CLOSED')
+    require(mesh_open == EXPECTED['mesh_open'], phase, 'hyperpush-org/mesh-lang', f'expected {EXPECTED["mesh_open"]} open mesh-lang issues, found {mesh_open}')
+    require(mesh_closed == EXPECTED['mesh_closed'], phase, 'hyperpush-org/mesh-lang', f'expected {EXPECTED["mesh_closed"]} closed mesh-lang issues, found {mesh_closed}')
+    require(hyperpush_open == EXPECTED['hyperpush_open'], phase, 'hyperpush-org/hyperpush', f'expected {EXPECTED["hyperpush_open"]} open hyperpush issues, found {hyperpush_open}')
+    require(hyperpush_closed == EXPECTED['hyperpush_closed'], phase, 'hyperpush-org/hyperpush', f'expected {EXPECTED["hyperpush_closed"]} closed hyperpush issues, found {hyperpush_closed}')
+
     return {
         'mesh_lang': {
             'total': len(mesh_items),
-            'open': sum(1 for item in mesh_items if item['state'] == 'OPEN'),
-            'closed': sum(1 for item in mesh_items if item['state'] == 'CLOSED'),
+            'open': mesh_open,
+            'closed': mesh_closed,
         },
         'hyperpush': {
             'total': len(hyperpush_items),
-            'open': sum(1 for item in hyperpush_items if item['state'] == 'OPEN'),
-            'closed': sum(1 for item in hyperpush_items if item['state'] == 'CLOSED'),
+            'open': hyperpush_open,
+            'closed': hyperpush_closed,
         },
         'combined_total': combined,
     }
@@ -371,7 +427,7 @@ def verify_issue_matches(operation: dict[str, Any]) -> dict[str, Any]:
     repo_slug = final_state['repo_slug']
     number = final_state['number']
     handle = final_state['issue_handle']
-    fields = 'number,title,state,url,body,labels,comments'
+    fields = 'number,title,state,url,body,labels,comments,closedAt,stateReason'
     payload = gh_json(
         f'issue-view-{repo_slug.split("/")[-1]}-{number}',
         ['issue', 'view', str(number), '-R', repo_slug, '--json', fields],
@@ -381,6 +437,8 @@ def verify_issue_matches(operation: dict[str, Any]) -> dict[str, Any]:
     require(payload['number'] == number, phase, handle, 'issue number drifted')
     require(payload['url'] == final_state['issue_url'], phase, handle, 'canonical issue URL drifted')
     require(payload['state'] == final_state['state'], phase, handle, 'issue state drifted')
+    require((payload.get('closedAt') or None) == final_state.get('closed_at'), phase, handle, 'issue closedAt drifted')
+    require(normalize_state_reason(payload.get('stateReason')) == final_state.get('state_reason'), phase, handle, 'issue stateReason drifted')
     require(payload['title'] == final_state['title'], phase, handle, 'issue title drifted')
     require(normalize_multiline(payload.get('body')) == normalize_multiline(final_state.get('body')), phase, handle, 'issue body drifted')
     require(label_names(payload) == sorted(final_state.get('labels') or []), phase, handle, 'issue labels drifted')
@@ -425,6 +483,8 @@ def replay_issue_states(results: dict[str, Any], bucket_sets: dict[str, Any]) ->
         'verified_operations': len(verified),
         'verified_handles': [row['issue_handle'] for row in verified],
         'close_handles': bucket_sets['close_handles'],
+        'closed_close_handles': bucket_sets['closed_close_handles'],
+        'reopened_close_handles': bucket_sets['reopened_close_handles'],
         'rewrite_scope_handles': bucket_sets['rewrite_scope_handles'],
         'mock_follow_handles': bucket_sets['mock_follow_handles'],
         'naming_handles': bucket_sets['naming_handles'],
@@ -460,7 +520,8 @@ def render_handoff(results: dict[str, Any], repo_totals: dict[str, Any], bucket_
         '',
         '## Bucket outcomes',
         '',
-        f"- Closed shipped `mesh-lang` rows: `{len(bucket_sets['close_handles'])}` verified closed with their closeout comments intact.",
+        f"- Still-closed shipped `mesh-lang` rows: `{len(bucket_sets['closed_close_handles'])}` verified closed with their closeout comments intact.",
+        f"- Reopened shipped `mesh-lang` row: `{', '.join(bucket_sets['reopened_close_handles'])}` is now `OPEN`, so S03 should treat it as active repo truth rather than preserved done state.",
         f"- `rewrite_scope` product rows: `{len(bucket_sets['rewrite_scope_handles'])}` verified open with rewritten title/body text matching the checked plan.",
         f"- Mock-backed follow-through rows: `{len(bucket_sets['mock_follow_handles'])}` verified open with truthful wording that keeps the operator-app/backend gaps explicit.",
         f"- Naming-normalization rows: `{', '.join(bucket_sets['naming_handles'])}` verified open with public `hyperpush-org/hyperpush` wording and only compatibility-path mentions of `hyperpush-mono`.",
@@ -468,6 +529,7 @@ def render_handoff(results: dict[str, Any], repo_totals: dict[str, Any], bucket_
         '## Notes for S03',
         '',
         '- The checked `repo-mutation-results.json` is an idempotence rerun snapshot from T02, so every operation is recorded as `already_satisfied` even though the canonical transfer/create mappings remain authoritative.',
+        '- Live repo truth has moved since the original S02 handoff: the transferred docs issue `mesh-lang#19` is now closed, and `mesh-lang#3` has been reopened.',
         '- The org project still needs its item URLs/statuses realigned to the repo-truth state above; that board-only drift is intentionally deferred to S03.',
         f"- Re-run `bash {Path('scripts/verify-m057-s02.sh')}` before S03 mutates project state if you need a fresh live-read confirmation.",
         '',

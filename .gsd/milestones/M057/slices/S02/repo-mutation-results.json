@@ -193,15 +193,15 @@
           "number": 19,
           "issue_handle": "mesh-lang#19",
           "issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/19",
-          "state": "OPEN",
+          "state": "CLOSED",
           "title": "[Bug]: docs Packages nav link points to /packages instead of opening packages.meshlang.dev in a new tab",
           "body": "## Before you submit\n- [x] I searched existing issues and checked the relevant docs/examples first.\n- [x] I can reproduce this with a current build, the latest public release, or a specific commit I list below.\n\n## Affected area\ndocumentation / website\n\n## Version / commit\n79a030c8\n\n## Operating system\nOther\n\n## Project / starter / path (if relevant)\n- `website/docs/.vitepress/config.mts`\n- `website/docs/.vitepress/theme/components/NavBar.vue`\n\n## Reproduction steps\n1. Open the website.\n2. Click the **Packages** link in the top navigation bar.\n3. Observe that it navigates the current tab to `/packages`.\n\n## Expected behavior\nThe **Packages** nav item should open `https://packages.meshlang.dev` in a new browser tab.\n\n## Actual behavior\nThe nav item points at the local site route (`/packages` / `/packages/`) instead of the external packages site, so it keeps the user on the docs site and sends them to the wrong destination.\n\n## Logs, errors, or screenshots\nRelevant repo surfaces currently point to the local path:\n- `website/docs/.vitepress/config.mts:218` \u2192 `{ text: 'Packages', link: '/packages/' }`\n- `website/docs/.vitepress/theme/components/NavBar.vue:17` \u2192 `{ text: 'Packages', href: '/packages/' }`\n\n## Additional context\nThis appears to affect the shared website navigation surface rather than page-local content. The desired behavior is an external link to `packages.meshlang.dev`, opened in a new tab/window.\n",
           "labels": [
             "bug",
             "documentation"
           ],
-          "closed_at": null,
-          "state_reason": null,
+          "closed_at": "2026-04-10T17:09:24Z",
+          "state_reason": "completed",
           "api_url": "https://api.github.com/repos/hyperpush-org/mesh-lang/issues/19"
         },
         "changes_identity": true
@@ -211,15 +211,15 @@
         "number": 19,
         "issue_handle": "mesh-lang#19",
         "issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/19",
-        "state": "OPEN",
+        "state": "CLOSED",
         "title": "[Bug]: docs Packages nav link points to /packages instead of opening packages.meshlang.dev in a new tab",
         "body": "## Before you submit\n- [x] I searched existing issues and checked the relevant docs/examples first.\n- [x] I can reproduce this with a current build, the latest public release, or a specific commit I list below.\n\n## Affected area\ndocumentation / website\n\n## Version / commit\n79a030c8\n\n## Operating system\nOther\n\n## Project / starter / path (if relevant)\n- `website/docs/.vitepress/config.mts`\n- `website/docs/.vitepress/theme/components/NavBar.vue`\n\n## Reproduction steps\n1. Open the website.\n2. Click the **Packages** link in the top navigation bar.\n3. Observe that it navigates the current tab to `/packages`.\n\n## Expected behavior\nThe **Packages** nav item should open `https://packages.meshlang.dev` in a new browser tab.\n\n## Actual behavior\nThe nav item points at the local site route (`/packages` / `/packages/`) instead of the external packages site, so it keeps the user on the docs site and sends them to the wrong destination.\n\n## Logs, errors, or screenshots\nRelevant repo surfaces currently point to the local path:\n- `website/docs/.vitepress/config.mts:218` \u2192 `{ text: 'Packages', link: '/packages/' }`\n- `website/docs/.vitepress/theme/components/NavBar.vue:17` \u2192 `{ text: 'Packages', href: '/packages/' }`\n\n## Additional context\nThis appears to affect the shared website navigation surface rather than page-local content. The desired behavior is an external link to `packages.meshlang.dev`, opened in a new tab/window.\n",
         "labels": [
           "bug",
           "documentation"
         ],
-        "closed_at": null,
-        "state_reason": null,
+        "closed_at": "2026-04-10T17:09:24Z",
+        "state_reason": "completed",
         "api_url": "https://api.github.com/repos/hyperpush-org/mesh-lang/issues/19"
       },
       "label_resolution": {
@@ -824,7 +824,7 @@
           "number": 3,
           "issue_handle": "mesh-lang#3",
           "issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/3",
-          "state": "CLOSED",
+          "state": "OPEN",
           "title": "Mesh: clustered Docker-on-VM deploy baseline for Hyperpush",
           "body": "## Outcome\nGive Hyperpush a truthful, repeatable Docker-first deployment baseline on a generic VM with Mesh clustering that works without repo-local magic.\n\n## Scope\n- Generic Docker-on-a-VM deployment path for Mesh clustered apps\n- Node identity, discovery, clustering, and bootstrap UX must be stable enough for Hyperpush\n- Container/runtime contract should be simple enough to document and automate\n- Close the gap between \"language supports clustering\" and \"operator can actually deploy this product\"\n\n## Acceptance criteria\n- A generic VM + Docker path exists and is documented\n- The clustered runtime starts, discovers peers, and stays healthy under the Hyperpush shape\n- The deploy path is truthful for both single-node and clustered product deployments\n- Any required env/entrypoint/runtime assumptions are explicit and tested\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Mesh Foundation\n- Commitment: Committed\n- Critical path: 1\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Generic Docker-on-a-VM cluster bootstrap is documented and repeatable.\n- Peer discovery, identity, and health verification work without repo-local magic.\n- Single-node and clustered product deployments are both truthful.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/7 \u2014 Mesh: define generic Docker cluster bootstrap contract\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/8 \u2014 Mesh: ship reference clustered VM deployment and health verification\n<!-- roadmap-detail-end -->\n",
           "labels": [
@@ -832,8 +832,8 @@
             "epic",
             "roadmap"
           ],
-          "closed_at": "2026-04-10T08:29:56Z",
-          "state_reason": "completed",
+          "closed_at": null,
+          "state_reason": "reopened",
           "api_url": "https://api.github.com/repos/hyperpush-org/mesh-lang/issues/3"
         },
         "changes_identity": false
@@ -843,7 +843,7 @@
         "number": 3,
         "issue_handle": "mesh-lang#3",
         "issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/3",
-        "state": "CLOSED",
+        "state": "OPEN",
         "title": "Mesh: clustered Docker-on-VM deploy baseline for Hyperpush",
         "body": "## Outcome\nGive Hyperpush a truthful, repeatable Docker-first deployment baseline on a generic VM with Mesh clustering that works without repo-local magic.\n\n## Scope\n- Generic Docker-on-a-VM deployment path for Mesh clustered apps\n- Node identity, discovery, clustering, and bootstrap UX must be stable enough for Hyperpush\n- Container/runtime contract should be simple enough to document and automate\n- Close the gap between \"language supports clustering\" and \"operator can actually deploy this product\"\n\n## Acceptance criteria\n- A generic VM + Docker path exists and is documented\n- The clustered runtime starts, discovers peers, and stays healthy under the Hyperpush shape\n- The deploy path is truthful for both single-node and clustered product deployments\n- Any required env/entrypoint/runtime assumptions are explicit and tested\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Mesh Foundation\n- Commitment: Committed\n- Critical path: 1\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Generic Docker-on-a-VM cluster bootstrap is documented and repeatable.\n- Peer discovery, identity, and health verification work without repo-local magic.\n- Single-node and clustered product deployments are both truthful.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/7 \u2014 Mesh: define generic Docker cluster bootstrap contract\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/8 \u2014 Mesh: ship reference clustered VM deployment and health verification\n<!-- roadmap-detail-end -->\n",
         "labels": [
@@ -851,8 +851,8 @@
           "epic",
           "roadmap"
         ],
-        "closed_at": "2026-04-10T08:29:56Z",
-        "state_reason": "completed",
+        "closed_at": null,
+        "state_reason": "reopened",
         "api_url": "https://api.github.com/repos/hyperpush-org/mesh-lang/issues/3"
       },
       "label_resolution": null,
@@ -3864,7 +3864,7 @@
             "roadmap"
           ],
           "closed_at": null,
-          "state_reason": null,
+          "state_reason": "reopened",
           "api_url": "https://api.github.com/repos/hyperpush-org/hyperpush/issues/54"
         },
         "changes_identity": false
@@ -3882,7 +3882,7 @@
           "roadmap"
         ],
         "closed_at": null,
-        "state_reason": null,
+        "state_reason": "reopened",
         "api_url": "https://api.github.com/repos/hyperpush-org/hyperpush/issues/54"
       },
       "label_resolution": null,

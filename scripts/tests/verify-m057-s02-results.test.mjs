@@ -26,8 +26,22 @@ const expected = {
   rewriteScope: 21,
   mockBackedFollowThrough: 7,
   namingNormalizationHandles: ['hyperpush#54', 'hyperpush#55', 'hyperpush#56'],
+  closedCloseHandles: [
+    'mesh-lang#4',
+    'mesh-lang#5',
+    'mesh-lang#6',
+    'mesh-lang#8',
+    'mesh-lang#9',
+    'mesh-lang#10',
+    'mesh-lang#11',
+    'mesh-lang#13',
+    'mesh-lang#14',
+  ],
+  reopenedCloseHandle: 'mesh-lang#3',
   transferredHandle: 'mesh-lang#19',
   transferredUrl: 'https://github.com/hyperpush-org/mesh-lang/issues/19',
+  transferredState: 'CLOSED',
+  transferredClosedAt: '2026-04-10T17:09:24Z',
   createdHandle: 'hyperpush#58',
   createdUrl: 'https://github.com/hyperpush-org/hyperpush/issues/58',
 }
@@ -115,15 +129,32 @@ function validateResults(results, plan, ledger) {
   assert.ok(transferOperation, 'results must preserve the transfer operation')
   assert.ok(createOperation, 'results must preserve the create operation')
 
+  const closeHandles = closeOperations.map((operation) => operation.canonical_issue_handle)
+  requireSetEqual(
+    closeHandles,
+    [...expected.closedCloseHandles, expected.reopenedCloseHandle],
+    'close results must retain the expected mesh-lang close bucket handles',
+  )
+
   for (const operation of closeOperations) {
     assert.equal(operation.status, 'already_satisfied')
-    assert.equal(operation.final_state.state, 'CLOSED')
     assert.ok(operation.matching_comment?.body, `${operation.operation_id} should preserve the closeout comment body`)
     assert.match(operation.matching_comment.body, /Closing as shipped\./)
     assert.ok(
       operation.matching_comment.body.includes(`Canonical issue: \`${operation.canonical_issue_handle}\`.`),
       `${operation.operation_id} should keep its canonical handle in the closeout comment`,
     )
+
+    if (operation.canonical_issue_handle === expected.reopenedCloseHandle) {
+      assert.equal(operation.final_state.state, 'OPEN')
+      assert.equal(operation.final_state.closed_at, null)
+      assert.equal(operation.final_state.state_reason, 'reopened')
+      continue
+    }
+
+    assert.equal(operation.final_state.state, 'CLOSED')
+    assert.ok(operation.final_state.closed_at, `${operation.operation_id} should preserve its close timestamp`)
+    assert.equal(operation.final_state.state_reason, 'completed')
   }
 
   const { rewriteScopeHandles, mockBackedFollowThroughHandles } = deriveExpectedBuckets(ledger)
@@ -173,7 +204,9 @@ function validateResults(results, plan, ledger) {
   assert.equal(transferOperation.final_state.repo_slug, 'hyperpush-org/mesh-lang')
   assert.equal(transferOperation.final_state.issue_handle, expected.transferredHandle)
   assert.equal(transferOperation.final_state.issue_url, expected.transferredUrl)
-  assert.equal(transferOperation.final_state.state, 'OPEN')
+  assert.equal(transferOperation.final_state.state, expected.transferredState)
+  assert.equal(transferOperation.final_state.closed_at, expected.transferredClosedAt)
+  assert.equal(transferOperation.final_state.state_reason, 'completed')
   assert.equal(transferOperation.final_state.title, transferOperation.requested.title_after)
   assert.equal(normalizeMultiline(transferOperation.final_state.body), normalizeMultiline(transferOperation.requested.body_after))
   assert.deepEqual(transferOperation.label_resolution.assignable, ['bug', 'documentation'])
@@ -235,6 +268,25 @@ test('results artifact fails closed when the retrospective /pitch issue mapping 
   assert.throws(
     () => validateResults(readJson(tmpRoot, 'repo-mutation-results.json'), plan, ledger),
     /Expected values to be strictly equal/,
+  )
+})
+
+test('results artifact fails closed when the reopened mesh issue is forced back into the shipped-closed bucket', (t) => {
+  const ledger = readJson(root, files.ledgerJson)
+  const plan = readJson(root, files.planJson)
+  const results = readJson(root, files.resultsJson)
+  const tmpRoot = mkTmpDir(t, 'm057-s02-results-reopened-close-')
+  const mutated = structuredClone(results)
+  const reopened = mutated.operations.find((operation) => operation.operation_id === 'close-mesh-lang-3')
+  reopened.final_state.state = 'CLOSED'
+  reopened.final_state.closed_at = '2026-04-10T08:29:56Z'
+  reopened.final_state.state_reason = 'completed'
+  const filePath = path.join(tmpRoot, 'repo-mutation-results.json')
+  writeJson(filePath, mutated)
+
+  assert.throws(
+    () => validateResults(readJson(tmpRoot, 'repo-mutation-results.json'), plan, ledger),
+    /OPEN|reopened/,
   )
 })
 

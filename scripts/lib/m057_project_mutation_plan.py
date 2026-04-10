@@ -89,8 +89,8 @@ EXPECTED_ROLLUP = {
     "update": 23,
     "unchanged": 30,
     "inherited_rows": 23,
-    "desired_total": 55,
 }
+EXPECTED_DESIRED_PROJECT_TOTAL = 55
 PRIORITY_LABEL_TO_OPTION = {
     "priority: low": "P2",
     "priority: medium": "P1",
@@ -1170,6 +1170,12 @@ def build_plan(*, source_root: Path, s01_dir: Path, s02_dir: Path, output_dir: P
 
         if project_backed and live_item is None:
             raise PlanError(f"missing live project item for board-backed row {handle}")
+        if project_action_kind == "leave_untracked":
+            if project_backed:
+                raise PlanError(f"leave_untracked row {handle} cannot be marked project_backed")
+            if live_item is not None:
+                raise PlanError(f"leave_untracked row {handle} unexpectedly exists on the live board")
+            continue
         if project_action_kind == "remove_from_project":
             if live_item is None:
                 raise PlanError(f"expected stale cleanup row {handle} to still be present on the live board")
@@ -1347,6 +1353,8 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
             raise PlanError(f"plan rollup drifted for {key}: expected {expected}, found {actual}")
     if require_int(rollup.get("current_project_items"), "plan.rollup.current_project_items") != EXPECTED_CURRENT_PROJECT_TOTAL:
         raise PlanError("current_project_items drifted")
+    if require_int(rollup.get("desired_project_items"), "plan.rollup.desired_project_items") != EXPECTED_DESIRED_PROJECT_TOTAL:
+        raise PlanError("desired_project_items drifted")
 
     operations = require_object(plan.get("operations"), "plan.operations")
     delete_ops = [require_object(operation, "plan.operations.delete[]") for operation in require_array(operations.get("delete"), "plan.operations.delete")]

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M057/S03/T01",
+  "timestamp": 1775843240868,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "python3 scripts/lib/m057_project_mutation_plan.py --output-dir .gsd/milestones/M057/slices/S03 --check",
+      "exitCode": 1,
+      "durationMs": 2225,
+      "verdict": "fail"
+    },
+    {
+      "command": "node --test scripts/tests/verify-m057-s03-plan.test.mjs",
+      "exitCode": 1,
+      "durationMs": 171,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}
