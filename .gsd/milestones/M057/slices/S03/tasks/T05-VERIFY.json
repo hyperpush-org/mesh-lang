@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T05",
+  "unitId": "M057/S03/T05",
+  "timestamp": 1775851321629,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/verify-m057-s03-results.test.mjs",
+      "exitCode": 0,
+      "durationMs": 477,
+      "verdict": "pass"
+    },
+    {
+      "command": "bash scripts/verify-m057-s03.sh",
+      "exitCode": 0,
+      "durationMs": 45524,
+      "verdict": "pass"
+    }
+  ]
+}
