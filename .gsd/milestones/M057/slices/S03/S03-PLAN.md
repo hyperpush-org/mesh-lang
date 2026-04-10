@@ -60,7 +60,7 @@ Done when: the checked S03 plan artifacts exist, the retained S02 verifier outco
   - Files: `scripts/lib/m057_project_mutation_plan.py`, `scripts/tests/verify-m057-s03-plan.test.mjs`, `.gsd/milestones/M057/slices/S03/project-mutation-plan.json`, `.gsd/milestones/M057/slices/S03/project-mutation-plan.md`
   - Verify: python3 scripts/lib/m057_project_mutation_plan.py --output-dir .gsd/milestones/M057/slices/S03 --check && node --test scripts/tests/verify-m057-s03-plan.test.mjs
 
-- [ ] **T04: Apply project deletes, adds, and field edits from the refreshed checked manifest** `est:2h`
+- [x] **T04: Apply project deletes, adds, and field edits from the refreshed checked manifest** `est:2h`
   Why: After the planner is green, org project #1 still has to be brought into line with the reconciled repo truth through a deterministic, resumable apply step.
 
 Do:
