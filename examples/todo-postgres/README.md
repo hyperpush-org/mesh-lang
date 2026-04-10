@@ -222,10 +222,10 @@ Identity resolution order: `MESH_NODE_NAME` > `FLY_*` env > hostname + `MESH_NOD
 
 ### Operator inspection
 
-When the cluster is running, inspect it with the cluster cookie:
+When the cluster is running, inspect it with the cluster cookie from inside the Compose network. The `node1` hostname in `node1@node1:4370` typically does not resolve from the host machine:
 
 ```bash
-meshc cluster status     node1@node1:4370 --cookie change-me-in-production --json
-meshc cluster continuity node1@node1:4370 --cookie change-me-in-production --json
-meshc cluster diagnostics node1@node1:4370 --cookie change-me-in-production --json
+docker compose exec node1 meshc cluster status     node1@node1:4370 --cookie change-me-in-production --json
+docker compose exec node1 meshc cluster continuity node1@node1:4370 --cookie change-me-in-production --json
+docker compose exec node1 meshc cluster diagnostics node1@node1:4370 --cookie change-me-in-production --json
 ```
