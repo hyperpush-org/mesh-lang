@@ -9,10 +9,11 @@
 # becomes its node basename via the runtime's automatic identity path, so
 # MESH_NODE_NAME is not required.
 #
-# Operator inspection (while the cluster is running):
-#   meshc cluster status   node1@node1:4370 --json
-#   meshc cluster status   node2@node2:4370 --json
-#   meshc cluster continuity node1@node1:4370 --json
+# Operator inspection (while the cluster is running, from a container on the
+# `mesh` network):
+#   docker compose exec node1 meshc cluster status node1@node1:4370 --json
+#   docker compose exec node1 meshc cluster status node2@node2:4370 --json
+#   docker compose exec node1 meshc cluster continuity node1@node1:4370 --json
 
 services:
   postgres:
