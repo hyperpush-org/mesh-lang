@@ -2,21 +2,42 @@
 id: T03
 parent: S02
 milestone: M040
-provides: []
-requires: []
-affects: []
-key_files: []
-key_decisions: []
-patterns_established: []
-drill_down_paths: []
-observability_surfaces: []
-duration: ""
-verification_result: ""
+key_files:
+  - (none)
+key_decisions:
+  - (none)
+duration: 
+verification_result: untested
 completed_at: 
 blocker_discovered: false
 ---
 
 # T03: Require replica-backed admission and mirrored continuity status
 
+****
+
 ## What Happened
+
 No summary recorded.
+
+## Verification
+
+No verification recorded.
+
+## Verification Evidence
+
+| # | Command | Exit Code | Verdict | Duration |
+|---|---------|-----------|---------|----------|
+| — | No verification commands discovered | — | — | — |
+
+## Deviations
+
+None.
+
+## Known Issues
+
+None.
+
+## Files Created/Modified
+
+None.

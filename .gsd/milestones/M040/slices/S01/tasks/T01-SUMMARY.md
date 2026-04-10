@@ -2,29 +2,6 @@
 id: T01
 parent: S01
 milestone: M040
-provides: []
-requires: []
-affects: []
-key_files: ["cluster-proof/work.mpl", "cluster-proof/main.mpl", "cluster-proof/tests/work.test.mpl", ".gsd/milestones/M040/slices/S01/tasks/T01-SUMMARY.md"]
-key_decisions: ["Drafted the keyed contract around request-key identity, attempt IDs, and status snapshots instead of extending the old anonymous `request_id` shape.", "Stopped execution and wrote a detailed handoff once Mesh compile/type failures persisted and the context budget warning required wrap-up."]
-patterns_established: []
-drill_down_paths: []
-observability_surfaces: []
-duration: ""
-verification_result: "Ran `cargo run -q -p meshc -- test cluster-proof/tests` and `cargo run -q -p meshc -- build cluster-proof`. Both failed during compilation, so task-level verification did not pass and slice-level verification was not attempted. The task summary records the failed commands and the current resume points."
-completed_at: 2026-03-28T17:45:04.495Z
-blocker_discovered: false
----
-
-# T01: Attempted a keyed `/work` submit/status refactor and test rewrite, but the Mesh package still fails to compile.
-
-> Attempted a keyed `/work` submit/status refactor and test rewrite, but the Mesh package still fails to compile.
-
-## What Happened
----
-id: T01
-parent: S01
-milestone: M040
 key_files:
   - cluster-proof/work.mpl
   - cluster-proof/main.mpl
@@ -33,9 +10,9 @@ key_files:
 key_decisions:
   - Drafted the keyed contract around request-key identity, attempt IDs, and status snapshots instead of extending the old anonymous `request_id` shape.
   - Stopped execution and wrote a detailed handoff once Mesh compile/type failures persisted and the context budget warning required wrap-up.
-duration: ""
+duration: 
 verification_result: mixed
-completed_at: 2026-03-28T17:45:04.496Z
+completed_at: 2026-03-28T17:45:04.495Z
 blocker_discovered: false
 ---
 
@@ -58,7 +35,6 @@ Ran `cargo run -q -p meshc -- test cluster-proof/tests` and `cargo run -q -p mes
 | 1 | `cargo run -q -p meshc -- test cluster-proof/tests` | 1 | ❌ fail | 6000ms |
 | 2 | `cargo run -q -p meshc -- build cluster-proof` | 1 | ❌ fail | 6000ms |
 
-
 ## Deviations
 
 Stopped before finishing implementation and before slice-level verification because the package was still compile-failing when the context budget warning required an immediate wrap-up.
@@ -73,10 +49,3 @@ Stopped before finishing implementation and before slice-level verification beca
 - `cluster-proof/main.mpl`
 - `cluster-proof/tests/work.test.mpl`
 - `.gsd/milestones/M040/slices/S01/tasks/T01-SUMMARY.md`
-
-
-## Deviations
-Stopped before finishing implementation and before slice-level verification because the package was still compile-failing when the context budget warning required an immediate wrap-up.
-
-## Known Issues
-`cluster-proof/work.mpl` does not compile; the keyed registry/service draft is incomplete; `cluster-proof/tests/work.test.mpl` depends on the unfinished draft contract; and `cluster-proof/main.mpl` now points to keyed handlers that are not yet buildable.

@@ -1,0 +1,468 @@
+{
+  "version": "m057-s01-mesh-lang-issues-v1",
+  "snapshot_kind": "repo-issues",
+  "captured_at": "2026-04-10T04:50:41Z",
+  "source": {
+    "command": "/opt/homebrew/bin/gh issue list -R hyperpush-org/mesh-lang --state all --limit 200 --json number,title,state,labels,body,url,createdAt,updatedAt,closedAt",
+    "requested_repo": "hyperpush-org/mesh-lang"
+  },
+  "repo": {
+    "requested_slug": "hyperpush-org/mesh-lang",
+    "canonical_slug": "hyperpush-org/mesh-lang",
+    "canonical_url": "https://github.com/hyperpush-org/mesh-lang",
+    "issue_base_url": "https://github.com/hyperpush-org/mesh-lang/issues"
+  },
+  "rollup": {
+    "total": 16,
+    "open": 16,
+    "closed": 0
+  },
+  "issues": [
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/3",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 3,
+      "title": "Mesh: clustered Docker-on-VM deploy baseline for Hyperpush",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:37:59Z",
+      "updated_at": "2026-04-10T01:09:13Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/3",
+      "body": "## Outcome\nGive Hyperpush a truthful, repeatable Docker-first deployment baseline on a generic VM with Mesh clustering that works without repo-local magic.\n\n## Scope\n- Generic Docker-on-a-VM deployment path for Mesh clustered apps\n- Node identity, discovery, clustering, and bootstrap UX must be stable enough for Hyperpush\n- Container/runtime contract should be simple enough to document and automate\n- Close the gap between \"language supports clustering\" and \"operator can actually deploy this product\"\n\n## Acceptance criteria\n- A generic VM + Docker path exists and is documented\n- The clustered runtime starts, discovers peers, and stays healthy under the Hyperpush shape\n- The deploy path is truthful for both single-node and clustered product deployments\n- Any required env/entrypoint/runtime assumptions are explicit and tested\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Mesh Foundation\n- Commitment: Committed\n- Critical path: 1\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Generic Docker-on-a-VM cluster bootstrap is documented and repeatable.\n- Peer discovery, identity, and health verification work without repo-local magic.\n- Single-node and clustered product deployments are both truthful.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/7 \u2014 Mesh: define generic Docker cluster bootstrap contract\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/8 \u2014 Mesh: ship reference clustered VM deployment and health verification\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpRLQ",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/4",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 4,
+      "title": "Mesh: runtime hardening for Hyperpush production load and clustering",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:00Z",
+      "updated_at": "2026-04-10T01:09:14Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/4",
+      "body": "## Outcome\nHarden the Mesh runtime so Hyperpush can honestly claim production readiness under real clustered load, failover, and recovery conditions.\n\n## Scope\n- Cluster stability under Hyperpush production traffic patterns\n- Failover, recovery, and continuity behavior required by the product\n- Runtime diagnostics and observability needed to debug real incidents\n- Any correctness or performance issues that would make Hyperpush's core promises fake\n\n## Acceptance criteria\n- Runtime behavior is stable enough for Hyperpush production use\n- Known crashers, correctness bugs, or continuity gaps on the Hyperpush path are closed or explicitly removed from public claims\n- Cluster health, recovery, and failure surfaces are inspectable by operators\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Mesh Foundation\n- Commitment: Committed\n- Critical path: 1\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Failover and recovery semantics are stable enough for Hyperpush production incidents.\n- Operators can inspect recovery state and failure causes with useful diagnostics.\n- Soak or load evidence exists for clustered runtime behavior on the Hyperpush path.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/9 \u2014 Mesh: harden failover and recovery semantics for Hyperpush workloads\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/10 \u2014 Mesh: expose operator diagnostics and soak verification for clustered runtime behavior\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpRLQ",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/5",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 5,
+      "title": "Mesh: deploy and release primitives needed for Hyperpush autonomous remediation",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:02Z",
+      "updated_at": "2026-04-10T01:09:16Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/5",
+      "body": "## Outcome\nProvide the Mesh-side primitives needed for Hyperpush's autonomous remediation loop to deploy fixes, verify releases, and reason about runtime truth safely.\n\n## Scope\n- Release/deploy/runtime surfaces needed by Hyperpush's agent loop\n- Post-deploy verification hooks or signals needed to confirm error-rate drops\n- Support for truthful autonomous deploy + rollback/reopen behavior where appropriate\n- Any missing runtime/build/deploy seams that block the GitHub-to-production loop\n\n## Acceptance criteria\n- Hyperpush can depend on Mesh/runtime surfaces for deploy + verify flows without hidden operator work\n- Post-release verification is grounded in real runtime signals\n- Missing primitives are added or the Hyperpush product claim is narrowed truthfully\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Deployment\n- Commitment: Planned\n- Critical path: 1 -> 4\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Release, deploy, and runtime verification signals are available to the Hyperpush product.\n- Post-release verification can rely on those real signals.\n- Rollback or regression behavior is supported or explicitly bounded.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/11 \u2014 Mesh: expose release and deploy verification signals for autonomous remediation\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/12 \u2014 Mesh: add rollback and regression primitives for failed autonomous fixes\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpRLQ",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/6",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 6,
+      "title": "Mesh: docs, packages, installers, and public surfaces must stay truthful for Hyperpush launch",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:04Z",
+      "updated_at": "2026-04-10T01:09:18Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/6",
+      "body": "## Outcome\nKeep the Mesh install, docs, packages, and public surfaces truthful as Hyperpush becomes a real product dependency.\n\n## Scope\n- Installer/install docs and package surfaces\n- Public docs and landing language that Hyperpush depends on\n- Self-hosted and clustered deployment guidance\n- Any package/docs/website drift that would make the Hyperpush launch dishonest\n\n## Acceptance criteria\n- Public docs/packages/install surfaces match the actual runtime and deploy contract\n- Hyperpush operators are not sent down fake or stale Mesh paths\n- Product-critical Mesh docs are current enough to support onboarding and self-hosting\n\n## Roadmap notes\n- Domain: Mesh\n- Track: Mesh Foundation\n- Commitment: Committed\n- Critical path: 1\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Public install, package, and docs surfaces match actual runtime and deploy behavior.\n- Self-hosted and clustered operator docs reflect the real product path.\n- Mesh surfaces referenced by Hyperpush do not overclaim unsupported behavior.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/13 \u2014 Mesh: audit installer, package, and docs truth against the Hyperpush launch contract\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/14 \u2014 Mesh: refresh self-hosted and clustered operator docs for product deployments\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBdQ",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpRLQ",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/7",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 7,
+      "title": "Mesh: define generic Docker cluster bootstrap contract",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:06Z",
+      "updated_at": "2026-04-10T01:04:06Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/7",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#3\n\n## Outcome\nDefine the exact env, identity, discovery, and startup contract for generic Docker deployments of clustered Mesh apps.\n\n## Acceptance criteria\n- Operator-facing bootstrap inputs are explicit\n- Cluster formation works without repo-local hacks\n- The contract is stable enough for Hyperpush product deployments\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/8",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 8,
+      "title": "Mesh: ship reference clustered VM deployment and health verification",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:08Z",
+      "updated_at": "2026-04-10T01:04:08Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/8",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#3\n\n## Outcome\nProvide a reference generic-VM deployment plus health verification flow for clustered Mesh apps under a Hyperpush-shaped workload.\n\n## Acceptance criteria\n- Reference deployment exists\n- Health and peer discovery are verifiable\n- Single-node and clustered paths are both truthful\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/9",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 9,
+      "title": "Mesh: harden failover and recovery semantics for Hyperpush workloads",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:11Z",
+      "updated_at": "2026-04-10T01:04:11Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/9",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#4\n\n## Outcome\nMake failover, recovery, and continuity behavior reliable enough for real Hyperpush production incidents.\n\n## Acceptance criteria\n- Owner loss and recovery flows are stable\n- Continuity semantics match product expectations\n- Known correctness gaps on the Hyperpush path are closed\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/10",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 10,
+      "title": "Mesh: expose operator diagnostics and soak verification for clustered runtime behavior",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:13Z",
+      "updated_at": "2026-04-10T01:04:13Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/10",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#4\n\n## Outcome\nGive operators enough runtime diagnostics and soak evidence to trust clustered Mesh behavior under Hyperpush load.\n\n## Acceptance criteria\n- Operators can inspect runtime failures and recovery\n- Soak or load evidence exists for the clustered path\n- Diagnostic surfaces are useful, not just present\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/11",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 11,
+      "title": "Mesh: expose release and deploy verification signals for autonomous remediation",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:15Z",
+      "updated_at": "2026-04-10T01:04:15Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/11",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#5\n\n## Outcome\nProvide the release/deploy/runtime signals Hyperpush needs to verify autonomous fixes after deployment.\n\n## Acceptance criteria\n- Release/deploy signals are available to the product\n- Post-release verification can rely on real runtime data\n- Hidden manual operator steps are eliminated or made explicit\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/12",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 12,
+      "title": "Mesh: add rollback and regression primitives for failed autonomous fixes",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:17Z",
+      "updated_at": "2026-04-10T01:04:17Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/12",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#5\n\n## Outcome\nSupport truthful rollback or regression behavior when an autonomous fix is deployed and does not hold.\n\n## Acceptance criteria\n- Failed fixes can be detected cleanly\n- Product can trigger or reason about rollback/regression actions\n- Runtime limitations are explicit where rollback cannot be owned automatically\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/13",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 13,
+      "title": "Mesh: audit installer, package, and docs truth against the Hyperpush launch contract",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:20Z",
+      "updated_at": "2026-04-10T02:02:59Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/13",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#6\n\n## Outcome\nAudit the public Mesh install, package, and docs surfaces against what Hyperpush will actually depend on at launch.\n\n## Acceptance criteria\n- Public docs match real install/runtime behavior\n- Broken or stale paths are removed or corrected\n- Hyperpush operators are not routed into fake Mesh guidance\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBdQ",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/14",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 14,
+      "title": "Mesh: refresh self-hosted and clustered operator docs for product deployments",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:23Z",
+      "updated_at": "2026-04-10T02:02:59Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/14",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#6\n\n## Outcome\nRefresh the self-hosted and clustered deployment docs from a product-operator perspective rather than a language-only perspective.\n\n## Acceptance criteria\n- Docs cover the product-relevant deployment path\n- Clustered operator guidance is current\n- Self-hosted claims stay truthful\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBdQ",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/15",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 15,
+      "title": "Mesh: built-in runtime observability canvas for nodes, actors, and message flow",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:32:55Z",
+      "updated_at": "2026-04-10T01:40:18Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/15",
+      "body": "## Outcome\nAdd built-in runtime observability to Mesh so operators can see clustered nodes and actor activity visually: nodes joining and dying, actors spawning and respawning, and data/messages traveling across the system in real time.\n\n## Scope\n- Runtime-owned observability surface for node and actor topology\n- Structured lifecycle events for node join/leave/failure and actor spawn/exit/restart\n- Message/data-flow telemetry suitable for live visualization\n- A visual canvas/operator surface that can render nodes, actors per node, traffic between them, and failure/recovery behavior\n- A truth-preserving surface that both Hyperpush and self-hosted Mesh operators can consume\n\n## Acceptance criteria\n- Operators can see nodes and actor placement visually on a canvas\n- Node death, recovery, and cluster membership changes are visible in near real time\n- Actor spawn, death, and respawn are visible in near real time\n- Message or data movement between nodes/actors is represented visually and grounded in real runtime data\n- The observability contract is stable enough to support both product and self-hosted operator use cases\n\n## Detailed acceptance criteria\n- Runtime telemetry must expose real node and actor state rather than inferred UI-only models.\n- Operators must be able to see node membership, actor placement, spawn/death/respawn, and cross-node flow.\n- Failure and recovery visuals must be grounded in real runtime events.\n- The observability surface must support both Hyperpush and generic Mesh operator use cases.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/16 \u2014 Mesh observability: emit structured runtime topology and actor lifecycle events\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/17 \u2014 Mesh observability: capture message and work movement for live cluster visualization\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/18 \u2014 Mesh observability: build operator canvas for nodes, actors, failures, and respawns\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpRLQ",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/16",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 16,
+      "title": "Mesh observability: emit structured runtime topology and actor lifecycle events",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:32:56Z",
+      "updated_at": "2026-04-10T01:32:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/16",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#15\n\n## Outcome\nExpose a structured runtime event stream for node topology, actor lifecycle, and cluster state transitions.\n\n## Acceptance criteria\n- Node join/leave/failure events are emitted\n- Actor spawn/exit/restart events are emitted\n- Event stream is stable enough for operator tooling and visualization consumers\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/17",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 17,
+      "title": "Mesh observability: capture message and work movement for live cluster visualization",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:32:59Z",
+      "updated_at": "2026-04-10T01:32:59Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/17",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#15\n\n## Outcome\nCapture data/message/work movement in a way that can power live visualizations without lying about what the runtime actually knows.\n\n## Acceptance criteria\n- Cross-node movement is represented from real runtime data\n- Flow semantics are clear enough for operator debugging\n- The surface avoids fake animation divorced from real events\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/mesh-lang/issues/18",
+      "repo": "hyperpush-org/mesh-lang",
+      "number": 18,
+      "title": "Mesh observability: build operator canvas for nodes, actors, failures, and respawns",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:33:01Z",
+      "updated_at": "2026-04-10T01:33:01Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/mesh-lang/issues/18",
+      "body": "## Parent epic\n- hyperpush-org/mesh-lang#15\n\n## Outcome\nBuild the visual operator canvas that renders node topology, actor placement, flow, and failure/recovery behavior.\n\n## Acceptance criteria\n- Nodes are visible on a canvas\n- Actors per node are visible\n- Node death and actor respawn are visibly represented\n- The canvas reflects real runtime state rather than a static mock\n",
+      "labels": [
+        {
+          "id": "LA_kwDOR9cWl88AAAACemKBlA",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDOR9cWl88AAAACewpQ6w",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    }
+  ]
+}

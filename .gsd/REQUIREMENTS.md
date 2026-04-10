@@ -312,6 +312,83 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
+### R128 — `mesh-lang` issues reflect the actual language-repo code state.
+- Class: admin/support
+- Status: active
+- Description: Open issues in `hyperpush-org/mesh-lang` should match the current language-repo code, docs, workflow, and repo-boundary state instead of preserving stale pre-split or pre-closeout roadmap assumptions.
+- Why it matters: Language-repo issues are part of the public planning surface; if they drift from shipped code, the repo stops being intelligible to maintainers and evaluators.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01
+- Validation: mapped
+- Notes: Completed work should be closed with evidence, not left open as active roadmap noise.
+
+### R129 — `hyperpush` issues reflect the actual product-repo code state.
+- Class: admin/support
+- Status: active
+- Description: Open issues in `hyperpush-org/hyperpush` should match the current product-repo reality for `mesher/`, `mesher/landing/`, and `mesher/frontend-exp`, including the post-split ownership contract.
+- Why it matters: Product planning becomes misleading if the issue set still describes a different repo shape or stale implementation baseline.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01
+- Validation: mapped
+- Notes: The local sibling workspace is the truth source for this milestone, not stale GitHub wording.
+
+### R130 — Org project #1 reflects reconciled cross-repo issue truth.
+- Class: operability
+- Status: active
+- Description: The Hyperpush Launch Roadmap project should accurately show what is done, active, and next across both repos after issue reconciliation instead of remaining a stale all-Todo umbrella.
+- Why it matters: The org roadmap is the cross-repo portfolio surface; if it is misleading, the whole planning story is misleading.
+- Source: user
+- Primary owning slice: M057/S03
+- Supporting slices: M057/S01, M057/S02
+- Validation: mapped
+- Notes: Project status is derived from reconciled issue truth, not treated as independent evidence.
+
+### R131 — Missing tracker coverage is created where code reality has no honest issue or project item.
+- Class: admin/support
+- Status: active
+- Description: If current shipped or active code reality in either repo lacks honest tracker coverage, the reconciliation pass should create the missing issue or project item instead of forcing existing stale items to carry the wrong meaning.
+- Why it matters: A truthful tracker requires filling real gaps, not just cleaning visible clutter.
+- Source: user
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01, M057/S03
+- Validation: mapped
+- Notes: This is additive only where the audit proves a genuine gap.
+
+### R132 — Reconciliation preserves history instead of hiding drift.
+- Class: quality-attribute
+- Status: active
+- Description: Completed items should be closed with evidence, and drifted items should be rewritten or split in a way that preserves the historical record instead of silently repurposing tracker entries.
+- Why it matters: Tracker cleanup that destroys history makes the repos cleaner-looking but less truthful.
+- Source: inferred
+- Primary owning slice: M057/S02
+- Supporting slices: M057/S01, M057/S03
+- Validation: mapped
+- Notes: Ambiguous items should stay open with clarified scope rather than be force-closed.
+
+### R133 — Repo ownership and naming are normalized across tracker surfaces.
+- Class: constraint
+- Status: active
+- Description: Tracker wording should consistently distinguish language-owned work from product-owned work and normalize stale `hyperpush-mono` naming to the public `hyperpush` repo identity where appropriate.
+- Why it matters: Ownership confusion is one of the main ways cross-repo planning becomes incoherent after a split.
+- Source: user
+- Primary owning slice: M057/S01
+- Supporting slices: M057/S02, M057/S03
+- Validation: mapped
+- Notes: The split contract from M055 is authoritative for repo ownership.
+
+### R134 — A fresh maintainer can understand shipped, active, and deferred work from GitHub surfaces alone.
+- Class: quality-attribute
+- Status: active
+- Description: After reconciliation, a new maintainer should be able to read the two repos plus org project #1 and understand what has shipped, what is actively in progress, and what is deferred without relying on `.gsd` archaeology or local tribal knowledge.
+- Why it matters: The point of this milestone is not cosmetic cleanup; it is restoring intelligible planning truth.
+- Source: user
+- Primary owning slice: M057/S03
+- Supporting slices: M057/S01, M057/S02
+- Validation: mapped
+- Notes: This is the end-to-end acceptance bar for the milestone.
+
 ### R121 — The packages site is part of the normal CI/deploy contract for the public Mesh surface.
 - Class: operability
 - Status: validated
@@ -1098,6 +1175,17 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: The current expectation is server-side truth first; client-side awareness is a fallback, not a starting assumption.
 
+### R135 — Tracker reconciliation may later be automated once the truthful manual contract is proven.
+- Class: admin/support
+- Status: deferred
+- Description: The project may later add automation that keeps repo issues and org project state in sync with code and workflow reality, but M057 should first prove the manual reconciliation contract and taxonomy.
+- Why it matters: Automating a broken or underspecified planning model would only make tracker drift faster.
+- Source: inferred
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: unmapped
+- Notes: Defer automation until the manual audit, issue, and project rules are stable.
+
 ## Out of Scope
 
 ### R030 — The current planning wave is not a frontend-first language push.
@@ -1376,6 +1464,28 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Public teaching should be scaffold/examples first, Mesher second, and deeper/internal proof rails separate.
 
+### R136 — M057 will not implement stale roadmap items as part of tracker reconciliation.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone will not turn tracker cleanup into a stealth feature-delivery milestone by implementing old roadmap items just to make GitHub look truthful.
+- Why it matters: That would collapse planning repair and feature execution into one dishonest loop.
+- Source: user
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: n/a
+- Notes: Reconciliation changes trackers, not product/runtime scope.
+
+### R137 — M057 will not change code solely to make stale issues appear accurate.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: The codebase will not be reshaped just to preserve old issue wording; tracker truth must move toward code truth, not the other way around.
+- Why it matters: Otherwise the milestone would optimize appearances over reality.
+- Source: user
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: n/a
+- Notes: When drift exists, the default action is to fix the tracker, not rewrite the shipped code.
+
 ## Traceability
 
 | ID | Class | Status | Primary owner | Supporting | Proof |
@@ -1504,10 +1614,20 @@ This file is the explicit capability and coverage contract for the project.
 | R125 | constraint | out-of-scope | none | none | n/a |
 | R126 | anti-feature | out-of-scope | none | none | n/a |
 | R127 | anti-feature | out-of-scope | none | none | n/a |
+| R128 | admin/support | active | M057/S02 | M057/S01 | mapped |
+| R129 | admin/support | active | M057/S02 | M057/S01 | mapped |
+| R130 | operability | active | M057/S03 | M057/S01, M057/S02 | mapped |
+| R131 | admin/support | active | M057/S02 | M057/S01, M057/S03 | mapped |
+| R132 | quality-attribute | active | M057/S02 | M057/S01, M057/S03 | mapped |
+| R133 | constraint | active | M057/S01 | M057/S02, M057/S03 | mapped |
+| R134 | quality-attribute | active | M057/S03 | M057/S01, M057/S02 | mapped |
+| R135 | admin/support | deferred | none | none | unmapped |
+| R136 | anti-feature | out-of-scope | none | none | n/a |
+| R137 | anti-feature | out-of-scope | none | none | n/a |
 
 ## Coverage Summary
 
-- Active requirements: 14
-- Mapped to slices: 14
-- Validated: 69
+- Active requirements: 16
+- Mapped to slices: 16
+- Validated: 74
 - Unmapped active requirements: 0

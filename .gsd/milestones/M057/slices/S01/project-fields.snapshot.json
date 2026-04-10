@@ -1,0 +1,333 @@
+{
+  "version": "m057-s01-project-fields-v1",
+  "snapshot_kind": "project-fields",
+  "captured_at": "2026-04-10T04:50:41Z",
+  "source": {
+    "command": "/opt/homebrew/bin/gh project field-list 1 --owner hyperpush-org --format json",
+    "owner": "hyperpush-org",
+    "project_number": 1
+  },
+  "project": {
+    "owner": "hyperpush-org",
+    "number": 1,
+    "id": "PVT_kwDOEExRVs4BUM59",
+    "title": "Hyperpush Launch Roadmap",
+    "url": "https://github.com/orgs/hyperpush-org/projects/1"
+  },
+  "canonical_repos": {
+    "mesh_lang": {
+      "command": "/opt/homebrew/bin/gh repo view hyperpush-org/mesh-lang --json nameWithOwner,url",
+      "requested_slug": "hyperpush-org/mesh-lang",
+      "canonical_slug": "hyperpush-org/mesh-lang",
+      "canonical_url": "https://github.com/hyperpush-org/mesh-lang",
+      "issue_base_url": "https://github.com/hyperpush-org/mesh-lang/issues"
+    },
+    "hyperpush": {
+      "command": "/opt/homebrew/bin/gh repo view hyperpush-org/hyperpush --json nameWithOwner,url",
+      "requested_slug": "hyperpush-org/hyperpush",
+      "canonical_slug": "hyperpush-org/hyperpush",
+      "canonical_url": "https://github.com/hyperpush-org/hyperpush",
+      "issue_base_url": "https://github.com/hyperpush-org/hyperpush/issues"
+    },
+    "hyperpush_alias": {
+      "command": "/opt/homebrew/bin/gh repo view hyperpush-org/hyperpush-mono --json nameWithOwner,url",
+      "requested_slug": "hyperpush-org/hyperpush-mono",
+      "canonical_slug": "hyperpush-org/hyperpush",
+      "canonical_url": "https://github.com/hyperpush-org/hyperpush",
+      "issue_base_url": "https://github.com/hyperpush-org/hyperpush/issues"
+    }
+  },
+  "field_count": 18,
+  "tracked_field_keys": [
+    "commitment",
+    "delivery_mode",
+    "domain",
+    "hackathon_phase",
+    "priority",
+    "start_date",
+    "status",
+    "target_date",
+    "title",
+    "track"
+  ],
+  "fields": [
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrj0",
+      "field_name": "Title",
+      "field_key": "title",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrj4",
+      "field_name": "Assignees",
+      "field_key": "assignees",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWrj8",
+      "field_name": "Status",
+      "field_key": "status",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "f75ad846",
+          "name": "Todo",
+          "option_key": "todo"
+        },
+        {
+          "id": "47fc9ee4",
+          "name": "In Progress",
+          "option_key": "in_progress"
+        },
+        {
+          "id": "98236657",
+          "name": "Done",
+          "option_key": "done"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkA",
+      "field_name": "Labels",
+      "field_key": "labels",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkE",
+      "field_name": "Linked pull requests",
+      "field_key": "linked_pull_requests",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkI",
+      "field_name": "Milestone",
+      "field_key": "milestone",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkM",
+      "field_name": "Repository",
+      "field_key": "repository",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkU",
+      "field_name": "Reviewers",
+      "field_key": "reviewers",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkY",
+      "field_name": "Parent issue",
+      "field_key": "parent_issue",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWrkc",
+      "field_name": "Sub-issues progress",
+      "field_key": "sub_issues_progress",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWr1g",
+      "field_name": "Domain",
+      "field_key": "domain",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "0047fe0f",
+          "name": "Hyperpush",
+          "option_key": "hyperpush"
+        },
+        {
+          "id": "f7d2ca8a",
+          "name": "Mesh",
+          "option_key": "mesh"
+        },
+        {
+          "id": "b8fbb4b3",
+          "name": "Shared",
+          "option_key": "shared"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWr1k",
+      "field_name": "Track",
+      "field_key": "track",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "2208765b",
+          "name": "Mesh Foundation",
+          "option_key": "mesh_foundation"
+        },
+        {
+          "id": "1f4981e1",
+          "name": "Core Parity",
+          "option_key": "core_parity"
+        },
+        {
+          "id": "2c2e3aee",
+          "name": "Operator App",
+          "option_key": "operator_app"
+        },
+        {
+          "id": "d12d0c2f",
+          "name": "AI + GitHub",
+          "option_key": "ai_github"
+        },
+        {
+          "id": "66f17ab8",
+          "name": "Bug Market",
+          "option_key": "bug_market"
+        },
+        {
+          "id": "ed3c541b",
+          "name": "Solana Economy",
+          "option_key": "solana_economy"
+        },
+        {
+          "id": "54513096",
+          "name": "Deployment",
+          "option_key": "deployment"
+        },
+        {
+          "id": "fa9c973b",
+          "name": "SaaS Growth",
+          "option_key": "saas_growth"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWr1o",
+      "field_name": "Commitment",
+      "field_key": "commitment",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "cf1edbe5",
+          "name": "Exploring",
+          "option_key": "exploring"
+        },
+        {
+          "id": "c222dcd9",
+          "name": "Planned",
+          "option_key": "planned"
+        },
+        {
+          "id": "8c20f7a4",
+          "name": "Committed",
+          "option_key": "committed"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWsBI",
+      "field_name": "Delivery Mode",
+      "field_key": "delivery_mode",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "52e5e6ee",
+          "name": "Shared",
+          "option_key": "shared"
+        },
+        {
+          "id": "5353e59f",
+          "name": "SaaS-only",
+          "option_key": "saas_only"
+        },
+        {
+          "id": "14353025",
+          "name": "Self-hosted",
+          "option_key": "self_hosted"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWsBM",
+      "field_name": "Priority",
+      "field_key": "priority",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "2cf959a9",
+          "name": "P0",
+          "option_key": "p0"
+        },
+        {
+          "id": "744a52bd",
+          "name": "P1",
+          "option_key": "p1"
+        },
+        {
+          "id": "6cf690c3",
+          "name": "P2",
+          "option_key": "p2"
+        }
+      ]
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWsBQ",
+      "field_name": "Start date",
+      "field_key": "start_date",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTF_lADOEExRVs4BUM59zhBWsCI",
+      "field_name": "Target date",
+      "field_key": "target_date",
+      "field_type": "ProjectV2Field",
+      "options": []
+    },
+    {
+      "field_id": "PVTSSF_lADOEExRVs4BUM59zhBWsCM",
+      "field_name": "Hackathon Phase",
+      "field_key": "hackathon_phase",
+      "field_type": "ProjectV2SingleSelectField",
+      "options": [
+        {
+          "id": "f1cacb43",
+          "name": "Phase 1 \u2014 Foundation",
+          "option_key": "phase_1_foundation"
+        },
+        {
+          "id": "080606c0",
+          "name": "Phase 2 \u2014 Parity",
+          "option_key": "phase_2_parity"
+        },
+        {
+          "id": "b44bc4d9",
+          "name": "Phase 3 \u2014 Operator App",
+          "option_key": "phase_3_operator_app"
+        },
+        {
+          "id": "0068a426",
+          "name": "Phase 4 \u2014 Agent Loop",
+          "option_key": "phase_4_agent_loop"
+        },
+        {
+          "id": "79a512ad",
+          "name": "Phase 5 \u2014 Bug Market + Solana",
+          "option_key": "phase_5_bug_market_solana"
+        },
+        {
+          "id": "6207f5df",
+          "name": "Phase 6 \u2014 Launch Hardening",
+          "option_key": "phase_6_launch_hardening"
+        }
+      ]
+    }
+  ]
+}

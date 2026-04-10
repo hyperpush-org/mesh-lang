@@ -1,0 +1,1418 @@
+{
+  "version": "m057-s01-hyperpush-issues-v1",
+  "snapshot_kind": "repo-issues",
+  "captured_at": "2026-04-10T04:50:41Z",
+  "source": {
+    "command": "/opt/homebrew/bin/gh issue list -R hyperpush-org/hyperpush --state all --limit 200 --json number,title,state,labels,body,url,createdAt,updatedAt,closedAt",
+    "requested_repo": "hyperpush-org/hyperpush"
+  },
+  "repo": {
+    "requested_slug": "hyperpush-org/hyperpush",
+    "canonical_slug": "hyperpush-org/hyperpush",
+    "canonical_url": "https://github.com/hyperpush-org/hyperpush",
+    "issue_base_url": "https://github.com/hyperpush-org/hyperpush/issues"
+  },
+  "rollup": {
+    "total": 52,
+    "open": 48,
+    "closed": 4
+  },
+  "issues": [
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/2",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 2,
+      "title": "First user & ticket",
+      "state": "CLOSED",
+      "created_at": "2026-02-19T00:17:12Z",
+      "updated_at": "2026-03-23T19:01:44Z",
+      "closed_at": "2026-03-23T19:01:44Z",
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/2",
+      "body": "Its a nice project using GSD, so I just wanted to try it out and play a bit.\n\nToo bad gives a \"Could not resolve host\":\n\n```\ncurl -sSf https://mesh-lang.org/install.sh | sh\n```\n\nDoesn't solve for me. I also tried `curl -sSf https://meshlang.dev/install.sh| sh` (gives a 404)\n\n",
+      "labels": []
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/3",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 3,
+      "title": "Installer succeeds but CLI not available (PATH not set / session not updated)",
+      "state": "CLOSED",
+      "created_at": "2026-04-04T10:32:55Z",
+      "updated_at": "2026-04-04T19:47:11Z",
+      "closed_at": "2026-04-04T19:47:11Z",
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/3",
+      "body": "After installing Mesh using the official installers, the CLI tools (meshc, meshpkg) are not immediately available in the terminal, even though the installer reports success.\n\nThis creates a confusing onboarding experience where installation appears successful, but the commands fail with command not found.",
+      "labels": []
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/4",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 4,
+      "title": "meshc only detects runtime in hardcoded paths (~/.mesh/target/{release,debug}) causing build failure after install",
+      "state": "CLOSED",
+      "created_at": "2026-04-04T10:57:36Z",
+      "updated_at": "2026-04-05T22:50:10Z",
+      "closed_at": "2026-04-05T22:50:10Z",
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/4",
+      "body": "After installing Mesh and attempting to build a simple project, the build fails because the compiler cannot locate the required runtime library (libmesh_rt.a), even when it exists in expected or intuitive locations.",
+      "labels": []
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/5",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 5,
+      "title": "Windows: npm run generate:og fails in website",
+      "state": "CLOSED",
+      "created_at": "2026-04-04T17:53:40Z",
+      "updated_at": "2026-04-05T22:50:35Z",
+      "closed_at": "2026-04-05T22:50:35Z",
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/5",
+      "body": "Running `npm run generate:og` in the website project fails on Windows because the script uses `python3`, which is not available by default on many Windows systems.\n\n---\n\n### Affected File\n- `website/package.json`\n",
+      "labels": []
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/8",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 8,
+      "title": "[Bug]: website Packages nav link points to /packages instead of opening packages.meshlang.dev in a new tab",
+      "state": "OPEN",
+      "created_at": "2026-04-05T22:46:18Z",
+      "updated_at": "2026-04-05T22:52:03Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/8",
+      "body": "## Before you submit\n- [x] I searched existing issues and checked the relevant docs/examples first.\n- [x] I can reproduce this with a current build, the latest public release, or a specific commit I list below.\n\n## Affected area\ndocumentation / website\n\n## Version / commit\n79a030c8\n\n## Operating system\nOther\n\n## Project / starter / path (if relevant)\n- `website/docs/.vitepress/config.mts`\n- `website/docs/.vitepress/theme/components/NavBar.vue`\n\n## Reproduction steps\n1. Open the website.\n2. Click the **Packages** link in the top navigation bar.\n3. Observe that it navigates the current tab to `/packages`.\n\n## Expected behavior\nThe **Packages** nav item should open `https://packages.meshlang.dev` in a new browser tab.\n\n## Actual behavior\nThe nav item points at the local site route (`/packages` / `/packages/`) instead of the external packages site, so it keeps the user on the docs site and sends them to the wrong destination.\n\n## Logs, errors, or screenshots\nRelevant repo surfaces currently point to the local path:\n- `website/docs/.vitepress/config.mts:218` \u2192 `{ text: 'Packages', link: '/packages/' }`\n- `website/docs/.vitepress/theme/components/NavBar.vue:17` \u2192 `{ text: 'Packages', href: '/packages/' }`\n\n## Additional context\nThis appears to affect the shared website navigation surface rather than page-local content. The desired behavior is an external link to `packages.meshlang.dev`, opened in a new tab/window.",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdM9w",
+          "name": "bug",
+          "description": "Something isn't working",
+          "color": "d73a4a"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACXfdM_A",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACeFcLog",
+          "name": "priority: low",
+          "description": "Nice-to-have or low urgency",
+          "color": "0e8a16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/11",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 11,
+      "title": "Hyperpush: JS SDK true drop-in Sentry compatibility",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:05Z",
+      "updated_at": "2026-04-10T01:09:21Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/11",
+      "body": "## Outcome\nShip a JS SDK that is a true drop-in Sentry replacement for Hyperpush's first canonical integration surface.\n\n## Scope\n- JS/TS SDK compatibility and migration path\n- \"swap DNS and import\" level adoption experience\n- Ingestion contract, metadata, grouping inputs, releases/envs/session context, and other parity-critical SDK behavior\n- Public migration docs for the canonical JS path\n\n## Acceptance criteria\n- A real JS app can switch from Sentry to Hyperpush with minimal/no architecture changes\n- The Hyperpush JS SDK captures the parity-critical signals the product depends on\n- Migration friction is low enough to call it a drop-in replacement truthfully\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Core Parity\n- Commitment: Committed\n- Critical path: 2\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Canonical JS/TS Sentry usage can migrate with import/DNS-level friction rather than a rewrite.\n- The JS SDK captures the release, environment, user, session, and stack/context signals the operator app needs.\n- The drop-in claim is backed by migration docs and verification fixtures.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/25 \u2014 Hyperpush JS SDK: implement drop-in Sentry compatibility for canonical web/server usage\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/26 \u2014 Hyperpush JS SDK: ship migration guide and parity verification fixtures\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/12",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 12,
+      "title": "Hyperpush: Go SDK true drop-in Sentry compatibility",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:06Z",
+      "updated_at": "2026-04-10T01:09:23Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/12",
+      "body": "## Outcome\nShip a Go SDK that is a true drop-in Sentry replacement for Hyperpush's second canonical integration surface.\n\n## Scope\n- Go SDK compatibility and migration path\n- Ingestion contract and parity-critical metadata\n- Releases/envs/session or request context needed for the operator experience\n- Public migration docs for the canonical Go path\n\n## Acceptance criteria\n- A real Go service can switch from Sentry to Hyperpush with minimal/no architecture changes\n- The Hyperpush Go SDK feeds the same core issue and performance workflows as the JS SDK\n- Migration friction is low enough to call it a drop-in replacement truthfully\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Core Parity\n- Commitment: Committed\n- Critical path: 2\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Canonical Go Sentry usage can migrate with minimal architectural change.\n- The Go SDK captures the parity-critical release, environment, request-context, and stack-trace signals the operator app needs.\n- The drop-in claim is backed by migration docs and verification fixtures.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/27 \u2014 Hyperpush Go SDK: implement drop-in Sentry compatibility for canonical service usage\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/28 \u2014 Hyperpush Go SDK: ship migration guide and parity verification fixtures\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/13",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 13,
+      "title": "Hyperpush: core parity for ingestion, grouping, regression, alerts, ownership, and environments",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:08Z",
+      "updated_at": "2026-04-10T01:09:25Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/13",
+      "body": "## Outcome\nReach Sentry-parity for the core issue-tracking experience: ingestion, grouping, regression detection, ownership/workflow, environments, alerts, and operator truth.\n\n## Scope\n- Ingestion pipeline and project/event model\n- Issue grouping and regression detection\n- Environments and ownership/workflow state\n- Alerts and alert routing\n- User/session context and issue detail truth\n\n## Acceptance criteria\n- The core operator loop works without hand-waving: issue appears, groups correctly, regresses correctly, and can be acted on\n- Public parity claims for the issue workflow are truthful\n- Missing parity surfaces are either shipped or removed from claims\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Core Parity\n- Commitment: Committed\n- Critical path: 2\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Production ingestion and the project/event truth model are stable enough for launch.\n- Grouping, regression, ownership, environments, alerts, and session context are operator-usable.\n- The core incident loop works end to end without hand-waving.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/29 \u2014 Hyperpush core parity: build production ingestion and project/event truth model\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/30 \u2014 Hyperpush core parity: ship grouping, regression, alerts, ownership, environments, and session context\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/14",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 14,
+      "title": "Hyperpush: parity for releases, deploy correlation, symbolication, performance tracing, replay, retention, and sampling",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:09Z",
+      "updated_at": "2026-04-10T01:09:27Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/14",
+      "body": "## Outcome\nReach Sentry-parity for the extended operator surfaces: releases, deploy correlation, source context/symbolication, performance tracing, session replay, retention, and sampling.\n\n## Scope\n- Release tracking and deploy correlation\n- Source maps / symbolication / source context\n- Performance tracing / transaction views\n- Session replay\n- Retention, quotas, and sampling controls\n\n## Acceptance criteria\n- These surfaces are real enough that \"1:1 or better than Sentry\" is not marketing fiction\n- The operator app can inspect and act on these signals as first-class product features\n- Any parity gaps are explicit and visible on the roadmap, not hidden in copy\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Core Parity\n- Commitment: Committed\n- Critical path: 2\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Release and deploy correlation plus symbolication/source context are real.\n- Performance tracing and session replay are real product surfaces.\n- Retention, quotas, and sampling controls are available and operator-meaningful.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/31 \u2014 Hyperpush parity: release/deploy correlation and symbolication/source context\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/32 \u2014 Hyperpush parity: performance tracing, session replay, retention, and sampling controls\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/15",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 15,
+      "title": "Hyperpush: promote frontend-exp into the real operator app while demoting landing to marketing",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:11Z",
+      "updated_at": "2026-04-10T01:46:55Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/15",
+      "body": "## Outcome\nPromote `frontend-exp` into the real Hyperpush operator app and reduce `landing` to a pure marketing site.\n\n## Scope\n- Rename/reposition `frontend-exp` into the real app surface\n- `landing` becomes marketing only\n- Replace mocked dashboard surfaces with real operator data and workflows\n- All major product screens in the current prototype become truthful: Issues, Performance, Solana Programs, Releases, Alerts, AI Copilot, Bounties, Dashboards, Treasury, Discover\n\n## Acceptance criteria\n- The operator app is the real product control plane\n- The landing site no longer acts as a fake or partial app\n- Core app navigation and page surfaces are backed by real data and workflows\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Operator App\n- Commitment: Committed\n- Critical path: 3\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- `frontend-exp` is promoted into the real operator app and `landing` is marketing only.\n- The operator app's major screens are backed by real data and workflows.\n- The public product surface no longer relies on mocked app behavior.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/33 \u2014 Hyperpush app: promote frontend-exp and retire landing-as-app behavior\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/34 \u2014 Hyperpush app: replace mocked operator screens with real data and workflows\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/16",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 16,
+      "title": "Hyperpush: SaaS onboarding and control plane at app.hyperpush.dev",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:12Z",
+      "updated_at": "2026-04-10T01:46:55Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/16",
+      "body": "## Outcome\nShip the SaaS control plane at `app.hyperpush.dev` for project creation, GitHub connection, AI policy, treasury setup, and overall operator onboarding.\n\n## Scope\n- SaaS project creation and configuration\n- GitHub connection/setup per project\n- AI setup/policy configuration\n- Treasury/project token setup for SaaS projects\n- Any operator-facing settings required to make the rest of the roadmap usable\n\n## Acceptance criteria\n- A new managed project can be created and configured through the app\n- SaaS users have a real control plane for GitHub, AI, and treasury setup\n- This path is not blocked on hidden manual setup outside the product\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: SaaS Growth\n- Delivery Mode: SaaS-only\n- Commitment: Planned\n- Critical path: 3\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- SaaS users can create a project, connect GitHub, and configure AI policy in product.\n- Treasury or token onboarding works at `app.hyperpush.dev`.\n- The managed control plane is coherent end to end.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/35 \u2014 Hyperpush SaaS: project creation, GitHub connection, and AI policy setup\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/36 \u2014 Hyperpush SaaS: treasury/token onboarding and managed operator setup at app.hyperpush.dev\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/17",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 17,
+      "title": "Hyperpush: AI Copilot chat-first operator control for all non-destructive actions",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:13Z",
+      "updated_at": "2026-04-10T01:09:33Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/17",
+      "body": "## Outcome\nMake the AI Copilot a chat-first operator surface that can do virtually everything non-destructive from the app.\n\n## Scope\n- Chat-first operator control for investigation and operational actions\n- Non-destructive admin workflows from chat\n- Root-cause analysis, summarization, suggested fixes, and broader operator assistance\n- By-configured AI for self-hosted via BYO model/provider secrets\n\n## Acceptance criteria\n- Operators can manage the platform from chat alone for non-destructive actions\n- AI actions match configured project policy rather than hidden product assumptions\n- The app/UI and chat surface agree on the same underlying capabilities\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: AI + GitHub\n- Commitment: Committed\n- Critical path: 4\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Chat is a first-class operator interface for non-destructive actions.\n- AI root-cause analysis, summaries, and suggested actions are real.\n- Self-hosted BYO model/provider configuration and policy controls exist.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/37 \u2014 Hyperpush AI Copilot: chat-first root cause analysis and operator actions\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/38 \u2014 Hyperpush AI Copilot: self-hosted BYO model-provider configuration and policy enforcement\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/18",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 18,
+      "title": "Hyperpush: GitHub autonomous remediation loop (issue \u2192 patch \u2192 PR \u2192 CI \u2192 merge)",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:14Z",
+      "updated_at": "2026-04-10T01:09:35Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/18",
+      "body": "## Outcome\nClose the autonomous engineering loop from production incident to merged fix PR.\n\n## Scope\n- Detect/group issue\n- Open/update GitHub issue\n- Investigate root cause\n- Write patch, create branch, push commits\n- Open PR, run tests/CI, merge after checks pass\n- Respect configured project autonomy rules\n\n## Acceptance criteria\n- The agent can autonomously perform the engineering loop when configured\n- GitHub is deeply integrated per project/repo, not bolted on as a manual export\n- Maintainers can understand and audit what the agent did and why\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: AI + GitHub\n- Commitment: Committed\n- Critical path: 4\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- The agent can autonomously move from issue creation to patch PR under project policy.\n- GitHub installs, permissions, CI, and merge policy are integrated cleanly.\n- Maintainers can audit and trust the remediation loop.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/39 \u2014 Hyperpush GitHub loop: automate issue-to-branch-to-PR with audit trail\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/40 \u2014 Hyperpush GitHub loop: enforce CI, merge policy, and repo permission model\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/19",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 19,
+      "title": "Hyperpush: auto-deploy, post-release verification, and automatic regression reopening",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:15Z",
+      "updated_at": "2026-04-10T01:09:37Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/19",
+      "body": "## Outcome\nExtend the autonomous loop beyond merge into deployment, post-release verification, and automatic regression reopening.\n\n## Scope\n- Deploy automatically if configured\n- Use real post-release signals to verify the original error dropped if configured\n- Reopen/regress issues automatically when the fix does not hold if configured\n- Align this with the first truthful auto-deploy target: generic Docker-on-a-VM\n\n## Acceptance criteria\n- Hyperpush can own the post-merge loop on the configured deployment target\n- Post-release verification is based on real product/runtime data\n- Failed fixes are reopened/regressed automatically when policy allows\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: AI + GitHub\n- Commitment: Planned\n- Critical path: 4 -> 7\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Generic Docker-on-a-VM is a truthful automatic deploy target.\n- Post-release verification checks whether the original error actually dropped.\n- Failed fixes reopen or regress automatically when configured.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/41 \u2014 Hyperpush deploy loop: integrate generic Docker VM auto-deploy\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/42 \u2014 Hyperpush deploy loop: verify post-release fixes and automatically regress failed ones\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/20",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 20,
+      "title": "Hyperpush: public bug board, contributor race model, maintainer-approved payouts, and X bot distribution",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:16Z",
+      "updated_at": "2026-04-10T01:09:38Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/20",
+      "body": "## Outcome\nShip the external contributor loop: public bug board, contributor race model, maintainer-approved payouts, and SaaS-side X announcements.\n\n## Scope\n- Private issue elevation to public bug board\n- Configurable auto-publication policy\n- Contributor flow with wallet address in PR and no mandatory Hyperpush account\n- Claim windows where configured; otherwise merged PR wins\n- Maintainer-approved payout eligibility after merge to default branch\n- Hyperpush X bot announcement for SaaS-side bounties\n\n## Acceptance criteria\n- A maintainer can elevate a bug publicly, set or accept a suggested bounty, and have outside contributors compete to fix it\n- The merged PR + maintainer approval flow is sufficient to make payout eligible\n- The SaaS-side X announcement path is real for public bounties\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Bug Market\n- Commitment: Committed\n- Critical path: 5\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Maintainers can elevate private incidents to a public bug board under policy control.\n- Contributors can race on fixes with wallet-in-PR flow and maintainer-approved payout eligibility.\n- SaaS-side X distribution for public bounties is real.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/43 \u2014 Hyperpush bug market: public bug board publication and maintainer controls\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/44 \u2014 Hyperpush bug market: contributor wallet-in-PR flow, payout approval, and X announcements\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/21",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 21,
+      "title": "Hyperpush: Solana treasury, configurable token/SOL payouts, and whale-proof token mechanics",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:18Z",
+      "updated_at": "2026-04-10T01:09:40Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/21",
+      "body": "## Outcome\nShip the Solana-side economics: per-project treasury, configurable token/SOL payouts, deployed program, and whale-proof token mechanics by design.\n\n## Scope\n- Per-project treasury\n- Configurable payout asset: project token or SOL\n- Deployed Solana program and payout path\n- Hard 3% cap enforced on-chain per wallet\n- Sensible exempt wallets (treasury, dev/maintainer, escrow, LP, vesting, and other required system wallets)\n- Anti-whale / anti-snipe design chosen truthfully\n- Monitoring/detection for suspicious aggregation where hard guarantees are not possible\n\n## Acceptance criteria\n- The token/program/payout system is real and can be used by the product\n- The maintainer is not required to buy a large defensive position to avoid capture\n- Public claims about whale resistance match what is actually enforceable\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Solana Economy\n- Commitment: Committed\n- Critical path: 6\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Program, treasury, and payout path are real with configurable token-or-SOL payouts.\n- The 3% per-wallet cap is enforced on-chain with an explicit exempt wallet model.\n- Anti-whale launch mechanics and suspicious aggregation monitoring are truthful, not magical.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/45 \u2014 Hyperpush Solana economy: program, treasury, and payout architecture with token-or-SOL configuration\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/46 \u2014 Hyperpush Solana economy: on-chain whale protection and exempt wallet model\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/22",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 22,
+      "title": "Hyperpush: self-hosted parity with SaaS for all core features using BYO infrastructure and secrets",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:19Z",
+      "updated_at": "2026-04-10T01:09:42Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/22",
+      "body": "## Outcome\nSelf-hosted Hyperpush must have feature parity with SaaS for core product capabilities, using BYO infrastructure and secrets where needed.\n\n## Scope\n- Self-hosted parity for core product capabilities\n- BYO AI/model provider secrets (for example OpenRouter)\n- OSS/manual equivalents for SaaS-specific conveniences where automatic platform features do not exist\n- No artificial cloud-only feature wall for the core Hyperpush experience\n\n## Acceptance criteria\n- Self-hosted operators can run the full core Hyperpush loop without SaaS lock-in\n- The only differences between SaaS and self-hosted are operational convenience and managed infra/secrets\n- Public self-hosted claims are truthful and documented\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Deployment\n- Delivery Mode: Self-hosted\n- Commitment: Committed\n- Critical path: 7\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Self-hosted users get the full core feature set with BYO infrastructure and secrets where required.\n- AI, GitHub, and bug-market parity gaps are closed or explicitly documented.\n- Docs and runbooks make the self-hosted contract usable.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/47 \u2014 Hyperpush self-hosted: BYO dependency and deployment contract for full feature parity\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/48 \u2014 Hyperpush self-hosted: docs, runbooks, and parity closure across AI, GitHub, and bug market\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/23",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 23,
+      "title": "Hyperpush: generic Docker-on-a-VM deployment baseline for frontend and meshable backend",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:38:20Z",
+      "updated_at": "2026-04-10T01:09:44Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/23",
+      "body": "## Outcome\nMake Hyperpush easy to deploy anywhere with Docker on a generic VM, with a frontend container and a meshable backend cluster that can auto-mesh.\n\n## Scope\n- Generic Docker-on-a-VM deployment target for the product\n- Frontend container + meshable backend deployment model\n- Runtime/bootstrap expectations for cluster formation\n- The first truthful automatic deploy target for Hyperpush\n\n## Acceptance criteria\n- A real Hyperpush deployment works on a generic VM with Docker\n- The product deploy model is documented and repeatable\n- Automatic deployment can truthfully target this platform when configured\n\n## Roadmap notes\n- Domain: Hyperpush\n- Track: Deployment\n- Commitment: Committed\n- Critical path: 1 + 7\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- Product topology is explicit: frontend container plus meshable backend.\n- The generic Docker VM reference deployment works.\n- Cluster health and bootstrap verification exist for the product deployment path.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/49 \u2014 Hyperpush deployment: define frontend plus meshable backend topology\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/50 \u2014 Hyperpush deployment: ship generic Docker VM reference deployment and cluster health verification\n<!-- roadmap-detail-end -->\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/24",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 24,
+      "title": "Hyperpush Launch Roadmap (cross-repo umbrella)",
+      "state": "OPEN",
+      "created_at": "2026-04-10T00:39:34Z",
+      "updated_at": "2026-04-10T01:40:20Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/24",
+      "body": "## Scope\nThis umbrella tracks the public launch roadmap across both repos:\n- `hyperpush-org/hyperpush` (product)\n- `hyperpush-org/mesh-lang` (language/runtime/docs work required to make Hyperpush truthful)\n\nThis roadmap intentionally includes Mesh work when it is on the Hyperpush critical path.\n\n## Critical path\n1. Mesh clustered Docker-on-VM deploy baseline for Hyperpush\n2. Mesh runtime hardening for Hyperpush production load and clustering\n3. Hyperpush JS SDK true drop-in Sentry compatibility\n4. Hyperpush Go SDK true drop-in Sentry compatibility\n5. Hyperpush core parity for ingestion, grouping, regression, alerts, ownership, and environments\n6. Hyperpush parity for releases, deploy correlation, symbolication, performance tracing, replay, retention, and sampling\n7. Promote `frontend-exp` into the real operator app while demoting `landing` to marketing\n8. Hyperpush AI Copilot chat-first operator control for all non-destructive actions\n9. Hyperpush GitHub autonomous remediation loop (issue \u2192 patch \u2192 PR \u2192 CI \u2192 merge)\n10. Hyperpush public bug board, contributor race model, maintainer-approved payouts, and X bot distribution\n11. Hyperpush Solana treasury, configurable token/SOL payouts, and whale-proof token mechanics\n12. Hyperpush self-hosted parity with SaaS for all core features using BYO infrastructure and secrets\n13. Hyperpush generic Docker-on-a-VM deployment baseline for frontend and meshable backend\n14. Mesh deploy and release primitives needed for Hyperpush autonomous remediation\n15. Mesh docs, packages, installers, and public surfaces must stay truthful for Hyperpush launch\n16. Hyperpush SaaS onboarding and control plane at `app.hyperpush.dev`\n17. Hyperpush auto-deploy, post-release verification, and automatic regression reopening\n\n## Mesh foundation epics\n- [ ] hyperpush-org/mesh-lang#15 \u2014 Mesh: built-in runtime observability canvas for nodes, actors, and message flow\n- [ ] hyperpush-org/mesh-lang#3 \u2014 Mesh: clustered Docker-on-VM deploy baseline for Hyperpush\n- [ ] hyperpush-org/mesh-lang#4 \u2014 Mesh: runtime hardening for Hyperpush production load and clustering\n- [ ] hyperpush-org/mesh-lang#5 \u2014 Mesh: deploy and release primitives needed for Hyperpush autonomous remediation\n- [ ] hyperpush-org/mesh-lang#6 \u2014 Mesh: docs, packages, installers, and public surfaces must stay truthful for Hyperpush launch\n\n## Hyperpush product epics\n- [ ] hyperpush-org/hyperpush#11 \u2014 Hyperpush: JS SDK true drop-in Sentry compatibility\n- [ ] hyperpush-org/hyperpush#12 \u2014 Hyperpush: Go SDK true drop-in Sentry compatibility\n- [ ] hyperpush-org/hyperpush#13 \u2014 Hyperpush: core parity for ingestion, grouping, regression, alerts, ownership, and environments\n- [ ] hyperpush-org/hyperpush#14 \u2014 Hyperpush: parity for releases, deploy correlation, symbolication, performance tracing, replay, retention, and sampling\n- [ ] hyperpush-org/hyperpush#15 \u2014 Hyperpush: promote frontend-exp into the real operator app while demoting landing to marketing\n- [ ] hyperpush-org/hyperpush#16 \u2014 Hyperpush: SaaS onboarding and control plane at app.hyperpush.dev\n- [ ] hyperpush-org/hyperpush#17 \u2014 Hyperpush: AI Copilot chat-first operator control for all non-destructive actions\n- [ ] hyperpush-org/hyperpush#18 \u2014 Hyperpush: GitHub autonomous remediation loop (issue \u2192 patch \u2192 PR \u2192 CI \u2192 merge)\n- [ ] hyperpush-org/hyperpush#19 \u2014 Hyperpush: auto-deploy, post-release verification, and automatic regression reopening\n- [ ] hyperpush-org/hyperpush#20 \u2014 Hyperpush: public bug board, contributor race model, maintainer-approved payouts, and X bot distribution\n- [ ] hyperpush-org/hyperpush#21 \u2014 Hyperpush: Solana treasury, configurable token/SOL payouts, and whale-proof token mechanics\n- [ ] hyperpush-org/hyperpush#22 \u2014 Hyperpush: self-hosted parity with SaaS for all core features using BYO infrastructure and secrets\n- [ ] hyperpush-org/hyperpush#23 \u2014 Hyperpush: generic Docker-on-a-VM deployment baseline for frontend and meshable backend\n\n## Notes\n- `landing` becomes marketing only.\n- `frontend-exp` becomes the real operator app (likely renamed/promoted).\n- Self-hosted parity is a product requirement, not a separate reduced feature tier.\n- SaaS-specific conveniences (for example the Hyperpush X bot) still belong on the roadmap, but not as the core feature boundary.\n\n<!-- roadmap-detail-start -->\n## Detailed acceptance criteria\n- This umbrella remains the single public cross-repo entry point for the launch plan.\n- Every launch-critical epic across Hyperpush and Mesh is attached beneath it.\n- The roadmap stays honest about critical path, commitment, and delivery mode.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/3 \u2014 Mesh: clustered Docker-on-VM deploy baseline for Hyperpush\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/4 \u2014 Mesh: runtime hardening for Hyperpush production load and clustering\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/5 \u2014 Mesh: deploy and release primitives needed for Hyperpush autonomous remediation\n- [ ] https://github.com/hyperpush-org/mesh-lang/issues/6 \u2014 Mesh: docs, packages, installers, and public surfaces must stay truthful for Hyperpush launch\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/11 \u2014 Hyperpush: JS SDK true drop-in Sentry compatibility\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/12 \u2014 Hyperpush: Go SDK true drop-in Sentry compatibility\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/13 \u2014 Hyperpush: core parity for ingestion, grouping, regression, alerts, ownership, and environments\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/14 \u2014 Hyperpush: parity for releases, deploy correlation, symbolication, performance tracing, replay, retention, and sampling\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/15 \u2014 Hyperpush: promote frontend-exp into the real operator app while demoting landing to marketing\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/16 \u2014 Hyperpush: SaaS onboarding and control plane at app.hyperpush.dev\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/17 \u2014 Hyperpush: AI Copilot chat-first operator control for all non-destructive actions\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/18 \u2014 Hyperpush: GitHub autonomous remediation loop (issue \u2192 patch \u2192 PR \u2192 CI \u2192 merge)\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/19 \u2014 Hyperpush: auto-deploy, post-release verification, and automatic regression reopening\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/20 \u2014 Hyperpush: public bug board, contributor race model, maintainer-approved payouts, and X bot distribution\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/21 \u2014 Hyperpush: Solana treasury, configurable token/SOL payouts, and whale-proof token mechanics\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/22 \u2014 Hyperpush: self-hosted parity with SaaS for all core features using BYO infrastructure and secrets\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/23 \u2014 Hyperpush: generic Docker-on-a-VM deployment baseline for frontend and meshable backend\n<!-- roadmap-detail-end -->\n\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRNw",
+          "name": "epic",
+          "description": "Large roadmap initiative",
+          "color": "5319E7"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/25",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 25,
+      "title": "Hyperpush JS SDK: implement drop-in Sentry compatibility for canonical web/server usage",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:25Z",
+      "updated_at": "2026-04-10T01:04:25Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/25",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#11\n\n## Outcome\nBuild the JS/TS compatibility layer needed for true drop-in adoption on the first canonical integration surface.\n\n## Acceptance criteria\n- Canonical Sentry install path maps to Hyperpush with minimal changes\n- Ingestion and metadata parity are real\n- Operator app receives the required parity signals\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/26",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 26,
+      "title": "Hyperpush JS SDK: ship migration guide and parity verification fixtures",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:27Z",
+      "updated_at": "2026-04-10T02:02:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/26",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#11\n\n## Outcome\nProve the JS drop-in claim with migration docs and verification fixtures instead of just saying it works.\n\n## Acceptance criteria\n- Migration guide exists\n- Verification fixtures exercise the parity path\n- Public drop-in claim is evidence-backed\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdM_A",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/27",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 27,
+      "title": "Hyperpush Go SDK: implement drop-in Sentry compatibility for canonical service usage",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:29Z",
+      "updated_at": "2026-04-10T01:04:29Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/27",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#12\n\n## Outcome\nBuild the Go compatibility layer needed for true drop-in adoption on the second canonical integration surface.\n\n## Acceptance criteria\n- Canonical Go install path maps to Hyperpush with minimal changes\n- Ingestion and metadata parity are real\n- Operator app receives the required parity signals\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/28",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 28,
+      "title": "Hyperpush Go SDK: ship migration guide and parity verification fixtures",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:32Z",
+      "updated_at": "2026-04-10T02:02:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/28",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#12\n\n## Outcome\nProve the Go drop-in claim with migration docs and verification fixtures instead of relying on copy.\n\n## Acceptance criteria\n- Migration guide exists\n- Verification fixtures exercise the parity path\n- Public drop-in claim is evidence-backed\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdM_A",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/29",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 29,
+      "title": "Hyperpush core parity: audit and harden existing Mesher ingestion and project/event model",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:33Z",
+      "updated_at": "2026-04-10T02:13:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/29",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#13\n\n## Outcome\nAudit and harden the existing Mesher ingestion and project/event model so the operator app and future SDK parity work build on something stable and truthful.\n\n## Current state\nMesher already has a real ingestion path, project/event model, seeded project data, and REST surfaces. This issue is not greenfield buildout; it is about hardening and closing the gaps that would make product claims fake.\n\n## Acceptance criteria\n- The current Mesher ingestion and project/event model are audited against the operator app and SDK needs\n- Gaps in the current shape are identified and closed or explicitly deferred\n- The model is stable enough to support the next wave of app integration work\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/30",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 30,
+      "title": "Hyperpush core parity: close remaining gaps in grouping, regression, alerts, ownership, environments, and session context",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:35Z",
+      "updated_at": "2026-04-10T02:13:58Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/30",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#13\n\n## Outcome\nClose the remaining gaps in grouping, regression detection, alerts, ownership, environments, and session context on top of the current Mesher backend.\n\n## Current state\nMesher already exposes issue search, event detail, dashboard, settings, team, API-key, and alert-rule surfaces. This issue focuses on the product gaps that remain between that backend and the launch-grade operator experience.\n\n## Acceptance criteria\n- Grouping and regression behavior are trustworthy\n- Alerts, ownership, environments, and session context are operator-usable\n- The operator loop no longer relies on copy that overclaims these capabilities\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/31",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 31,
+      "title": "Hyperpush parity: release/deploy correlation and symbolication/source context",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:37Z",
+      "updated_at": "2026-04-10T01:04:37Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/31",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#14\n\n## Outcome\nMake deploys and stack traces investigable enough to meet the extended Sentry-parity bar.\n\n## Acceptance criteria\n- Release/deploy correlation is real\n- Symbolication/source context is real\n- Operators can tie failures to real releases and code locations\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/32",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 32,
+      "title": "Hyperpush parity: performance tracing, session replay, retention, and sampling controls",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:40Z",
+      "updated_at": "2026-04-10T01:04:40Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/32",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#14\n\n## Outcome\nShip the extended performance and replay surfaces, plus retention/sampling controls, required for launch honesty.\n\n## Acceptance criteria\n- Performance tracing is real\n- Session replay is real\n- Retention and sampling controls exist and are operator-meaningful\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/33",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 33,
+      "title": "Hyperpush app: promote frontend-exp and retire landing-as-app behavior",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:42Z",
+      "updated_at": "2026-04-10T01:46:55Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/33",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#15\n\n## Outcome\nMake `frontend-exp` the real operator app and reduce `landing` to a pure marketing role.\n\n## Acceptance criteria\n- App and marketing responsibilities are split cleanly\n- frontend-exp is promoted/renamed into the real app surface\n- landing no longer acts as a fake app\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/34",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 34,
+      "title": "Hyperpush app: replace mocked operator screens with real data and workflows",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:45Z",
+      "updated_at": "2026-04-10T02:19:46Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/34",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#15\n\n## Outcome\nReplace prototype/mocked screens with real product data and workflows across the operator app.\n\n## Acceptance criteria\n- Issues, performance, releases, bounties, treasury, and related screens are real\n- Operators can complete meaningful workflows in-app\n- UI no longer overclaims unsupported behavior\n\n## Detailed acceptance criteria\n- The promoted operator app must stop depending on mock data for the backend surfaces Mesher already exposes today.\n- Existing Mesher APIs (issues, dashboard, detail, alerts, settings, team, API keys, storage, and live updates) should be integrated before later-stage Solana/bounty/treasury/discover work is treated as active UI conversion.\n- Auth/session/project-selection should be defined as a bridge from the current Mesher contract, not invented independently of it.\n\n## Initial sub-issues\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/51 \u2014 Hyperpush app backend: define the bridge from the current Mesher contract to real app auth, session, and project selection\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/52 \u2014 Hyperpush app backend: replace issue, dashboard, detail, and alert mock data with existing Mesher APIs and live updates\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/53 \u2014 Hyperpush app backend: stage Solana, bounties, treasury, and discover integration behind real backing services\n- [ ] https://github.com/hyperpush-org/hyperpush/issues/57 \u2014 Hyperpush app backend: wire project settings, team, API keys, and storage admin surfaces to existing Mesher APIs\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/35",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 35,
+      "title": "Hyperpush SaaS: project creation, GitHub connection, and AI policy setup",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:47Z",
+      "updated_at": "2026-04-10T01:04:47Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/35",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#16\n\n## Outcome\nCreate a real managed-project onboarding path that establishes GitHub and AI control for operators.\n\n## Acceptance criteria\n- Managed projects can be created in-product\n- GitHub and AI policies can be configured in-product\n- The path is not blocked on hidden operator work\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/36",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 36,
+      "title": "Hyperpush SaaS: treasury/token onboarding and managed operator setup at app.hyperpush.dev",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:49Z",
+      "updated_at": "2026-04-10T01:04:49Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/36",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#16\n\n## Outcome\nComplete the SaaS onboarding path with treasury/token setup and the rest of the managed operator controls.\n\n## Acceptance criteria\n- Treasury/token setup exists for SaaS projects\n- app.hyperpush.dev functions as a real control plane\n- Managed onboarding is coherent end to end\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/37",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 37,
+      "title": "Hyperpush AI Copilot: chat-first root cause analysis and operator actions",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:52Z",
+      "updated_at": "2026-04-10T01:04:52Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/37",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#17\n\n## Outcome\nMake chat a first-class operator interface for investigation and non-destructive platform actions.\n\n## Acceptance criteria\n- Root-cause analysis and summaries are real\n- Operators can trigger non-destructive actions from chat\n- Chat and UI share the same underlying capability model\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/38",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 38,
+      "title": "Hyperpush AI Copilot: self-hosted BYO model-provider configuration and policy enforcement",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:54Z",
+      "updated_at": "2026-04-10T01:04:54Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/38",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#17\n\n## Outcome\nSupport the same AI product loop in self-hosted deployments via BYO model/provider configuration and policy controls.\n\n## Acceptance criteria\n- Self-hosted operators can provide their own model/provider secrets\n- Policy boundaries are respected by the agent\n- SaaS-only convenience is not confused with feature availability\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/39",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 39,
+      "title": "Hyperpush GitHub loop: automate issue-to-branch-to-PR with audit trail",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:56Z",
+      "updated_at": "2026-04-10T01:04:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/39",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#18\n\n## Outcome\nAutomate the engineering loop from incident to candidate fix, with enough traceability that maintainers can trust what happened.\n\n## Acceptance criteria\n- Agent can create/update issue, branch, commit, and PR\n- Audit trail exists for the remediation loop\n- Maintainers can understand and review agent actions\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/40",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 40,
+      "title": "Hyperpush GitHub loop: enforce CI, merge policy, and repo permission model",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:04:58Z",
+      "updated_at": "2026-04-10T01:04:58Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/40",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#18\n\n## Outcome\nIntegrate the autonomous PR flow with CI, merge policy, and per-project repository permissions.\n\n## Acceptance criteria\n- CI checks can gate the loop\n- Merge behavior matches configured project policy\n- Repo install and permission model are explicit and safe\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/41",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 41,
+      "title": "Hyperpush deploy loop: integrate generic Docker VM auto-deploy",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:00Z",
+      "updated_at": "2026-04-10T01:05:00Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/41",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#19\n\n## Outcome\nMake the first truthful auto-deploy target real: generic Docker on a VM.\n\n## Acceptance criteria\n- Auto-deploy can target the generic Docker VM path\n- Deployment behavior is operator-understandable\n- Deploy ownership boundaries are explicit\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/42",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 42,
+      "title": "Hyperpush deploy loop: verify post-release fixes and automatically regress failed ones",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:02Z",
+      "updated_at": "2026-04-10T01:05:02Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/42",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#19\n\n## Outcome\nVerify that deployed fixes actually reduce the original error, and reopen/regress the issue automatically when they do not.\n\n## Acceptance criteria\n- Post-release verification uses real signals\n- Failed fixes reopen/regress when configured\n- The verification loop is policy-controlled and truthful\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/43",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 43,
+      "title": "Hyperpush bug market: public bug board publication and maintainer controls",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:04Z",
+      "updated_at": "2026-04-10T01:05:04Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/43",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#20\n\n## Outcome\nGive maintainers a real path to elevate private incidents into a public bug market with policy controls.\n\n## Acceptance criteria\n- Public listing flow is real\n- Maintainers control publication policy and visibility\n- The bug market is not a mock showcase\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/44",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 44,
+      "title": "Hyperpush bug market: contributor wallet-in-PR flow, payout approval, and X announcements",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:07Z",
+      "updated_at": "2026-04-10T01:05:07Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/44",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#20\n\n## Outcome\nComplete the external contributor loop from PR submission to maintainer-approved payout eligibility and SaaS-side distribution on X.\n\n## Acceptance criteria\n- Wallet-in-PR flow works\n- Maintainer approval gates payout eligibility\n- SaaS bounties can be announced via the Hyperpush X bot\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/45",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 45,
+      "title": "Hyperpush Solana economy: program, treasury, and payout architecture with token-or-SOL configuration",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:09Z",
+      "updated_at": "2026-04-10T01:05:09Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/45",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#21\n\n## Outcome\nDefine and ship the Solana-side program/treasury/payout architecture with configurable token-or-SOL contributor payouts.\n\n## Acceptance criteria\n- Program and treasury path are real\n- Payout asset is configurable per project\n- Product can actually execute the payout path\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/46",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 46,
+      "title": "Hyperpush Solana economy: on-chain whale protection and exempt wallet model",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:12Z",
+      "updated_at": "2026-04-10T01:05:12Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/46",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#21\n\n## Outcome\nEnforce the hard per-wallet whale cap on-chain, define sensible exempt system wallets, and choose truthful anti-whale launch mechanics.\n\n## Acceptance criteria\n- 3% cap is enforced on-chain per wallet\n- Exempt wallet model is explicit\n- Public whale-resistance claims match what is actually enforceable\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/47",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 47,
+      "title": "Hyperpush self-hosted: BYO dependency and deployment contract for full feature parity",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:14Z",
+      "updated_at": "2026-04-10T01:05:14Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/47",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#22\n\n## Outcome\nDefine the self-hosted contract for providing infra, AI/provider keys, and deployment inputs while keeping the feature set intact.\n\n## Acceptance criteria\n- Self-hosted dependency contract is explicit\n- Core features are not arbitrarily cloud-only\n- Operators know what they must provide themselves\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/48",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 48,
+      "title": "Hyperpush self-hosted: docs, runbooks, and parity closure across AI, GitHub, and bug market",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:16Z",
+      "updated_at": "2026-04-10T02:02:56Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/48",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#22\n\n## Outcome\nClose the self-hosted parity gaps in docs and operational practice across AI, GitHub, and the bug market loop.\n\n## Acceptance criteria\n- Self-hosted docs/runbooks exist\n- Parity gaps are closed or explicit\n- Self-hosted claims are launch-truthful\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdM_A",
+          "name": "documentation",
+          "description": "Improvements or additions to documentation",
+          "color": "0075ca"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/49",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 49,
+      "title": "Hyperpush deployment: define frontend plus meshable backend topology",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:18Z",
+      "updated_at": "2026-04-10T01:05:18Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/49",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#23\n\n## Outcome\nDefine the actual product deployment topology: frontend container plus meshable backend cluster.\n\n## Acceptance criteria\n- Product topology is explicit\n- Frontend and backend responsibilities are clear\n- Cluster assumptions are documented\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/50",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 50,
+      "title": "Hyperpush deployment: ship generic Docker VM reference deployment and cluster health verification",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:05:20Z",
+      "updated_at": "2026-04-10T01:05:20Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/50",
+      "body": "## Parent epic\n- hyperpush-org/hyperpush#23\n\n## Outcome\nShip the reference generic Docker VM deployment plus cluster health verification for the product itself.\n\n## Acceptance criteria\n- Reference deployment exists\n- Cluster health can be verified cleanly\n- Operators can repeat the product deployment path\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/51",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 51,
+      "title": "Hyperpush app backend: define the bridge from the current Mesher contract to real app auth, session, and project selection",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:46:47Z",
+      "updated_at": "2026-04-10T02:19:44Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/51",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#34\n\n## Outcome\nDefine the bridge from the current Mesher project-scoped backend contract to the real multi-project operator app: auth, session, project selection, and the operator-facing API boundary.\n\n## Current state\nMesher already exposes project-scoped REST and WebSocket APIs plus seeded default org/project data, but it does not yet define the full operator auth/session/project-selection model the promoted app will need.\n\n## Acceptance criteria\n- The bridge from current Mesher backend assumptions to the real operator app contract is explicit\n- Auth/session/project-selection expectations are defined truthfully\n- The app/backend boundary is stable enough that the rest of the app integration work is not guessing\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/52",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 52,
+      "title": "Hyperpush app backend: replace issue, dashboard, detail, and alert mock data with existing Mesher APIs and live updates",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:46:50Z",
+      "updated_at": "2026-04-10T02:13:59Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/52",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#34\n\n## Outcome\nReplace the mocked issue, dashboard, event-detail, and alert surfaces in `frontend-exp` using the Mesher APIs and live-update path that already exist.\n\n## Current state\nMesher already exposes project-scoped REST and WebSocket surfaces for:\n- issues / search / event detail\n- dashboard metrics and timelines\n- alert rules and alert state\n- live event and issue updates\n\nThis issue is about wiring those real backend surfaces into the app instead of treating the whole operator product as a mock.\n\n## Acceptance criteria\n- Issues list and issue detail use live Mesher data\n- Dashboard metrics/charts use live Mesher data where the backend already exists\n- Alert surfaces use live Mesher data where the backend already exists\n- The app uses real-time updates where Mesher already broadcasts them\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/53",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 53,
+      "title": "Hyperpush app backend: stage Solana, bounties, treasury, and discover integration behind real backing services",
+      "state": "OPEN",
+      "created_at": "2026-04-10T01:46:52Z",
+      "updated_at": "2026-04-10T02:14:01Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/53",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#34\n\n## Outcome\nKeep the Solana, bounties, treasury, and discover app integration work explicitly staged behind the backing services it depends on.\n\n## Current state\nThose screens exist in `frontend-exp`, but the backend/service layer for them is not yet equivalent to the current Mesher issue/dashboard surfaces. This issue is not the first integration step; it is the later app-side integration once those backing services become real.\n\n## Acceptance criteria\n- The integration contract for Solana, bounties, treasury, and discover is explicit\n- The issue is sequenced after the backing services exist, not treated as immediate UI wiring\n- The roadmap stays honest about what is blocked on backend/service work\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/54",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 54,
+      "title": "Hyperpush deploy topology: split landing marketing from frontend-exp app routing and runtime boundaries",
+      "state": "OPEN",
+      "created_at": "2026-04-10T02:03:02Z",
+      "updated_at": "2026-04-10T02:03:02Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/54",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#49\n\n## Outcome\nDefine the concrete runtime boundary between `landing` as marketing and `frontend-exp` as the real operator app.\n\n## Acceptance criteria\n- Marketing vs app hostnames/routes are explicit\n- Frontend and backend runtime responsibilities are explicit\n- The topology is concrete enough to implement in Docker on a generic VM\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/55",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 55,
+      "title": "Hyperpush deployment: add a production Dockerfile and container startup path for frontend-exp",
+      "state": "OPEN",
+      "created_at": "2026-04-10T02:03:05Z",
+      "updated_at": "2026-04-10T02:03:05Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/55",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#50\n\n## Outcome\nGive `frontend-exp` a real production container path instead of relying on local-only dev assumptions.\n\n## Acceptance criteria\n- `frontend-exp` has a production Dockerfile or equivalent container build path\n- Container startup contract is explicit\n- The app can run as a real service in the generic VM deployment model\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/56",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 56,
+      "title": "Hyperpush deployment: create generic-VM compose stack and health verification for landing + frontend-exp + mesher backend",
+      "state": "OPEN",
+      "created_at": "2026-04-10T02:03:07Z",
+      "updated_at": "2026-04-10T02:03:07Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/56",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#50\n\n## Outcome\nCreate the reference generic-VM deployment stack and a health verification flow for the marketing site, app, and backend together.\n\n## Acceptance criteria\n- A repeatable generic-VM stack exists\n- Health/readiness verification exists for the deployed surfaces\n- The stack reflects the real product topology rather than a mock/demo shortcut\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    },
+    {
+      "canonical_issue_url": "https://github.com/hyperpush-org/hyperpush/issues/57",
+      "repo": "hyperpush-org/hyperpush",
+      "number": 57,
+      "title": "Hyperpush app backend: wire project settings, team, API keys, and storage admin surfaces to existing Mesher APIs",
+      "state": "OPEN",
+      "created_at": "2026-04-10T02:14:03Z",
+      "updated_at": "2026-04-10T02:14:03Z",
+      "closed_at": null,
+      "url": "https://github.com/hyperpush-org/hyperpush/issues/57",
+      "body": "## Parent issue\n- hyperpush-org/hyperpush#34\n\n## Outcome\nBridge the existing Mesher admin surfaces into the operator app: project settings, team/member management, API keys, and storage visibility.\n\n## Current state\nMesher already exposes project/org admin APIs for:\n- project settings\n- storage visibility\n- team/member management\n- API key creation and revocation\n\nThis is upstream app-integration work that can proceed before the broader Solana/bounty/treasury screens are real.\n\n## Acceptance criteria\n- The operator app can use the existing settings, team, API-key, and storage APIs\n- The current backend contract is reflected in the app honestly\n- These admin surfaces no longer depend on future-only product capabilities\n",
+      "labels": [
+        {
+          "id": "LA_kwDORL23f88AAAACXfdNCQ",
+          "name": "enhancement",
+          "description": "New feature or request",
+          "color": "a2eeef"
+        },
+        {
+          "id": "LA_kwDORL23f88AAAACewpRBg",
+          "name": "roadmap",
+          "description": "Launch roadmap work",
+          "color": "0E8A16"
+        }
+      ]
+    }
+  ],
+  "canonical_redirect": {
+    "command": "/opt/homebrew/bin/gh repo view hyperpush-org/hyperpush-mono --json nameWithOwner,url",
+    "requested_repo": "hyperpush-org/hyperpush-mono",
+    "canonical_slug": "hyperpush-org/hyperpush",
+    "canonical_url": "https://github.com/hyperpush-org/hyperpush"
+  }
+}

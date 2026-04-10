@@ -1,0 +1,77 @@
+query M057ProjectItems(
+  $owner: String!
+  $number: Int!
+  $pageSize: Int!
+  $fieldPageSize: Int!
+  $after: String
+) {
+  organization(login: $owner) {
+    projectV2(number: $number) {
+      id
+      title
+      url
+      items(first: $pageSize, after: $after) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          id
+          content {
+            __typename
+            ... on Issue {
+              number
+              title
+              state
+              url
+              repository {
+                nameWithOwner
+                url
+              }
+            }
+          }
+          fieldValues(first: $fieldPageSize) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            nodes {
+              __typename
+              ... on ProjectV2ItemFieldTextValue {
+                text
+                field {
+                  ...FieldCommon
+                }
+              }
+              ... on ProjectV2ItemFieldNumberValue {
+                number
+                field {
+                  ...FieldCommon
+                }
+              }
+              ... on ProjectV2ItemFieldDateValue {
+                date
+                field {
+                  ...FieldCommon
+                }
+              }
+              ... on ProjectV2ItemFieldSingleSelectValue {
+                name
+                optionId
+                field {
+                  ...FieldCommon
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment FieldCommon on ProjectV2FieldCommon {
+  id
+  name
+}
