@@ -1,7 +1,7 @@
 {
   "version": "m057-s01-reconciliation-evidence-v1",
-  "generated_at": "2026-04-10T06:14:29Z",
-  "inventory_captured_at": "2026-04-10T06:14:19Z",
+  "generated_at": "2026-04-10T06:20:36Z",
+  "inventory_captured_at": "2026-04-10T06:20:21Z",
   "source_script": "scripts/lib/m057_evidence_index.py",
   "rollup": {
     "entry_count": 5,

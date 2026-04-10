@@ -1,7 +1,7 @@
 {
   "version": "m057-s01-reconciliation-ledger-v1",
-  "generated_at": "2026-04-10T06:14:54Z",
-  "inventory_captured_at": "2026-04-10T06:14:19Z",
+  "generated_at": "2026-04-10T06:21:02Z",
+  "inventory_captured_at": "2026-04-10T06:20:21Z",
   "source_script": "scripts/lib/m057_reconciliation_ledger.py",
   "join_key": "canonical_issue_url",
   "rollup": {
@@ -16,10 +16,10 @@
       "hyperpush-org/hyperpush": 52
     },
     "primary_bucket_counts": {
-      "misfiled": 1,
       "rewrite-split": 21,
-      "keep-open": 33,
-      "shipped-but-open": 13
+      "shipped-but-open": 13,
+      "misfiled": 1,
+      "keep-open": 33
     }
   },
   "rows": [

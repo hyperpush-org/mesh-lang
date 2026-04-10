@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M057/S01/T03",
+  "timestamp": 1775801926856,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/verify-m057-s01-ledger.test.mjs",
+      "exitCode": 0,
+      "durationMs": 12417,
+      "verdict": "pass"
+    },
+    {
+      "command": "bash scripts/verify-m057-s01.sh",
+      "exitCode": 0,
+      "durationMs": 52140,
+      "verdict": "pass"
+    }
+  ]
+}
