@@ -181,3 +181,51 @@ docker run --rm \
   -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/todo-postgres \
   todo-postgres
 ```
+
+## Docker Compose (clustered)
+
+The `docker-compose.yml` runs a two-node cluster with a shared PostgreSQL instance. Apply migrations, build the binary, then start the cluster:
+
+```bash
+meshc build .
+docker compose up -d
+```
+
+**Note for macOS/Windows users**: If you see "exec format error", you need to build for Linux:
+```bash
+# Install Linux target (one-time setup)
+rustup target add x86_64-unknown-linux-gnu
+
+# Build for Linux
+meshc build --target x86_64-unknown-linux-gnu .
+
+# Then start the cluster
+docker compose up -d
+```
+
+The compose file uses a shared DNS alias (`mesh-cluster`) so every node can discover its peers through `MESH_DISCOVERY_SEED=mesh-cluster`. Each container's hostname becomes its node identity automatically — no manual `MESH_NODE_NAME` construction is required. Set `MESH_NODE_HOST` to the container's reachable hostname or IP when the system hostname is not routable.
+
+### Bootstrap environment contract
+
+| Variable | Required | Default | Purpose |
+|---|---|---|---|
+| `MESH_CLUSTER_COOKIE` | Yes (cluster) | — | Shared HMAC-SHA256 secret for node authentication |
+| `MESH_DISCOVERY_SEED` | Yes (cluster) | — | DNS name that resolves to all node IPs |
+| `MESH_CLUSTER_PORT` | No | `4370` | TCP port for inter-node communication |
+| `MESH_NODE_NAME` | No | auto | Explicit `name@host:port` identity (overrides auto) |
+| `MESH_NODE_HOST` | No | hostname | Advertised address peers use to reach this node |
+| `MESH_CONTINUITY_ROLE` | No | `primary` | `primary` or `standby` continuity role |
+| `MESH_CONTINUITY_PROMOTION_EPOCH` | No | `0` | Monotonic counter for split-brain prevention |
+| `MESH_DISCOVERY_INTERVAL_MS` | No | `5000` | DNS re-resolution interval in milliseconds |
+
+Identity resolution order: `MESH_NODE_NAME` > `FLY_*` env > hostname + `MESH_NODE_HOST`.
+
+### Operator inspection
+
+When the cluster is running, inspect it with the cluster cookie:
+
+```bash
+meshc cluster status     node1@node1:4370 --cookie change-me-in-production --json
+meshc cluster continuity node1@node1:4370 --cookie change-me-in-production --json
+meshc cluster diagnostics node1@node1:4370 --cookie change-me-in-production --json
+```
