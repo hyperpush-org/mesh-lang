@@ -1,0 +1,239 @@
+{
+  "version": "m057-s01-naming-ownership-map-v1",
+  "generated_at": "2026-04-10T06:14:29Z",
+  "inventory_captured_at": "2026-04-10T06:14:19Z",
+  "source_script": "scripts/lib/m057_evidence_index.py",
+  "surfaces": [
+    {
+      "surface_id": "mesh_lang_repo",
+      "surface_label": "Language / docs / packages surfaces",
+      "ownership_truth": "language-owned in mesh-lang",
+      "delivery_truth": "authoritative tracked sources still live in this checkout",
+      "workspace_path_truth": "mesh-lang/... tracked directly under this repo root",
+      "public_repo_truth": "hyperpush-org/mesh-lang",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/mesh-lang",
+        "issue_repo": "mesh-lang",
+        "workspace_root": "mesh-lang"
+      },
+      "evidence_refs": [
+        {
+          "path": ".gsd/PROJECT.md",
+          "line": 7,
+          "marker": "mesh-lang` keeps the language/toolchain/docs/installers/registry/packages/public-site surfaces",
+          "note": "Project contract names mesh-lang as the owner of language, docs, installer, registry, and public-site code."
+        }
+      ]
+    },
+    {
+      "surface_id": "hyperpush_product_repo",
+      "surface_label": "Product repo surfaces exposed through mesher/",
+      "ownership_truth": "product-owned in the Hyperpush product repo",
+      "delivery_truth": "repo-boundary split shipped; tracker wording must normalize to the public product slug",
+      "workspace_path_truth": "local compatibility path mesher -> ../hyperpush-mono/mesher; workspace helper canonicalizes both hyperpush and hyperpush-mono to workspace root hyperpush-mono",
+      "public_repo_truth": "hyperpush-org/hyperpush",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/hyperpush",
+        "issue_repo": "hyperpush",
+        "workspace_root": "hyperpush-mono",
+        "compatibility_path": "mesher -> ../hyperpush-mono/mesher"
+      },
+      "evidence_refs": [
+        {
+          "path": ".gsd/PROJECT.md",
+          "line": 7,
+          "marker": "still surfaced locally through the `hyperpush-mono` workspace path",
+          "note": "Project contract says the public product repo is hyperpush while the local workspace still uses the hyperpush-mono path."
+        },
+        {
+          "path": ".gsd/PROJECT.md",
+          "line": 7,
+          "marker": "any local `mesh-lang/mesher` path is compatibility-only",
+          "note": "Project contract marks mesh-lang/mesher as a compatibility path, not the authoritative tracked tree."
+        },
+        {
+          "path": "scripts/workspace-git.sh",
+          "line": 32,
+          "marker": "if [[ \"$normalized_expected\" == 'https://github.com/hyperpush-org/hyperpush-mono' && \"$normalized_actual\" == 'https://github.com/hyperpush-org/hyperpush' ]]; then",
+          "note": "workspace-git explicitly accepts the hyperpush-mono -> hyperpush remote alias drift."
+        },
+        {
+          "path": "scripts/workspace-git.sh",
+          "line": 112,
+          "marker": "hyperpush-mono|hyperpush) printf 'hyperpush-mono\\n' ;;",
+          "note": "workspace-git canonicalizes both hyperpush and hyperpush-mono CLI names to the local hyperpush-mono workspace root."
+        },
+        {
+          "path": "scripts/lib/repo-identity.json",
+          "line": 14,
+          "marker": "\"workspaceDir\": \"hyperpush-mono\"",
+          "note": "repo identity still records the local product workspace alias as hyperpush-mono."
+        },
+        {
+          "path": "hyperpush-issues.snapshot.json",
+          "json_pointer": "/canonical_redirect",
+          "note": "Live GitHub repo view canonicalized requested hyperpush-mono inventory capture to public repo hyperpush."
+        }
+      ]
+    },
+    {
+      "surface_id": "product_pitch_route",
+      "surface_label": "Evaluator /pitch route",
+      "ownership_truth": "product-owned landing surface",
+      "delivery_truth": "shipped in the sibling product repo during M056",
+      "workspace_path_truth": "mesher/landing/app/pitch/page.tsx via compatibility symlink into the sibling product repo",
+      "public_repo_truth": "hyperpush-org/hyperpush",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/hyperpush",
+        "issue_repo": "hyperpush",
+        "workspace_root": "hyperpush-mono",
+        "surface_path": "mesher/landing/app/pitch/page.tsx"
+      },
+      "evidence_refs": [
+        {
+          "path": "mesher/landing/app/pitch/page.tsx",
+          "line": 4,
+          "marker": "return <PitchDeck />",
+          "note": "The route file exists and renders the shipped PitchDeck surface."
+        },
+        {
+          "path": ".gsd/milestones/M056/M056-SUMMARY.md",
+          "line": 42,
+          "marker": "M056 delivered `/pitch` as a real App Router route inside `mesher/landing/`",
+          "note": "M056 milestone summary records /pitch as shipped in the product repo."
+        }
+      ]
+    },
+    {
+      "surface_id": "mesh_lang_docs_packages_nav",
+      "surface_label": "Website docs navbar / packages link",
+      "ownership_truth": "language-owned docs surface",
+      "delivery_truth": "active bug lives in mesh-lang docs, not the product repo",
+      "workspace_path_truth": "website/docs/.vitepress/* tracked directly in mesh-lang",
+      "public_repo_truth": "hyperpush-org/mesh-lang",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/mesh-lang",
+        "issue_repo": "mesh-lang",
+        "workspace_root": "mesh-lang",
+        "surface_paths": [
+          "website/docs/.vitepress/config.mts",
+          "website/docs/.vitepress/theme/components/NavBar.vue"
+        ]
+      },
+      "evidence_refs": [
+        {
+          "path": "website/docs/.vitepress/config.mts",
+          "line": 218,
+          "marker": "{ text: 'Packages', link: '/packages/' }",
+          "note": "VitePress nav config keeps the Packages link on the docs site."
+        },
+        {
+          "path": "website/docs/.vitepress/theme/components/NavBar.vue",
+          "line": 17,
+          "marker": "{ text: 'Packages', href: '/packages/' }",
+          "note": "Custom NavBar repeats the same local Packages route."
+        }
+      ]
+    },
+    {
+      "surface_id": "frontend_exp_operator_app",
+      "surface_label": "frontend-exp operator UI",
+      "ownership_truth": "product-owned operator app surface",
+      "delivery_truth": "partial only; checked-in UI still consumes mock data instead of live operator services",
+      "workspace_path_truth": "mesher/frontend-exp/lib/mock-data.ts via the compatibility symlink into the sibling product repo",
+      "public_repo_truth": "hyperpush-org/hyperpush",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/hyperpush",
+        "issue_repo": "hyperpush",
+        "workspace_root": "hyperpush-mono",
+        "surface_path": "mesher/frontend-exp/lib/mock-data.ts"
+      },
+      "evidence_refs": [
+        {
+          "path": "mesher/frontend-exp/lib/mock-data.ts",
+          "line": 44,
+          "marker": "export const MOCK_ISSUES: Issue[] = [",
+          "note": "frontend-exp still exports hard-coded mock issue rows."
+        },
+        {
+          "path": "mesher/frontend-exp/lib/mock-data.ts",
+          "line": 211,
+          "marker": "export const MOCK_STATS = {",
+          "note": "frontend-exp still exports hard-coded dashboard statistics."
+        }
+      ]
+    }
+  ],
+  "drift_findings": [
+    {
+      "finding_id": "product_repo_public_slug_alias",
+      "summary": "The local workspace still uses hyperpush-mono while live GitHub canonicalizes the public product repo to hyperpush.",
+      "workspace_path_truth": "product workspace root remains hyperpush-mono and mesher resolves through ../hyperpush-mono/mesher",
+      "public_repo_truth": "hyperpush-org/hyperpush",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/hyperpush",
+        "issue_repo": "hyperpush",
+        "workspace_root": "hyperpush-mono"
+      },
+      "evidence_refs": [
+        {
+          "path": ".gsd/PROJECT.md",
+          "line": 7,
+          "marker": "still surfaced locally through the `hyperpush-mono` workspace path",
+          "note": "Project contract says the public product repo is hyperpush while the local workspace still uses the hyperpush-mono path."
+        },
+        {
+          "path": "scripts/workspace-git.sh",
+          "line": 32,
+          "marker": "if [[ \"$normalized_expected\" == 'https://github.com/hyperpush-org/hyperpush-mono' && \"$normalized_actual\" == 'https://github.com/hyperpush-org/hyperpush' ]]; then",
+          "note": "workspace-git explicitly accepts the hyperpush-mono -> hyperpush remote alias drift."
+        },
+        {
+          "path": "hyperpush-issues.snapshot.json",
+          "json_pointer": "/canonical_redirect",
+          "note": "Inventory capture proved GitHub redirects hyperpush-mono to hyperpush at query time."
+        }
+      ]
+    },
+    {
+      "finding_id": "compatibility_mesher_path_not_authoritative",
+      "summary": "mesh-lang/mesher is only a compatibility symlink and must not be treated as a language-owned authoritative tree.",
+      "workspace_path_truth": "mesher -> ../hyperpush-mono/mesher",
+      "public_repo_truth": "hyperpush-org/hyperpush",
+      "normalized_canonical_destination": {
+        "repo_slug": "hyperpush-org/hyperpush",
+        "issue_repo": "hyperpush",
+        "workspace_root": "hyperpush-mono",
+        "compatibility_path": "mesher -> ../hyperpush-mono/mesher"
+      },
+      "evidence_refs": [
+        {
+          "path": ".gsd/PROJECT.md",
+          "line": 7,
+          "marker": "any local `mesh-lang/mesher` path is compatibility-only",
+          "note": "Project contract marks mesh-lang/mesher as a compatibility path, not the authoritative tracked tree."
+        }
+      ]
+    }
+  ],
+  "decision_refs": [
+    {
+      "path": ".gsd/DECISIONS.md",
+      "line": 462,
+      "marker": "| D454 | M057/S01 planning | data-shape |",
+      "note": "D454 defines the three-layer artifact split for raw snapshots, derived evidence, and the final ledger."
+    },
+    {
+      "path": ".gsd/DECISIONS.md",
+      "line": 463,
+      "marker": "| D455 | M057/S01/T01 | tracker-reconciliation |",
+      "note": "D455 defines the canonical issue URL inventory shape that this evidence index consumes."
+    },
+    {
+      "path": ".gsd/DECISIONS.md",
+      "line": 464,
+      "marker": "| D456 | M057/S01/T02 | tracker-reconciliation |",
+      "note": "D456 fixes the downstream naming contract by keeping workspace-path truth separate from public repo truth and canonical tracker destination."
+    }
+  ]
+}

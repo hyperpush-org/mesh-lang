@@ -1,7 +1,7 @@
 {
   "version": "m057-s01-hyperpush-issues-v1",
   "snapshot_kind": "repo-issues",
-  "captured_at": "2026-04-10T04:50:41Z",
+  "captured_at": "2026-04-10T06:14:19Z",
   "source": {
     "command": "/opt/homebrew/bin/gh issue list -R hyperpush-org/hyperpush --state all --limit 200 --json number,title,state,labels,body,url,createdAt,updatedAt,closedAt",
     "requested_repo": "hyperpush-org/hyperpush"
