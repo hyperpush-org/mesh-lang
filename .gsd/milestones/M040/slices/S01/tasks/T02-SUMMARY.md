@@ -8,7 +8,7 @@ key_files:
 key_decisions:
   - Replaced the failing keyed submit tuple-extraction path with explicit `submit_decision` and `submit_next_state` helpers so the Mesh compiler could type-check the runtime path again.
   - Stopped before broad follow-on fixes once the context-budget warning fired, leaving the next unit a narrowed resume target: export contract types and rewrite `cluster-proof/tests/work.test.mpl` away from opaque cross-module tuple/struct assumptions.
-duration:
+duration: 
 verification_result: mixed
 completed_at: 2026-03-28T17:58:16.294Z
 blocker_discovered: false

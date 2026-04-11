@@ -15,7 +15,7 @@ key_files:
 key_decisions:
   - Keep the durability policy on the existing env rail via `CLUSTER_PROOF_DURABILITY` instead of introducing a second bootstrap path.
   - Preserve the legacy `GET /work` proof rail as a compatibility adapter that can still dispatch to the peer when healthy membership exists.
-duration:
+duration: 
 verification_result: mixed
 completed_at: 2026-03-28T19:26:04.229Z
 blocker_discovered: false

@@ -12,7 +12,7 @@ key_files:
 key_decisions:
   - Let non-root lexical bindings shadow root-scope function registrations during MIR lowering so local strings cannot be rewritten into function symbols.
   - Keep the keyed S01 /work contract intact and restore the old GET /work rail as a compatibility adapter instead of reverting the keyed API.
-duration:
+duration: 
 verification_result: mixed
 completed_at: 2026-03-28T19:04:17.458Z
 blocker_discovered: false

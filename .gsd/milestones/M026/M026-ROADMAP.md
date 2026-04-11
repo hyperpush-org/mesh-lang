@@ -6,4 +6,4 @@ Legacy placeholder milestone retained only so historical queue state can be neut
 ## Slice Overview
 | ID | Slice | Risk | Depends | Done | After this |
 |----|-------|------|---------|------|------------|
-| S01 | Legacy placeholder neutralization | low | — | ⬜ | After this: M026 is an explicit non-executable placeholder and no longer masquerades as the active milestone. |
+| S01 | Legacy placeholder neutralization | low | — | ✅ | After this: M026 is an explicit non-executable placeholder and no longer masquerades as the active milestone. |

@@ -271,3 +271,9 @@
 {"id":"35501b51-779e-4fde-b61b-cc028ed15be6","ts":"2026-04-11T07:03:48.059Z","severity":"info","message":"Committed: feat: Captured the real Next-specific seam inventory and mapped each se…","source":"notify","read":false}
 {"id":"78731633-e0ac-4f36-8685-73f2b51b5f2c","ts":"2026-04-11T07:09:47.286Z","severity":"warning","message":"[safety] destructive command: recursive delete","source":"workflow-logger","read":false}
 {"id":"1318bd2c-b100-49ff-a098-3ff23bd31fb6","ts":"2026-04-11T07:09:47.287Z","severity":"warning","message":"Destructive command detected: recursive delete","source":"notify","read":false}
+{"id":"eca6d642-2340-4786-91cd-f129af16d487","ts":"2026-04-11T07:21:04.726Z","severity":"info","message":"Committed: feat: Replaced `frontend-exp`’s Next runtime plumbing with TanStack Sta…","source":"notify","read":false}
+{"id":"5666de77-9f83-44bb-aab3-e3c2f3aef4a4","ts":"2026-04-11T07:21:34.939Z","severity":"error","message":"Post-execution checks failed: 1 blocking issue found","source":"notify","read":false}
+{"id":"7158d1cc-5a6c-4cdc-ab16-171349d01d09","ts":"2026-04-11T07:21:34.939Z","severity":"error","message":"Post-execution checks failed — cross-task consistency issue detected, pausing for human review","source":"notify","read":false}
+{"id":"1dbabf0b-871b-47fe-8376-56f97a28949a","ts":"2026-04-11T07:21:34.950Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"7f76e9ce-cb8e-4568-ae0a-d332bcee9064","ts":"2026-04-11T07:22:45.001Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"cf1dee08-14fe-41f1-a2aa-7d27833d6150","ts":"2026-04-11T07:22:49.491Z","severity":"info","message":"Resume: applied 17 fix(es) to state.","source":"notify","read":false}

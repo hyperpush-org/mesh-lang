@@ -10,7 +10,7 @@ key_files:
 key_decisions:
   - Drafted the keyed contract around request-key identity, attempt IDs, and status snapshots instead of extending the old anonymous `request_id` shape.
   - Stopped execution and wrote a detailed handoff once Mesh compile/type failures persisted and the context budget warning required wrap-up.
-duration:
+duration: 
 verification_result: mixed
 completed_at: 2026-03-28T17:45:04.495Z
 blocker_discovered: false

@@ -34,7 +34,7 @@ The existing app tree boots on TanStack Start migration plumbing in place, with 
   - Files: `../hyperpush-mono/mesher/frontend-exp/package.json`, `../hyperpush-mono/mesher/frontend-exp/src/routes/__root.tsx`, `../hyperpush-mono/mesher/frontend-exp/src/router.tsx`, `../hyperpush-mono/mesher/frontend-exp/app/globals.css`, `../hyperpush-mono/mesher/frontend-exp/tsconfig.json`
   - Verify: Run the in-place app’s install/build/dev smoke and confirm the visible shell still mounts with the preserved command contract.
 
-- [ ] **T03: Verify shell parity and command contract** `est:30-45m`
+- [x] **T03: Verify shell parity and command contract** `est:30-45m`
   Exercise the in-place migrated shell enough to prove the command contract and visible dashboard shell survived the framework swap groundwork. Record the exact seams that remain for route decomposition in S02 instead of widening S01 into route restructuring.
   - Files: `../hyperpush-mono/mesher/frontend-exp/package.json`, `../hyperpush-mono/mesher/frontend-exp/src/routes/__root.tsx`, `../hyperpush-mono/mesher/frontend-exp/src/router.tsx`
   - Verify: Run `npm run dev`, `npm run build`, and a targeted browser/smoke check against the in-place app and confirm no backend integration drift was introduced.

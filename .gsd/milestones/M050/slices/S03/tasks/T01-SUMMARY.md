@@ -1,7 +1,7 @@
 ---
-id: T03
-parent: S02
-milestone: M040
+id: T01
+parent: S03
+milestone: M050
 key_files:
   - (none)
 key_decisions:
@@ -12,7 +12,7 @@ completed_at:
 blocker_discovered: false
 ---
 
-# T03: Require replica-backed admission and mirrored continuity status
+# T01: Make Distributed Proof the canonical clustered proof map and retarget retained M047 docs rails
 
 ****
 

@@ -2,29 +2,6 @@
 id: T01
 parent: S02
 milestone: M050
-provides: []
-requires: []
-affects: []
-key_files: ["website/docs/docs/getting-started/index.md", "README.md", "scripts/tests/verify-m050-s02-first-contact-contract.test.mjs", ".gsd/KNOWLEDGE.md", ".gsd/milestones/M050/slices/S02/tasks/T01-SUMMARY.md"]
-key_decisions: ["Kept the literal README/Get Started clustered/proof next-step markers intact so the retained production-proof verifier stays green while the chooser copy moves above them.", "Used a slice-owned Node contract test to fail closed on starter-command, repo-identity, and ordering drift instead of trying to infer onboarding truth from broader docs prose."]
-patterns_established: []
-drill_down_paths: []
-observability_surfaces: []
-duration: ""
-verification_result: "Task-level verification passed with `node --test scripts/tests/verify-m050-s02-first-contact-contract.test.mjs` and `bash reference-backend/scripts/verify-production-proof-surface.sh`. Early slice-level replay also passed the retained M047/M048/M049 rails relevant to this docs change (`e2e_m047_s05`, `e2e_m047_s06`, `verify-m048-s05-contract`, `verify-m049-s05-contract`, `e2e_m049_s05`). The later-task-owned `e2e_m050_s02` and `scripts/verify-m050-s02.sh` surfaces are still absent, and unrelated retained failures remain in `scripts/tests/verify-m036-s03-contract.test.mjs` and `bash scripts/verify-m049-s05.sh`."
-completed_at: 2026-04-04T01:46:51.665Z
-blocker_discovered: false
----
-
-# T01: Rewrote README and Getting Started around the explicit clustered/SQLite/Postgres starter chooser and added a first-contact docs contract.
-
-> Rewrote README and Getting Started around the explicit clustered/SQLite/Postgres starter chooser and added a first-contact docs contract.
-
-## What Happened
----
-id: T01
-parent: S02
-milestone: M050
 key_files:
   - website/docs/docs/getting-started/index.md
   - README.md
@@ -34,9 +11,9 @@ key_files:
 key_decisions:
   - Kept the literal README/Get Started clustered/proof next-step markers intact so the retained production-proof verifier stays green while the chooser copy moves above them.
   - Used a slice-owned Node contract test to fail closed on starter-command, repo-identity, and ordering drift instead of trying to infer onboarding truth from broader docs prose.
-duration: ""
+duration: 
 verification_result: mixed
-completed_at: 2026-04-04T01:46:51.667Z
+completed_at: 2026-04-04T01:46:51.665Z
 blocker_discovered: false
 ---
 
@@ -68,7 +45,6 @@ Task-level verification passed with `node --test scripts/tests/verify-m050-s02-f
 | 10 | `bash scripts/verify-m050-s02.sh` | 127 | ❌ fail | 10ms |
 | 11 | `bash scripts/verify-m049-s05.sh` | 1 | ❌ fail | 51457ms |
 
-
 ## Deviations
 
 None.
@@ -84,10 +60,3 @@ None.
 - `scripts/tests/verify-m050-s02-first-contact-contract.test.mjs`
 - `.gsd/KNOWLEDGE.md`
 - `.gsd/milestones/M050/slices/S02/tasks/T01-SUMMARY.md`
-
-
-## Deviations
-None.
-
-## Known Issues
-`node --test scripts/tests/verify-m036-s03-contract.test.mjs` is already red on this tree because the retained M036 contract expects Neovim/install-script markers that are currently missing. `cargo test -p meshc --test e2e_m050_s02 -- --nocapture` and `bash scripts/verify-m050-s02.sh` still fail because T03 owns those slice-level verification surfaces and they do not exist yet. `bash scripts/verify-m049-s05.sh` still stops in the retained `e2e_m049_s01` replay (`.tmp/m049-s05/verify/m049-s01-e2e.log`), which is outside this T01 docs rewrite.

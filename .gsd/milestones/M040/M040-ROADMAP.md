@@ -1,4 +1,4 @@
-# M040:
+# M040: 
 
 ## Vision
 Extend the existing `cluster-proof` rail from cluster formation and remote routing into honest replicated continuity: callers submit keyed work, inspect durable status with owner/replica visibility, and prove that keyed work converges through individual node loss via cluster-internal continuity rather than an external durable store.
