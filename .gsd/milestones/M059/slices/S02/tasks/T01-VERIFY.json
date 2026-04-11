@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M059/S02/T01",
+  "timestamp": 1775923574071,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp run build",
+      "exitCode": 0,
+      "durationMs": 5593,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev --grep \"issues shell\"",
+      "exitCode": 1,
+      "durationMs": 3855,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}

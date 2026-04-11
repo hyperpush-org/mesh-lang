@@ -56,7 +56,7 @@
   - Verify: `npm --prefix ../hyperpush-mono/mesher/frontend-exp run build && npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev --grep "issues shell"`
   - Done when: the current `/` shell boots through the extracted module and a repo-owned browser spec truthfully asserts Issues landmarks, shell chrome, and zero console/request noise.
 
-- [ ] **T02: Extract the Issues route content and keep Issues state layout-owned** `est:90m`
+- [x] **T02: Extract the Issues route content and keep Issues state layout-owned** `est:90m`
   - Why: Issues is the last inline branch in the adapter shell, and its filters/detail state must stay above route leaves to preserve leave-and-return behavior.
   - Files: `../hyperpush-mono/mesher/frontend-exp/components/dashboard/issues-page.tsx`, `../hyperpush-mono/mesher/frontend-exp/components/dashboard/dashboard-issues-state.tsx`, `../hyperpush-mono/mesher/frontend-exp/components/dashboard/dashboard-shell.tsx`, `../hyperpush-mono/mesher/frontend-exp/src/routes/index.tsx`, `../hyperpush-mono/mesher/frontend-exp/app/page.tsx`, `../hyperpush-mono/mesher/frontend-exp/tests/e2e/dashboard-route-parity.spec.ts`
   - Do: extract the Issues column/panel into its own component, move Issues filter/search/detail state into shell-owned client state, and stop depending on inline Issues JSX from `app/page.tsx` on the active runtime path.
