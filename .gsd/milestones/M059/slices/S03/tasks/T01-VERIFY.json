@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M059/S03/T01",
+  "timestamp": 1775930633210,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "test -f ../hyperpush-mono/mesher/client/server.mjs",
+      "exitCode": 0,
+      "durationMs": 13,
+      "verdict": "pass"
+    },
+    {
+      "command": "test -f ../hyperpush-mono/mesher/client/tests/e2e/dashboard-route-parity.spec.ts",
+      "exitCode": 0,
+      "durationMs": 21,
+      "verdict": "pass"
+    },
+    {
+      "command": "test ! -e ../hyperpush-mono/mesher/frontend-exp/package.json",
+      "exitCode": 0,
+      "durationMs": 22,
+      "verdict": "pass"
+    }
+  ]
+}

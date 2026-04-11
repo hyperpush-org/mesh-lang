@@ -302,3 +302,7 @@
 {"id":"b195b8f8-c6de-4e06-9c76-0b4554efce87","ts":"2026-04-11T17:41:26.153Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 37m of uncommitted changes","source":"notify","read":false}
 {"id":"d4f0ddf4-7630-4d94-b96f-9c79ac2f4295","ts":"2026-04-11T17:55:56.153Z","severity":"warning","message":"[safety] destructive command: recursive delete","source":"workflow-logger","read":false}
 {"id":"c9e7b885-e743-4a6a-8e19-60477d20ffde","ts":"2026-04-11T17:55:56.154Z","severity":"warning","message":"Destructive command detected: recursive delete","source":"notify","read":false}
+{"id":"08d2b1e6-ad91-4862-8d52-c946939d14aa","ts":"2026-04-11T18:03:53.166Z","severity":"info","message":"Committed: docs: Moved the TanStack dashboard package to `mesher/client`, rewrote…","source":"notify","read":false}
+{"id":"c3568e19-53f4-40e3-a8ef-f38e88fbb38d","ts":"2026-04-11T18:03:53.207Z","severity":"warning","message":"[safety] file-change: test-results/.last-run.json — Modified but not in task plan's expected output","source":"workflow-logger","read":false}
+{"id":"d2b977e7-0195-4ba0-8b8a-d4c61df58286","ts":"2026-04-11T18:03:53.207Z","severity":"warning","message":"Safety: 1 unexpected file change(s) outside task plan","source":"notify","read":false}
+{"id":"adf26d20-8ce1-474c-987c-ea62c2c56ec5","ts":"2026-04-11T18:03:53.322Z","severity":"info","message":"Verification gate: 3/3 checks passed","source":"notify","read":false}

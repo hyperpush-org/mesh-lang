@@ -1,5 +1,7 @@
 # Knowledge
 
+- For M059/S03 cross-repo Playwright checks after the dashboard move, `mesh-lang` still has no local Playwright package. Validate the root `playwright.config.ts` with the moved package's binary instead: `PLAYWRIGHT_PROJECT=dev npx --prefix ../hyperpush-mono/mesher/client playwright test --config ./playwright.config.ts --project=dev --list`. That proves the root harness resolves the sibling `mesher/client` suite without needing a `cd` or a mesh-lang `package.json`.
+
 - For M059/S02/T05 route-parity verification in `../hyperpush-mono/mesher/frontend-exp`, `npm --prefix ... exec playwright test ... --project=<name>` on the current npm still warns about unknown `--project` config and ends up running both Playwright projects. Treat `npm run test:e2e:dev` and `npm run test:e2e:prod` (which set `PLAYWRIGHT_PROJECT`) as the authoritative isolated dev/prod commands, and keep any future shared parity config/spec changes compatible with those scripts.
 
 - For M059/S02 Playwright verification from `mesh-lang`, `npm --prefix ../hyperpush-mono/mesher/frontend-exp exec -- playwright ...` still keeps the current working directory at `mesh-lang`. The repo-root `playwright.config.ts` exists so the slice-plan commands can resolve the sibling `frontend-exp` tests/projects without `cd`, and concurrent dev/prod Playwright runs will fight over the shared `webServer` ports because that config starts both 3000 and 3001.
