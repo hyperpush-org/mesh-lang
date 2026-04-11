@@ -334,3 +334,4 @@
 {"id":"ab9ea94c-d915-4aa7-a383-9f4b3ff5be9a","ts":"2026-04-11T19:55:14.215Z","severity":"info","message":"Dynamic routing: enabled — simple tasks may use cheaper models (ceiling: openai-codex/gpt-5.4)","source":"notify","read":false}
 {"id":"a7f27474-74d0-4e76-be3a-b6f10dbe3e79","ts":"2026-04-11T19:55:14.220Z","severity":"info","message":"Pre-flight: 57 milestones queued. All have full context.","source":"notify","read":false}
 {"id":"7e7e7bdb-9d68-4c03-8228-f59d9c159b4c","ts":"2026-04-11T20:04:13.901Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 34m of uncommitted changes","source":"notify","read":false}
+{"id":"5b93659c-d1f6-4686-b4c4-405c760b1dbf","ts":"2026-04-11T20:34:51.712Z","severity":"info","message":"Committed: feat: Added a shared same-origin Mesher read seam with live/mock overvi…","source":"notify","read":false}
