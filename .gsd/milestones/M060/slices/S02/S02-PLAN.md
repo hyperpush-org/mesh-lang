@@ -61,7 +61,7 @@
   - Do: Add `Resolve`, `Reopen`, and `Ignore` controls to the existing detail action row with busy/disabled state, tighten list/status/summary derivations so refreshed live data drives the visible shell, and keep unsupported actions out of the S02 live surface.
   - Verify: `bash mesher/scripts/seed-live-issue.sh && npm --prefix mesher/client run test:e2e:dev -- --grep "issues live actions"`
   - Done when: the action row exposes only the supported live actions, filtered list/status badges update from refreshed provider data, and the summary chrome no longer relies on broad mock-only signals.
-- [ ] **T03: Finish seeded dev/prod maintainer-loop proof and document the supported live seam** `est:1h30m`
+- [x] **T03: Finish seeded dev/prod maintainer-loop proof and document the supported live seam** `est:1h30m`
   - Why: The slice only closes once the maintainer loop is deterministic in both runtimes and the supported live seam is documented for future maintainers.
   - Files: `mesher/scripts/seed-live-issue.sh`, `mesher/client/tests/e2e/issues-live-actions.spec.ts`, `mesher/client/tests/e2e/issues-live-read.spec.ts`, `mesher/client/README.md`
   - Do: Make the seeded issue replay-safe for repeated action assertions, finish dev/prod Playwright happy-path and failure-path coverage for the combined `issues live` suite, and document the supported S02 action set plus verification commands in the client README.
