@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T05",
+  "unitId": "M059/S02/T05",
+  "timestamp": 1775927059507,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp run build",
+      "exitCode": 0,
+      "durationMs": 5783,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev",
+      "exitCode": 0,
+      "durationMs": 39676,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=prod",
+      "exitCode": 0,
+      "durationMs": 41537,
+      "verdict": "pass"
+    }
+  ]
+}

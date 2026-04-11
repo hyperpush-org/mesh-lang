@@ -297,3 +297,8 @@
 {"id":"4ea5a87c-6511-404f-babe-7b2a01b7f371","ts":"2026-04-11T16:38:31.846Z","severity":"info","message":"Verification gate: 2/2 checks passed","source":"notify","read":false}
 {"id":"07e0a15d-4f79-4eab-9475-524be17002de","ts":"2026-04-11T16:51:13.669Z","severity":"info","message":"Committed: test: Made the dashboard sidebar URL-backed, moved AI close behavior on…","source":"notify","read":false}
 {"id":"3ffe5c57-5e91-4a90-af46-2967d4a4d2e9","ts":"2026-04-11T16:51:57.324Z","severity":"info","message":"Verification gate: 2/2 checks passed","source":"notify","read":false}
+{"id":"c0613940-ad9d-448b-b6d0-9a2f8183629a","ts":"2026-04-11T17:04:19.464Z","severity":"info","message":"Committed: chore: Added isolated dev/prod Playwright parity scripts, tightened the…","source":"notify","read":false}
+{"id":"bcaff192-bf9d-4b4c-8473-07fedfee7c92","ts":"2026-04-11T17:05:46.609Z","severity":"info","message":"Verification gate: 3/3 checks passed","source":"notify","read":false}
+{"id":"b195b8f8-c6de-4e06-9c76-0b4554efce87","ts":"2026-04-11T17:41:26.153Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 37m of uncommitted changes","source":"notify","read":false}
+{"id":"d4f0ddf4-7630-4d94-b96f-9c79ac2f4295","ts":"2026-04-11T17:55:56.153Z","severity":"warning","message":"[safety] destructive command: recursive delete","source":"workflow-logger","read":false}
+{"id":"c9e7b885-e743-4a6a-8e19-60477d20ffde","ts":"2026-04-11T17:55:56.154Z","severity":"warning","message":"Destructive command detected: recursive delete","source":"notify","read":false}
