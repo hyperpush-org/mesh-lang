@@ -344,3 +344,4 @@
 {"id":"2b70d35c-f04c-45f1-8efe-54bfcd7f7293","ts":"2026-04-11T21:40:08.112Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
 {"id":"04625cda-cd3f-4439-9c4c-64a7ce5e0ff5","ts":"2026-04-11T21:44:36.166Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
 {"id":"07a59c08-d789-4709-9b5d-3134c517275e","ts":"2026-04-11T21:44:40.302Z","severity":"info","message":"Resume: applied 14 fix(es) to state.","source":"notify","read":false}
+{"id":"79452ddf-59f0-4107-bb40-a309b19c7775","ts":"2026-04-11T22:07:43.619Z","severity":"info","message":"Committed: feat: Added provider-owned same-origin issue mutations, action diagnost…","source":"notify","read":false}

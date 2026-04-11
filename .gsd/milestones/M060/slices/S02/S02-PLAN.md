@@ -55,7 +55,7 @@
   - Do: Extend the shared Mesher client with typed `resolve` / `unresolve` / `archive` helpers, refactor the provider to own refresh and snapshot invalidation after mutations, expose action diagnostics through stable `data-*` attributes, and create the first action-focused Playwright proof file.
   - Verify: `bash mesher/scripts/seed-live-issue.sh && npm --prefix mesher/client run test:e2e:dev -- --grep "issues live actions"`
   - Done when: the provider owns supported issue mutations end to end, stale selected-detail caches are invalidated after writes, and the new action proof file can assert same-origin writes plus visible failure feedback.
-- [ ] **T02: Wire supported maintainer controls and backend-backed Issues summary signals** `est:2h`
+- [x] **T02: Wire supported maintainer controls and backend-backed Issues summary signals** `est:2h`
   - Why: The slice is not truthful until operators can actually trigger the supported actions and see the refreshed live status and summary signals in the existing shell.
   - Files: `mesher/client/components/dashboard/issue-detail.tsx`, `mesher/client/lib/issues-live-adapter.ts`, `mesher/client/components/dashboard/issue-list.tsx`, `mesher/client/components/dashboard/stats-bar.tsx`
   - Do: Add `Resolve`, `Reopen`, and `Ignore` controls to the existing detail action row with busy/disabled state, tighten list/status/summary derivations so refreshed live data drives the visible shell, and keep unsupported actions out of the S02 live surface.
