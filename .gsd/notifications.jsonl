@@ -323,3 +323,14 @@
 {"id":"dc486176-c339-4557-a67b-b601f0c59a76","ts":"2026-04-11T19:25:35.678Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
 {"id":"bb890b1e-3e0e-45bb-80b7-ab24b1242766","ts":"2026-04-11T19:25:35.787Z","severity":"info","message":"Auto-mode stopped — Session creation failed: unknown. Session: $1295.25 · 4234.11M tokens · 951 units","source":"notify","read":false}
 {"id":"838910dd-2a62-4281-87b3-47e505a9044f","ts":"2026-04-11T19:25:35.790Z","severity":"warning","message":"[state] DB unavailable — using filesystem state derivation (degraded mode)","source":"workflow-logger","read":false}
+{"id":"e75dc705-82c0-498c-a13f-cbbde12bd71a","ts":"2026-04-11T19:35:14.971Z","severity":"info","message":"Self-heal: cleared 25 stale runtime record(s) from a previous session.","source":"notify","read":false}
+{"id":"993999fd-820c-4c32-90d6-d283e42eca26","ts":"2026-04-11T19:35:29.288Z","severity":"info","message":"Analyzing codebase...","source":"notify","read":false}
+{"id":"6b88dc80-a422-4428-8ace-df59a1021d78","ts":"2026-04-11T19:35:29.368Z","severity":"success","message":"✓ Analyzed codebase","source":"notify","read":false}
+{"id":"d0f60130-131b-4164-99ef-54a97881be4c","ts":"2026-04-11T19:35:29.368Z","severity":"info","message":"Reviewing prior context...","source":"notify","read":false}
+{"id":"f867eed3-312c-411a-8d3e-f998fb1fbbfd","ts":"2026-04-11T19:35:29.384Z","severity":"success","message":"✓ Reviewed prior context","source":"notify","read":false}
+{"id":"f9b8cc71-8299-4937-8c36-84aeb1ac9401","ts":"2026-04-11T19:55:12.935Z","severity":"warning","message":"[guided] manifest unlink failed: ENOENT: no such file or directory, unlink '/Users/sn0w/Documents/dev/mesh-lang/.gsd/DISCUSSION-MANIFEST.json'","source":"workflow-logger","read":false}
+{"id":"9b951386-6de6-4483-b499-cb43d543a470","ts":"2026-04-11T19:55:12.935Z","severity":"info","message":"Milestone M060 ready.","source":"notify","read":false}
+{"id":"7325fa8f-9fff-4b1e-8d88-1f6d71b48af0","ts":"2026-04-11T19:55:14.214Z","severity":"info","message":"Auto-mode started. Will loop through 5 milestones.","source":"notify","read":false}
+{"id":"ab9ea94c-d915-4aa7-a383-9f4b3ff5be9a","ts":"2026-04-11T19:55:14.215Z","severity":"info","message":"Dynamic routing: enabled — simple tasks may use cheaper models (ceiling: openai-codex/gpt-5.4)","source":"notify","read":false}
+{"id":"a7f27474-74d0-4e76-be3a-b6f10dbe3e79","ts":"2026-04-11T19:55:14.220Z","severity":"info","message":"Pre-flight: 57 milestones queued. All have full context.","source":"notify","read":false}
+{"id":"7e7e7bdb-9d68-4c03-8228-f59d9c159b4c","ts":"2026-04-11T20:04:13.901Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 34m of uncommitted changes","source":"notify","read":false}

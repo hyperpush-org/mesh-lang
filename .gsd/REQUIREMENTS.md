@@ -92,6 +92,94 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
+### R153 — The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
+- Class: integration
+- Status: active
+- Description: The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
+- Why it matters: This milestone exists to turn the current shell into a real backend-backed dashboard without inventing new product scope.
+- Source: M060
+- Primary owning slice: M060/S02
+- Supporting slices: M060/S03, M060/S04
+- Validation: mapped
+- Notes: Backend-backed means real read paths for issues, events, dashboard summaries, alerts, settings/storage, team, and API keys where routes already exist.
+
+### R154 — Existing backend-backed actions exposed by the dashboard work end to end from the client, not just the read path.
+- Class: primary-user-loop
+- Status: active
+- Description: Existing backend-backed actions exposed by the dashboard work end to end from the client, not just the read path.
+- Why it matters: A wired shell that only reads data but leaves current backend-backed controls fake would still be misleading and would not unblock future work.
+- Source: user
+- Primary owning slice: M060/S03
+- Supporting slices: M060/S02, M060/S04
+- Validation: mapped
+- Notes: Includes issue actions and any existing backend-backed alert/settings/team/API-key mutations that the current shell exposes.
+
+### R155 — The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
+- Class: launchability
+- Status: active
+- Description: The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
+- Why it matters: The milestone needs a truthful live context without expanding scope into new auth UX.
+- Source: user
+- Primary owning slice: M060/S01
+- Supporting slices: M060/S02
+- Validation: mapped
+- Notes: Real auth context for this milestone means existing backend reality, not a new dashboard auth system.
+
+### R156 — The existing UI structure stays materially intact while backend-backed areas become live.
+- Class: constraint
+- Status: active
+- Description: The existing UI structure stays materially intact while backend-backed areas become live.
+- Why it matters: The value is in wiring the current shell to reality, not in reimagining the shell.
+- Source: user
+- Primary owning slice: M060/S01
+- Supporting slices: M060/S02, M060/S03, M060/S04
+- Validation: mapped
+- Notes: Change as little UI as possible; do not turn the milestone into a redesign or frontend architecture rewrite.
+
+### R157 — UI that is still mock-only remains present and visually stable instead of being removed just because it is not yet backend-backed.
+- Class: constraint
+- Status: active
+- Description: UI that is still mock-only remains present and visually stable instead of being removed just because it is not yet backend-backed.
+- Why it matters: Removing or redesigning mocked areas would shrink scope in the wrong direction and break shell continuity.
+- Source: user
+- Primary owning slice: M060/S03
+- Supporting slices: M060/S04
+- Validation: mapped
+- Notes: Mixed live/mock screens should stay silent and natural rather than loudly split into separate products.
+
+### R158 — When backend-backed dashboard calls fail, the UI shows minimal truthful failure feedback through existing patterns, including shadcn/Radix toast-style notification, without redesigning the experience.
+- Class: failure-visibility
+- Status: active
+- Description: When backend-backed dashboard calls fail, the UI shows minimal truthful failure feedback through existing patterns, including shadcn/Radix toast-style notification, without redesigning the experience.
+- Why it matters: Once the shell is real, silent failure would be worse than visible rough edges.
+- Source: user
+- Primary owning slice: M060/S01
+- Supporting slices: M060/S02, M060/S03
+- Validation: mapped
+- Notes: Use straightforward in-place or toast feedback rather than quiet fake fallback or a new operational UX.
+
+### R159 — Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
+- Class: integration
+- Status: active
+- Description: Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
+- Why it matters: The milestone must be allowed to repair blocking seams without turning into a backend rewrite.
+- Source: user
+- Primary owning slice: M060/S04
+- Supporting slices: M060/S02, M060/S03
+- Validation: mapped
+- Notes: Do not widen this into a general backend cleanup milestone.
+
+### R160 — The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
+- Class: launchability
+- Status: active
+- Description: The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
+- Why it matters: The point of this milestone is to unblock future work by establishing a real assembled shell seam.
+- Source: user
+- Primary owning slice: M060/S04
+- Supporting slices: M060/S01, M060/S02, M060/S03
+- Validation: mapped
+- Notes: The proof bar is the full backend-backed shell, not a thin representative route.
+
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -1286,6 +1374,33 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: unmapped
 - Notes: Deferred until after TanStack Start parity is proven.
 
+### R161 — The dashboard supports real multi-project or multi-organization switching from the current selector UI.
+- Class: admin/support
+- Status: deferred
+- Description: The dashboard supports real multi-project or multi-organization switching from the current selector UI.
+- Why it matters: The current milestone only requires a truthful seeded/default real context, not full selector semantics.
+- Source: inferred
+- Validation: unmapped
+- Notes: Deferred unless the current backend reality already exposes a low-cost truthful path.
+
+### R162 — The dashboard has a polished real login/session flow for human users.
+- Class: launchability
+- Status: deferred
+- Description: The dashboard has a polished real login/session flow for human users.
+- Why it matters: A new login/session system is separate work and would distort the integration milestone.
+- Source: user
+- Validation: unmapped
+- Notes: Deferred because this milestone explicitly uses existing project/org/API-key reality instead of expanding into a new auth UX.
+
+### R163 — Treasury, releases, bounties, performance, Solana, and other product-shaped mock-only sections are fully backed by new real backend surfaces in this milestone.
+- Class: differentiator
+- Status: deferred
+- Description: Treasury, releases, bounties, performance, Solana, and other product-shaped mock-only sections are fully backed by new real backend surfaces in this milestone.
+- Why it matters: The current bar is to wire every already-backed surface, not to invent backend support for product-only areas.
+- Source: inferred
+- Validation: unmapped
+- Notes: Deferred unless a route already exists and can be wired without expanding backend scope.
+
 ## Out of Scope
 
 ### R030 — The current planning wave is not a frontend-first language push.
@@ -1612,6 +1727,33 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Any intentional route or data-behavior change belongs to a later milestone.
 
+### R164 — This milestone redesigns or substantially restyles the existing dashboard shell.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone redesigns or substantially restyles the existing dashboard shell.
+- Why it matters: Prevent scope drift into visual cleanup or frontend architecture work.
+- Source: user
+- Validation: n/a
+- Notes: Explicitly excluded by the user's change-as-little-UI-as-possible constraint.
+
+### R165 — This milestone removes mocked UI sections simply because they are not yet backend-backed.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone removes mocked UI sections simply because they are not yet backend-backed.
+- Why it matters: Prevent false simplification by shrinking the shell.
+- Source: user
+- Validation: n/a
+- Notes: Explicitly excluded; preserve shell continuity.
+
+### R166 — This milestone becomes a broad backend cleanup or product-expansion wave beyond the seams required to support the live dashboard wiring.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone becomes a broad backend cleanup or product-expansion wave beyond the seams required to support the live dashboard wiring.
+- Why it matters: Keeps the milestone honest and integration-focused.
+- Source: user
+- Validation: n/a
+- Notes: Backend fixes are allowed only when they directly unblock live shell behavior.
+
 ## Traceability
 
 | ID | Class | Status | Primary owner | Supporting | Proof |
@@ -1764,10 +1906,24 @@ This file is the explicit capability and coverage contract for the project.
 | R150 | anti-feature | out-of-scope | none | none | n/a |
 | R151 | anti-feature | out-of-scope | none | none | n/a |
 | R152 | constraint | out-of-scope | none | none | n/a |
+| R153 | integration | active | M060/S02 | M060/S03, M060/S04 | mapped |
+| R154 | primary-user-loop | active | M060/S03 | M060/S02, M060/S04 | mapped |
+| R155 | launchability | active | M060/S01 | M060/S02 | mapped |
+| R156 | constraint | active | M060/S01 | M060/S02, M060/S03, M060/S04 | mapped |
+| R157 | constraint | active | M060/S03 | M060/S04 | mapped |
+| R158 | failure-visibility | active | M060/S01 | M060/S02, M060/S03 | mapped |
+| R159 | integration | active | M060/S04 | M060/S02, M060/S03 | mapped |
+| R160 | launchability | active | M060/S04 | M060/S01, M060/S02, M060/S03 | mapped |
+| R161 | admin/support | deferred | none | none | unmapped |
+| R162 | launchability | deferred | none | none | unmapped |
+| R163 | differentiator | deferred | none | none | unmapped |
+| R164 | anti-feature | out-of-scope | none | none | n/a |
+| R165 | anti-feature | out-of-scope | none | none | n/a |
+| R166 | anti-feature | out-of-scope | none | none | n/a |
 
 ## Coverage Summary
 
-- Active requirements: 8
-- Mapped to slices: 8
+- Active requirements: 16
+- Mapped to slices: 16
 - Validated: 91 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148)
 - Unmapped active requirements: 0
