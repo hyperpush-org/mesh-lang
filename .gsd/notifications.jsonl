@@ -277,3 +277,8 @@
 {"id":"1dbabf0b-871b-47fe-8376-56f97a28949a","ts":"2026-04-11T07:21:34.950Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
 {"id":"7f76e9ce-cb8e-4568-ae0a-d332bcee9064","ts":"2026-04-11T07:22:45.001Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
 {"id":"cf1dee08-14fe-41f1-a2aa-7d27833d6150","ts":"2026-04-11T07:22:49.491Z","severity":"info","message":"Resume: applied 17 fix(es) to state.","source":"notify","read":false}
+{"id":"5ced08a1-ebbb-416c-aa85-8c00f089f484","ts":"2026-04-11T07:27:47.548Z","severity":"info","message":"Committed: feat: Verified `frontend-exp`’s TanStack Start shell parity and command…","source":"notify","read":false}
+{"id":"3c8940a5-c516-46fc-bad4-661993bb996e","ts":"2026-04-11T08:03:48.389Z","severity":"error","message":"Pre-execution checks failed: 2 blocking issues found","source":"notify","read":false}
+{"id":"ee03b3d0-a1b0-4974-8a3c-2428b9dffff3","ts":"2026-04-11T08:03:48.399Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"88058759-acc6-45a9-a615-8532bbe186fb","ts":"2026-04-11T15:51:37.124Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"92fb5036-a19c-4a85-a31d-d9acaff8e28e","ts":"2026-04-11T15:51:41.799Z","severity":"info","message":"Resume: applied 18 fix(es) to state.","source":"notify","read":false}

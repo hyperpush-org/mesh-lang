@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "milestoneId": "M059",
+  "sliceId": "S02",
+  "timestamp": 1775894628388,
+  "status": "fail",
+  "durationMs": 5,
+  "checks": [
+    {
+      "category": "file",
+      "target": "`../hyperpush-mono/mesher/frontend-exp/app/page.tsx` — current monolithic shell and local nav state source.",
+      "passed": false,
+      "message": "Task T01 reads '`../hyperpush-mono/mesher/frontend-exp/app/page.tsx` — current monolithic shell and local nav state source.' but it's created by task T02 (sequence violation)",
+      "blocking": true
+    },
+    {
+      "category": "file",
+      "target": "`../hyperpush-mono/mesher/frontend-exp/components/dashboard/sidebar.tsx` — current sidebar/nav model and footer settings affordance.",
+      "passed": false,
+      "message": "Task T01 reads '`../hyperpush-mono/mesher/frontend-exp/components/dashboard/sidebar.tsx` — current sidebar/nav model and footer settings affordance.' but it's created by task T04 (sequence violation)",
+      "blocking": true
+    }
+  ]
+}
