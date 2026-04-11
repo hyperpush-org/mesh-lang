@@ -1,5 +1,7 @@
 # Knowledge
 
+- For M060/S03 admin/ops Playwright proofs on the Alerts route, `DashboardShell` still mounts `DashboardIssuesStateProvider` globally, so opening `/alerts` can emit expected same-origin `net::ERR_ABORTED` requests for `/api/v1/projects/default/issues` plus the dashboard health/levels/volume endpoints when route mocks or navigation interrupt the hidden Issues bootstrap. Treat those as shell-level abort noise in Alerts-specific request assertions unless the slice explicitly changes provider mounting.
+
 - For M060/S02 combined `issues live` Playwright coverage, keep the read seam and action seam on separate deterministic seeded issues. The dev/prod harness runs the two spec files in parallel workers, so sharing one seeded issue lets action mutations race the read-side sparse/failure proofs. `bash mesher/scripts/seed-live-issue.sh` now seeds both titles and resets the action proof issue back to `unresolved` before the browser suites start.
 
 - For M060/S02 prod Playwright coverage on the live Issues seam, do not assert that the issue-detail banner shows the exact event id returned by the seeding helper. Parallel workers can ingest another event for the same seeded fingerprint before the selected detail hydrates, so the truthful assertion is a non-empty `data-latest-event-id` plus same-origin `/api/v1/events/:id` traffic, not identity with the seed response.

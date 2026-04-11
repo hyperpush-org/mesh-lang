@@ -50,7 +50,7 @@
 
 ## Tasks
 
-- [ ] **T01: Wire the Alerts route to live Mesher reads/actions and seed the admin/ops proof file** `est:2h30m`
+- [x] **T01: Wire the Alerts route to live Mesher reads/actions and seed the admin/ops proof file** `est:2h30m`
   - Why: The standalone Alerts route is the cleanest user-visible admin/ops seam and gives the slice its first truthful live surface plus the first real browser-proof file.
   - Files: `mesher/client/lib/mesher-api.ts`, `mesher/client/lib/admin-ops-live-adapter.ts`, `mesher/client/components/dashboard/alerts-live-state.tsx`, `mesher/client/components/dashboard/alerts-page.tsx`, `mesher/client/components/dashboard/alert-detail.tsx`, `mesher/client/components/dashboard/alert-stats.tsx`, `mesher/client/lib/mock-data.ts`, `mesher/client/tests/e2e/admin-ops-live.spec.ts`
   - Do: Extend the shared same-origin Mesher client for admin/ops payloads, add an alerts-owned live state seam, refactor the alerts shell to use live reads and supported fired-alert lifecycle actions, and seed `admin-ops-live.spec.ts` with same-origin happy/failure coverage for Alerts.
