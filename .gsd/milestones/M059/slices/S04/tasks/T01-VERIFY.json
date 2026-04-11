@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M059/S04/T01",
+  "timestamp": 1775933567757,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev -- tests/e2e/dashboard-route-parity.spec.ts",
+      "exitCode": 0,
+      "durationMs": 38551,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod -- tests/e2e/dashboard-route-parity.spec.ts",
+      "exitCode": 0,
+      "durationMs": 36506,
+      "verdict": "pass"
+    }
+  ]
+}

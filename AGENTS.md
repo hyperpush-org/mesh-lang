@@ -11,14 +11,14 @@ Blessed sibling workspace:
   mesh-lang/
   hyperpush-mono/
     mesher/
+    mesher/client/
     mesher/landing/
-    mesher/frontend-exp/
 ```
 
 GitHub authority is split:
 
 - `mesh-lang` owns language/toolchain/docs/installers/registry/packages/public-site surfaces.
-- `hyperpush-mono` / `hyperpush` owns `mesher/`, `mesher/landing/`, and `mesher/frontend-exp/`.
+- `hyperpush-mono` / `hyperpush` owns `mesher/`, the dashboard package at `mesher/client/`, and the Next.js landing app at `mesher/landing/`.
 - GitHub Actions secrets are repo-scoped: `mesh-lang` workflows cannot read secrets that exist only on `hyperpush`, so deploy/release/publish secrets must be present on `mesh-lang` itself or shared to it as organization secrets.
 
 The local `mesh-lang/mesher` path is only a compatibility symlink into the sibling product repo.
@@ -70,3 +70,5 @@ M055_ALLOW_PARTIAL_PUSH=1 git push ...
 - Do not assume one repo's branch graph applies to the other repo.
 - Do not commit or push product changes from `mesh-lang` just because they appeared under `mesh-lang/mesher` locally.
 - Do not copy product files back into `mesh-lang` to "make the push work".
+ack into `mesh-lang` to "make the push work".
+iles back into `mesh-lang` to "make the push work".
