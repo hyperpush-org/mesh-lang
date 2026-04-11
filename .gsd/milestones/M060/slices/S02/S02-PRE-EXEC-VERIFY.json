@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "milestoneId": "M060",
+  "sliceId": "S02",
+  "timestamp": 1775943608101,
+  "status": "fail",
+  "durationMs": 2,
+  "checks": [
+    {
+      "category": "file",
+      "target": "mesher/client/tests/e2e/issues-live-read.spec.ts",
+      "passed": false,
+      "message": "Task T01 reads 'mesher/client/tests/e2e/issues-live-read.spec.ts' but it's created by task T03 (sequence violation)",
+      "blocking": true
+    }
+  ]
+}

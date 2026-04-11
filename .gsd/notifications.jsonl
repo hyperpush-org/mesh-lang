@@ -335,3 +335,12 @@
 {"id":"a7f27474-74d0-4e76-be3a-b6f10dbe3e79","ts":"2026-04-11T19:55:14.220Z","severity":"info","message":"Pre-flight: 57 milestones queued. All have full context.","source":"notify","read":false}
 {"id":"7e7e7bdb-9d68-4c03-8228-f59d9c159b4c","ts":"2026-04-11T20:04:13.901Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 34m of uncommitted changes","source":"notify","read":false}
 {"id":"5b93659c-d1f6-4686-b4c4-405c760b1dbf","ts":"2026-04-11T20:34:51.712Z","severity":"info","message":"Committed: feat: Added a shared same-origin Mesher read seam with live/mock overvi…","source":"notify","read":false}
+{"id":"17691458-1cc5-4928-88f4-4388be3f6474","ts":"2026-04-11T20:59:47.133Z","severity":"info","message":"Committed: test: Added selected-issue live read plumbing, mounted toast feedback,…","source":"notify","read":false}
+{"id":"044fb852-ff5f-41d5-b094-847bd3d23013","ts":"2026-04-11T21:00:31.137Z","severity":"info","message":"Verification gate: FAILED — npm --prefix mesher/client run test:e2e:dev -- --grep \"issues live read seam\"","source":"notify","read":false}
+{"id":"d34d2944-ea8c-4c03-b280-bd72becf9107","ts":"2026-04-11T21:00:31.143Z","severity":"warning","message":"Verification failed (npm --prefix mesher/client run test:e2e:dev -- --grep \"issues live read seam\") — auto-fix attempt 1/2","source":"notify","read":false}
+{"id":"9e36384c-6232-433b-821e-1f3a89bd235a","ts":"2026-04-11T21:31:37.640Z","severity":"warning","message":"Artifact missing for research-slice M060/parallel-research — retrying (attempt 1)","source":"notify","read":false}
+{"id":"b283d305-3196-40d6-accd-134cd1505313","ts":"2026-04-11T21:31:38.237Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 31m of uncommitted changes","source":"notify","read":false}
+{"id":"aba9d5eb-363d-43da-ae38-10bc11c69af6","ts":"2026-04-11T21:40:08.102Z","severity":"error","message":"Pre-execution checks failed: 1 blocking issue found","source":"notify","read":false}
+{"id":"2b70d35c-f04c-45f1-8efe-54bfcd7f7293","ts":"2026-04-11T21:40:08.112Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"04625cda-cd3f-4439-9c4c-64a7ce5e0ff5","ts":"2026-04-11T21:44:36.166Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"07a59c08-d789-4709-9b5d-3134c517275e","ts":"2026-04-11T21:44:40.302Z","severity":"info","message":"Resume: applied 14 fix(es) to state.","source":"notify","read":false}

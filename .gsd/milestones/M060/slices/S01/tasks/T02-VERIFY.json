@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M060/S01/T02",
+  "timestamp": 1775941187189,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix mesher/client run test:e2e:dev -- --grep \"issues live read seam\"",
+      "exitCode": 1,
+      "durationMs": 43843,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}

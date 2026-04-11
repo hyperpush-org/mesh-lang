@@ -114,28 +114,6 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: Includes issue actions and any existing backend-backed alert/settings/team/API-key mutations that the current shell exposes.
 
-### R155 — The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
-- Class: launchability
-- Status: active
-- Description: The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
-- Why it matters: The milestone needs a truthful live context without expanding scope into new auth UX.
-- Source: user
-- Primary owning slice: M060/S01
-- Supporting slices: M060/S02
-- Validation: mapped
-- Notes: Real auth context for this milestone means existing backend reality, not a new dashboard auth system.
-
-### R156 — The existing UI structure stays materially intact while backend-backed areas become live.
-- Class: constraint
-- Status: active
-- Description: The existing UI structure stays materially intact while backend-backed areas become live.
-- Why it matters: The value is in wiring the current shell to reality, not in reimagining the shell.
-- Source: user
-- Primary owning slice: M060/S01
-- Supporting slices: M060/S02, M060/S03, M060/S04
-- Validation: mapped
-- Notes: Change as little UI as possible; do not turn the milestone into a redesign or frontend architecture rewrite.
-
 ### R157 — UI that is still mock-only remains present and visually stable instead of being removed just because it is not yet backend-backed.
 - Class: constraint
 - Status: active
@@ -1165,6 +1143,28 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by M059 closeout after maintainer-facing docs and workflow/config surfaces (`../hyperpush-mono/AGENTS.md`, `../hyperpush-mono/CONTRIBUTING.md`, `../hyperpush-mono/SUPPORT.md`, issue templates, CI, README, Dependabot, and `./AGENTS.md`) were confirmed to reference `mesher/client` and to have no direct stale `frontend-exp` guidance.
 - Notes: Only direct references need updating; broader product docs redesign is out of scope.
 
+### R155 — The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
+- Class: launchability
+- Status: validated
+- Description: The dashboard can operate against the backend's existing real project/org/API-key reality using a seeded or default real context without adding a polished login/session flow.
+- Why it matters: The milestone needs a truthful live context without expanding scope into new auth UX.
+- Source: user
+- Primary owning slice: M060/S01
+- Supporting slices: M060/S02
+- Validation: Validated in M060/S01 via seeded default-context boot through same-origin /api/v1 reads, deterministic seed/readback (`bash mesher/scripts/seed-live-issue.sh`), and passing dev/prod Playwright live-seam verification (`npm --prefix mesher/client run test:e2e:dev -- --grep "issues live read seam"`, `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live read seam"`).
+- Notes: Real auth context for this milestone means existing backend reality, not a new dashboard auth system.
+
+### R156 — The existing UI structure stays materially intact while backend-backed areas become live.
+- Class: constraint
+- Status: validated
+- Description: The existing UI structure stays materially intact while backend-backed areas become live.
+- Why it matters: The value is in wiring the current shell to reality, not in reimagining the shell.
+- Source: user
+- Primary owning slice: M060/S01
+- Supporting slices: M060/S02, M060/S03, M060/S04
+- Validation: Validated in M060/S01 by preserving the existing Issues shell while live list/stats/chart/detail data overlays onto fallback shell fields, with sparse-detail/fallback coverage proven by the passing `issues live read seam` Playwright suite in dev and prod.
+- Notes: Change as little UI as possible; do not turn the milestone into a redesign or frontend architecture rewrite.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -1908,8 +1908,8 @@ This file is the explicit capability and coverage contract for the project.
 | R152 | constraint | out-of-scope | none | none | n/a |
 | R153 | integration | active | M060/S02 | M060/S03, M060/S04 | mapped |
 | R154 | primary-user-loop | active | M060/S03 | M060/S02, M060/S04 | mapped |
-| R155 | launchability | active | M060/S01 | M060/S02 | mapped |
-| R156 | constraint | active | M060/S01 | M060/S02, M060/S03, M060/S04 | mapped |
+| R155 | launchability | validated | M060/S01 | M060/S02 | Validated in M060/S01 via seeded default-context boot through same-origin /api/v1 reads, deterministic seed/readback (`bash mesher/scripts/seed-live-issue.sh`), and passing dev/prod Playwright live-seam verification (`npm --prefix mesher/client run test:e2e:dev -- --grep "issues live read seam"`, `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live read seam"`). |
+| R156 | constraint | validated | M060/S01 | M060/S02, M060/S03, M060/S04 | Validated in M060/S01 by preserving the existing Issues shell while live list/stats/chart/detail data overlays onto fallback shell fields, with sparse-detail/fallback coverage proven by the passing `issues live read seam` Playwright suite in dev and prod. |
 | R157 | constraint | active | M060/S03 | M060/S04 | mapped |
 | R158 | failure-visibility | active | M060/S01 | M060/S02, M060/S03 | mapped |
 | R159 | integration | active | M060/S04 | M060/S02, M060/S03 | mapped |
@@ -1923,7 +1923,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 16
-- Mapped to slices: 16
-- Validated: 91 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148)
+- Active requirements: 14
+- Mapped to slices: 14
+- Validated: 93 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R155, R156)
 - Unmapped active requirements: 0

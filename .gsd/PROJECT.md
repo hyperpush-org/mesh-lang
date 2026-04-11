@@ -22,6 +22,8 @@ The planning problem behind M057 was external rather than code-level: the local 
 
 M059 is complete. The sibling product dashboard now runs from the canonical `../hyperpush-mono/mesher/client/` TanStack Start/Vite package, the full dev/prod route-parity suite and root-harness load check passed at closeout, the remaining direct maintainer guidance no longer points at `frontend-exp`, and requirements `R143` through `R148` are validated. The milestone closeout record lives under `.gsd/milestones/M059/` as `M059-VALIDATION.md` and `M059-SUMMARY.md`.
 
+M060 is active, and S01 is complete. The canonical `mesher/client` Issues shell now boots against the seeded default Mesher context through same-origin `/api/v1` reads, overlays live issue/list/stats/chart/detail/timeline data onto the existing shell while keeping unsupported fields visibly mocked, and surfaces selected-issue read failures through the mounted Radix toaster. The current closeout proof for that seam is the deterministic seed helper plus passing dev/prod `issues live read seam` Playwright runs.
+
 ## Core Value
 
 If Mesh claims it can cluster, route work, survive node loss, and report truthful runtime status, those claims must be proven through small docs-grade examples where the language/runtime owns the magic instead of the example app reimplementing distributed behavior — including the syntax users actually write.
@@ -39,6 +41,7 @@ Mesh already ships a broad backend-oriented stack:
 - a real package registry service in `registry/`, a public packages website in `packages-website/`, a docs site in `website/`, and repo-owned split-boundary docs/install/release helpers for the sibling product repo
 - editor surfaces including the VS Code extension and repo-owned Neovim pack
 - the frontend migration wave is complete in the sibling product repo: `../hyperpush-mono/mesher/client/` is the canonical TanStack Start/Vite dashboard package, the parity suite covers Solana Programs AI sidebar auto-collapse/restore plus Issues browser-history state restoration, the AreaChart runtime path is quiet under Playwright after disabling Recharts area animation, the root Playwright harness still resolves the moved package path from `mesh-lang`, and direct maintainer guidance now points at `mesher/client` rather than `frontend-exp`
+- M060/S01 established the first live backend seam in that canonical package: the Issues route now reads the seeded default project through same-origin `/api/v1`, normalizes Mesher payloads through a typed live-overlay adapter, keeps unsupported shell fields on explicit fallback content, and proves both successful hydration and visible failure-to-toast behavior in dev and built-prod runs
 
 Recent distributed-runtime state:
 - M039 proved automatic cluster formation, truthful membership, runtime-native internal balancing, and single-cluster failure/rejoin on a narrow proof app
@@ -56,6 +59,7 @@ Public docs and repo teaching surfaces are now much more truthful after M048-M05
 - the broader Hyperpush landing story still has positioning cleanup left outside `/pitch`, but the language repo keeps only the evaluator-facing `/pitch` contract and the repo-boundary handoff into the sibling product repo
 - M057 completed the tracker truth reset across the two repos and org project #1
 - M059 is complete: the product app no longer depends on Next.js on the active runtime path, the canonical dashboard path is `mesher/client`, current top-level dashboard sections are real TanStack routes with URL-backed navigation and preserved shell-owned Issues state, direct operational docs/templates now point at `mesher/client`, and the final parity rails pass in both dev and built production
+- M060 is underway: the first live Mesher-backed dashboard slice now proves same-origin browser transport, deterministic seed/readback, explicit live/fallback source observability, and mounted toast feedback without redesigning the shell or widening into new auth UX
 
 ## Architecture / Key Patterns
 
@@ -69,6 +73,7 @@ Public docs and repo teaching surfaces are now much more truthful after M048-M05
 - for public evaluator-facing surfaces, keep the simple path simpler than retained proof rails: scaffold/examples first, Mesher as the deeper real app, and verifier detail out of the primary docs story
 - tracker-reconciliation work now follows a fail-closed artifact chain: S01 produced canonical snapshots/evidence/ledger truth, S02 turned that ledger into checked repo mutation plan/results artifacts with canonical issue mapping, and S03 completed the org-project realignment from those persisted mappings plus live repo truth instead of re-deriving state from stale board text
 - M059 established and closed the frontend migration pattern: keep one visible dashboard shell mounted through TanStack Start route files, decompose top-level sections into real file routes under a pathless layout while preserving shell-owned transient and Issues state, keep the external command contract even if the internal production runner changes, move the canonical package wholesale once route/state parity is proven, keep repo-owned dev/prod parity rails plus a root harness, and treat runtime-signal assertions plus direct-operational grep gates as the authoritative closeout seam
+- M060/S01 established the live-shell wiring pattern for product-backed dashboard work: keep browser traffic on same-origin `/api/v1`, adapt Mesher payloads through a typed live/mock overlay instead of weakening the existing UI contract, expose source/state via stable `data-*` attributes for verification, and route backend read failures through the already-mounted toast surface instead of inventing a parallel error UX
 
 ## Capability Contract
 
