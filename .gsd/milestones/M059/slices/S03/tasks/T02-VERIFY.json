@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M059/S03/T02",
+  "timestamp": 1775931129980,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev",
+      "exitCode": 0,
+      "durationMs": 30513,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod",
+      "exitCode": 0,
+      "durationMs": 29415,
+      "verdict": "pass"
+    }
+  ]
+}
