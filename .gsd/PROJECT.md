@@ -102,5 +102,6 @@ See `.gsd/REQUIREMENTS.md` for the explicit capability contract, requirement sta
 - [x] M055: Multi-Repo Split & GSD Workflow Continuity — split language and product ownership cleanly without breaking the truthful handoff chain
 - [x] M056: Interactive Pitch Deck Page — ship the evaluator-facing `/pitch` route in the product repo and retain the repo-boundary handoff in `mesh-lang`
 - [x] M057: Cross-Repo Tracker Reconciliation — align `mesh-lang`, `hyperpush`, and org project #1 to the actual code and ownership state
+- [ ] M058: Frontend Framework Migration to TanStack Start — move the product dashboard from `mesher/frontend-exp` to `mesher/client` without changing its current behavior
 - [ ] M035: Test Framework Hardening — get Mesh's testing story ready to test `mesher` thoroughly during development
 - [ ] M037: Package Experience & Ecosystem Polish — improve the package manager experience, website-first, once the underlying trust path is proven

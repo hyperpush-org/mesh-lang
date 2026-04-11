@@ -92,6 +92,72 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
+### R143 — The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
+- Class: constraint
+- Status: active
+- Description: The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
+- Why it matters: This milestone exists to swap frameworks, not to change the product surface.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S01, M058/S03, M058/S04
+- Validation: mapped
+- Notes: Behavioral equivalence is the acceptance bar: same URLs, same visuals, same interactions, same mock-data semantics.
+
+### R144 — The canonical frontend app path moves from `mesher/frontend-exp` to `mesher/client` while preserving the same external `dev`, `build`, and `start` command contract.
+- Class: launchability
+- Status: active
+- Description: The canonical frontend app path moves from `mesher/frontend-exp` to `mesher/client` while preserving the same external `dev`, `build`, and `start` command contract.
+- Why it matters: Maintainers need the new path and framework to be truthful without losing the existing operator workflow.
+- Source: user
+- Primary owning slice: M058/S01
+- Supporting slices: M058/S03
+- Validation: mapped
+- Notes: Folder rename is in scope; command names must remain unchanged.
+
+### R145 — Current URLs, navigation structure, sidebar and panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
+- Class: quality-attribute
+- Status: active
+- Description: Current URLs, navigation structure, sidebar and panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
+- Why it matters: A migration that subtly changes how the dashboard works would violate the stated scope.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S04
+- Validation: mapped
+- Notes: Equivalence is defined by user-visible behavior, not implementation detail.
+
+### R146 — Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
+- Class: constraint
+- Status: active
+- Description: Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
+- Why it matters: Keeping data behavior fixed isolates framework risk and prevents scope creep.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S04
+- Validation: mapped
+- Notes: No new Mesher backend integration is part of M058.
+
+### R147 — The migrated app builds and starts successfully under TanStack Start without Next.js remaining on the critical runtime path.
+- Class: launchability
+- Status: active
+- Description: The migrated app builds and starts successfully under TanStack Start without Next.js remaining on the critical runtime path.
+- Why it matters: The framework migration is incomplete if the app still depends on Next.js to run.
+- Source: inferred
+- Primary owning slice: M058/S03
+- Supporting slices: M058/S01, M058/S04
+- Validation: mapped
+- Notes: `npm run dev`, `npm run build`, and `npm run start` must all work from `mesher/client`.
+
+### R148 — Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
+- Class: operability
+- Status: active
+- Description: Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
+- Why it matters: The migration should not leave maintainers with stale operational guidance.
+- Source: inferred
+- Primary owning slice: M058/S04
+- Supporting slices: M058/S03
+- Validation: mapped
+- Notes: Only direct references need updating; broader product docs redesign is out of scope.
+
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -996,6 +1062,21 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by M057/S01-S03: `reconciliation-audit.md` and `reconciliation-ledger.json` publish the canonical shipped/active/misfiled/missing tracker state, `repo-mutation-results.md` preserves the canonical issue mapping and final repo totals, and `project-mutation-results.md` plus the retained `.tmp/m057-s03/verify/` bundle explain representative done/active/next board truth without reopening prior `.gsd` archaeology; green replay is retained in `node --test scripts/tests/verify-m057-s03-results.test.mjs` and `bash scripts/verify-m057-s03.sh`.
 - Notes: This is the end-to-end acceptance bar for the milestone.
 
+### R139 — Untitled
+- Status: validated
+- Validation: Validated by M058/S01-S03: S01-S03 kept the frontend integration inside existing Mesher route families only; S03 specifically wired project-scoped API keys without adding project→org lookup or other new backend routes, published BACKEND-GAP-LEDGER.md to defer unsupported seams honestly, and passed the full closeout chain (`migrate.sh up`, `smoke.sh`, and `MESHER_BASE_URL=http://127.0.0.1:18080 node ../hyperpush-mono/mesher/frontend-exp/scripts/verify-s03-supported-admin.mjs`).
+- Notes: S04 should re-exercise the constraint in a browser proof, but the route-family boundary itself is now satisfied and validated.
+
+### R140 — Untitled
+- Status: validated
+- Validation: Validated by M058/S03: `../hyperpush-mono/mesher/frontend-exp/BACKEND-GAP-LEDGER.md` now publishes the required missing-contract classifications, the live admin route surfaces endpoint-scoped failures without mock fallbacks, and `verify-s03-supported-admin.mjs` fails closed on the first broken API-key endpoint, missing ledger heading, or forbidden active-path identifier after the full slice verification chain passed.
+- Notes: S03 converted the remaining admin/gap visibility work from planned support into checked proof.
+
+### R141 — Untitled
+- Status: validated
+- Validation: Validated by M058/S01-S03: the active TanStack Start shell now removes fake `AI Copilot` and hardcoded identity chrome, exposes only backend-supported settings/admin surfaces, treats team membership as a deferred ledger item until a safe discovery seam exists, and passes focused UI tests plus the redacted S03 replay verifier/no-fake-shell guard.
+- Notes: S04 still provides browser-level evidence, but the UI-honesty cleanup owned by S03 is now delivered and verified.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -1184,6 +1265,28 @@ This file is the explicit capability and coverage contract for the project.
 - Supporting slices: none
 - Validation: unmapped
 - Notes: Defer automation until the manual audit, issue, and project rules are stable.
+
+### R142 — Backend endpoints for currently unsupported `frontend-exp` domains such as performance, releases, bounties, treasury, or Solana-specific views can land later after M058 publishes the real contract gap ledger.
+- Class: admin/support
+- Status: deferred
+- Description: Backend endpoints for currently unsupported `frontend-exp` domains such as performance, releases, bounties, treasury, or Solana-specific views can land later after M058 publishes the real contract gap ledger.
+- Why it matters: Those domains may matter, but the first integration wave should expose the missing contract truth before inventing new backend scope.
+- Source: user
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: unmapped
+- Notes: The ledger produced by M058 should define the later follow-up backlog instead of trying to guess it up front.
+
+### R149 — The dashboard may later move from mock-data-only behavior to real Mesher backend integration after the framework migration is complete.
+- Class: integration
+- Status: deferred
+- Description: The dashboard may later move from mock-data-only behavior to real Mesher backend integration after the framework migration is complete.
+- Why it matters: Real data integration is valuable, but it would distort the equivalence-focused migration milestone.
+- Source: inferred
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: unmapped
+- Notes: Deferred until after TanStack Start parity is proven.
 
 ## Out of Scope
 
@@ -1622,10 +1725,25 @@ This file is the explicit capability and coverage contract for the project.
 | R135 | admin/support | deferred | none | none | unmapped |
 | R136 | anti-feature | out-of-scope | none | none | n/a |
 | R137 | anti-feature | out-of-scope | none | none | n/a |
+| R139 |  | validated | none | none | Validated by M058/S01-S03: S01-S03 kept the frontend integration inside existing Mesher route families only; S03 specifically wired project-scoped API keys without adding project→org lookup or other new backend routes, published BACKEND-GAP-LEDGER.md to defer unsupported seams honestly, and passed the full closeout chain (`migrate.sh up`, `smoke.sh`, and `MESHER_BASE_URL=http://127.0.0.1:18080 node ../hyperpush-mono/mesher/frontend-exp/scripts/verify-s03-supported-admin.mjs`). |
+| R140 |  | validated | none | none | Validated by M058/S03: `../hyperpush-mono/mesher/frontend-exp/BACKEND-GAP-LEDGER.md` now publishes the required missing-contract classifications, the live admin route surfaces endpoint-scoped failures without mock fallbacks, and `verify-s03-supported-admin.mjs` fails closed on the first broken API-key endpoint, missing ledger heading, or forbidden active-path identifier after the full slice verification chain passed. |
+| R141 |  | validated | none | none | Validated by M058/S01-S03: the active TanStack Start shell now removes fake `AI Copilot` and hardcoded identity chrome, exposes only backend-supported settings/admin surfaces, treats team membership as a deferred ledger item until a safe discovery seam exists, and passes focused UI tests plus the redacted S03 replay verifier/no-fake-shell guard. |
+| R142 | admin/support | deferred | none | none | unmapped |
+| R143 | constraint | active | M058/S02 | M058/S01, M058/S03, M058/S04 | mapped |
 
 ## Coverage Summary
 
-- Active requirements: 8
-- Mapped to slices: 8
-- Validated: 82 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134)
+- Active requirements: 9
+- Mapped to slices: 9
+- Validated: 85 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141)
+- Unmapped active requirements: 0
+ team membership as a deferred ledger item until a safe discovery seam exists, and passes focused UI tests plus the redacted S03 replay verifier/no-fake-shell guard. |
+| R142 | admin/support | deferred | none | none | unmapped |
+| R143 | constraint | active | M058/S02 | M058/S01, M058/S03, M058/S04 | mapped |
+
+## Coverage Summary
+
+- Active requirements: 9
+- Mapped to slices: 9
+- Validated: 85 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141)
 - Unmapped active requirements: 0
