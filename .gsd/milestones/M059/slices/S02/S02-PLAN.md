@@ -77,7 +77,7 @@
   - Verify: `npm --prefix ../hyperpush-mono/mesher/frontend-exp run build && npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev --grep "navigation parity"`
   - Done when: clicking the sidebar updates the URL and visible active section together, AI closes on route changes, sidebar collapse persists, `/settings` hides the shared header, and Issues state survives leave/return.
 
-- [ ] **T05: Prove dev and built-production deep-link parity on the existing command contract** `est:75m`
+- [x] **T05: Prove dev and built-production deep-link parity on the existing command contract** `est:75m`
   - Why: the slice is not done until the new route tree survives the actual `build` / `start` contract and non-root direct-entry in production.
   - Files: `../hyperpush-mono/mesher/frontend-exp/playwright.config.ts`, `../hyperpush-mono/mesher/frontend-exp/tests/e2e/dashboard-route-parity.spec.ts`, `../hyperpush-mono/mesher/frontend-exp/package.json`, `../hyperpush-mono/mesher/frontend-exp/server.mjs`
   - Do: extend the parity suite to dev and prod projects, prove a non-root route first-load under `npm run start`, and fix any truthful deep-link or environment-specific route drift without widening scope beyond the frontend/mock-data contract.

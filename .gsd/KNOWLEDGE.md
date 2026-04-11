@@ -1,5 +1,7 @@
 # Knowledge
 
+- For M059/S02/T05 route-parity verification in `../hyperpush-mono/mesher/frontend-exp`, `npm --prefix ... exec playwright test ... --project=<name>` on the current npm still warns about unknown `--project` config and ends up running both Playwright projects. Treat `npm run test:e2e:dev` and `npm run test:e2e:prod` (which set `PLAYWRIGHT_PROJECT`) as the authoritative isolated dev/prod commands, and keep any future shared parity config/spec changes compatible with those scripts.
+
 - For M059/S02 Playwright verification from `mesh-lang`, `npm --prefix ../hyperpush-mono/mesher/frontend-exp exec -- playwright ...` still keeps the current working directory at `mesh-lang`. The repo-root `playwright.config.ts` exists so the slice-plan commands can resolve the sibling `frontend-exp` tests/projects without `cd`, and concurrent dev/prod Playwright runs will fight over the shared `webServer` ports because that config starts both 3000 and 3001.
 
 - For M059/S01 production-command verification in `mesher/frontend-exp`, do not assume TanStack Start's current Vite build will emit Nitro's `.output/server/index.mjs`. With the current plugin-only setup it emits `dist/client/` plus `dist/server/server.js`, so a truthful `npm run start` contract needs either an explicit Nitro plugin or a package-local bridge server that serves `dist/client` and forwards other requests to the built fetch handler.
