@@ -1,5 +1,7 @@
 # Knowledge
 
+- For M059/S02 Playwright verification from `mesh-lang`, `npm --prefix ../hyperpush-mono/mesher/frontend-exp exec -- playwright ...` still keeps the current working directory at `mesh-lang`. The repo-root `playwright.config.ts` exists so the slice-plan commands can resolve the sibling `frontend-exp` tests/projects without `cd`, and concurrent dev/prod Playwright runs will fight over the shared `webServer` ports because that config starts both 3000 and 3001.
+
 - For M059/S01 production-command verification in `mesher/frontend-exp`, do not assume TanStack Start's current Vite build will emit Nitro's `.output/server/index.mjs`. With the current plugin-only setup it emits `dist/client/` plus `dist/server/server.js`, so a truthful `npm run start` contract needs either an explicit Nitro plugin or a package-local bridge server that serves `dist/client` and forwards other requests to the built fetch handler.
 
 - For M059/S01 local production smoke in `mesher/frontend-exp`, gating `@vercel/analytics/react` behind an explicit opt-in flag (for example `VITE_ENABLE_VERCEL_ANALYTICS === "true"`) keeps `npm run start` browser verification clean. Leaving analytics enabled for every local production run causes predictable `/_vercel/insights/script.js` 404 console/network noise even when the TanStack Start migration itself is correct.
