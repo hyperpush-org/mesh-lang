@@ -268,3 +268,6 @@
 {"id":"dfbe2428-ed70-42e0-bcc1-5aad41fcbbe3","ts":"2026-04-11T06:58:15.685Z","severity":"warning","message":"Multi-milestone discussion manifest is missing. Auto-start will remain paused until the manifest is written.","source":"notify","read":false}
 {"id":"7fadef70-a17b-4cdb-a098-270901003d04","ts":"2026-04-11T06:58:47.270Z","severity":"info","message":"Auto-mode started. Will loop through 5 milestones.","source":"notify","read":false}
 {"id":"50ae9b1c-cc6d-4105-964a-e70f7a1ab4eb","ts":"2026-04-11T06:58:47.283Z","severity":"info","message":"Pre-flight: 52 milestones queued. All have full context.","source":"notify","read":false}
+{"id":"35501b51-779e-4fde-b61b-cc028ed15be6","ts":"2026-04-11T07:03:48.059Z","severity":"info","message":"Committed: feat: Captured the real Next-specific seam inventory and mapped each se…","source":"notify","read":false}
+{"id":"78731633-e0ac-4f36-8685-73f2b51b5f2c","ts":"2026-04-11T07:09:47.286Z","severity":"warning","message":"[safety] destructive command: recursive delete","source":"workflow-logger","read":false}
+{"id":"1318bd2c-b100-49ff-a098-3ff23bd31fb6","ts":"2026-04-11T07:09:47.287Z","severity":"warning","message":"Destructive command detected: recursive delete","source":"notify","read":false}

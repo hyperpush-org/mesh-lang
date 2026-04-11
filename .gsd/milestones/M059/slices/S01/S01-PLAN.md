@@ -29,7 +29,7 @@ The existing app tree boots on TanStack Start migration plumbing in place, with 
   - Files: `../hyperpush-mono/mesher/frontend-exp/package.json`, `../hyperpush-mono/mesher/frontend-exp/next.config.mjs`, `../hyperpush-mono/mesher/frontend-exp/app/page.tsx`, `../hyperpush-mono/mesher/frontend-exp/app/layout.tsx`, `../hyperpush-mono/mesher/frontend-exp/app/globals.css`
   - Verify: Confirm the task plan names the existing framework seams and target TanStack replacements without changing visible product behavior.
 
-- [ ] **T02: Stand up TanStack Start plumbing in place** `est:60-90m`
+- [x] **T02: Stand up TanStack Start plumbing in place** `est:60-90m`
   Replace the framework plumbing in place: create the TanStack Start root route/router entry, move global CSS import to the new root, update package/config scripts and dependencies, and preserve aliases/components/mock-data imports so the current dashboard shell can boot under the new framework.
   - Files: `../hyperpush-mono/mesher/frontend-exp/package.json`, `../hyperpush-mono/mesher/frontend-exp/src/routes/__root.tsx`, `../hyperpush-mono/mesher/frontend-exp/src/router.tsx`, `../hyperpush-mono/mesher/frontend-exp/app/globals.css`, `../hyperpush-mono/mesher/frontend-exp/tsconfig.json`
   - Verify: Run the in-place app’s install/build/dev smoke and confirm the visible shell still mounts with the preserved command contract.
