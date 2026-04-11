@@ -56,7 +56,7 @@
   - Do: Extend the shared same-origin Mesher client for admin/ops payloads, add an alerts-owned live state seam, refactor the alerts shell to use live reads and supported fired-alert lifecycle actions, and seed `admin-ops-live.spec.ts` with same-origin happy/failure coverage for Alerts.
   - Verify: `npm --prefix mesher/client run test:e2e:dev -- --grep "admin and ops live alerts"`
   - Done when: the Alerts route reads and acts on real backend data, unsupported alert controls remain visibly non-live, and the new browser proof exercises an Alerts happy path plus a destructive-toast failure path.
-- [ ] **T02: Make Settings general, API keys, and alert rules truthful without breaking the shell** `est:2h30m`
+- [x] **T02: Make Settings general, API keys, and alert rules truthful without breaking the shell** `est:2h30m`
   - Why: S03 is not honest until the existing Settings shell stops pretending the whole page is writable and backs the real subsections with actual reads and writes.
   - Files: `mesher/client/components/dashboard/settings/settings-live-state.tsx`, `mesher/client/components/dashboard/settings/settings-page.tsx`, `mesher/client/lib/admin-ops-live-adapter.ts`, `mesher/client/tests/e2e/admin-ops-live.spec.ts`
   - Do: Add a settings-owned state seam, wire live General/storage, API key, and alert-rule subsections through the shared adapters, remove fake global save behavior for unsupported controls, and expand the browser proof for same-origin settings mutations and failure toasts.

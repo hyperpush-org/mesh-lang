@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M060/S03/T01",
+  "timestamp": 1775949972495,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix mesher/client run test:e2e:dev -- --grep \"admin and ops live alerts\"",
+      "exitCode": 0,
+      "durationMs": 17115,
+      "verdict": "pass"
+    }
+  ]
+}
