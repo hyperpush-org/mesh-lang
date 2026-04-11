@@ -7,6 +7,6 @@ Connect `../hyperpush-mono/mesher/client` to the existing Mesher backend while c
 | ID | Slice | Risk | Depends | Done | After this |
 |----|-------|------|---------|------|------------|
 | S01 | S01 | high | — | ✅ | Against a seeded local Mesher backend, the dashboard boots in a truthful real project-org/API-key context and the Issues route loads live issue, detail, and event data through the existing shell. |
-| S02 | S02 | high | — | ⬜ | The dashboard summaries and issue actions are live: operators can inspect real issues, perform existing issue actions, and see backend-backed summary data instead of broad mock stats. |
+| S02 | S02 | high | — | ✅ | The dashboard summaries and issue actions are live: operators can inspect real issues, perform existing issue actions, and see backend-backed summary data instead of broad mock stats. |
 | S03 | Admin and ops surfaces live | medium | S01 | ⬜ | Alerts, settings/storage, team, and API-key areas use real backend reads and writes wherever the backend already has a route, while the broader shell stays visually intact. |
 | S04 | Full backend-backed shell assembly | medium | S02, S03 | ⬜ | In one seeded local environment, the full backend-backed shell walkthrough succeeds across every currently existing Mesher dashboard route, with only minimal backend seam repairs and no redesign drift. |

@@ -346,3 +346,4 @@
 {"id":"07a59c08-d789-4709-9b5d-3134c517275e","ts":"2026-04-11T21:44:40.302Z","severity":"info","message":"Resume: applied 14 fix(es) to state.","source":"notify","read":false}
 {"id":"79452ddf-59f0-4107-bb40-a309b19c7775","ts":"2026-04-11T22:07:43.619Z","severity":"info","message":"Committed: feat: Added provider-owned same-origin issue mutations, action diagnost…","source":"notify","read":false}
 {"id":"e3b220e4-6970-4bb2-8ed7-7a2781b5cc36","ts":"2026-04-11T22:28:32.669Z","severity":"info","message":"Committed: feat: Moved live Issues maintainer actions into the real detail row and…","source":"notify","read":false}
+{"id":"ee105c33-edba-4647-a4cf-1c43fb13e4f8","ts":"2026-04-11T22:44:18.885Z","severity":"info","message":"Committed: feat: Made the Issues live proof replay-safe across dev and prod by see…","source":"notify","read":false}
