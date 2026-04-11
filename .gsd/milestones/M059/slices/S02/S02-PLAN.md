@@ -70,7 +70,7 @@
   - Verify: `npm --prefix ../hyperpush-mono/mesher/frontend-exp run build && npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev --grep "direct-entry routes"`
   - Done when: every current top-level section mounts from a real file route, `/` still means Issues, `/settings` still renders its self-owned page chrome, and the direct-entry route assertions pass.
 
-- [ ] **T04: Make top-level navigation route-aware and preserve shell parity behaviors** `est:90m`
+- [x] **T04: Make top-level navigation route-aware and preserve shell parity behaviors** `est:90m`
   - Why: the route tree alone is not enough; URL updates, active highlighting, AI close-on-nav, sidebar persistence, and settings-header behavior must stay truthful.
   - Files: `../hyperpush-mono/mesher/frontend-exp/components/dashboard/sidebar.tsx`, `../hyperpush-mono/mesher/frontend-exp/components/dashboard/dashboard-shell.tsx`, `../hyperpush-mono/mesher/frontend-exp/components/dashboard/dashboard-route-map.ts`, `../hyperpush-mono/mesher/frontend-exp/tests/e2e/dashboard-route-parity.spec.ts`
   - Do: make the sidebar route-target aware, derive the active section from router state, preserve shell-owned transient UI state outside the router, and assert URL/view parity plus Issues leave-and-return behavior.

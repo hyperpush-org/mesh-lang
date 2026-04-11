@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M059/S02/T03",
+  "timestamp": 1775925453046,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp run build",
+      "exitCode": 0,
+      "durationMs": 8321,
+      "verdict": "pass"
+    },
+    {
+      "command": "npm --prefix ../hyperpush-mono/mesher/frontend-exp exec playwright test tests/e2e/dashboard-route-parity.spec.ts --project=dev --grep \"direct-entry routes\"",
+      "exitCode": 0,
+      "durationMs": 50370,
+      "verdict": "pass"
+    }
+  ]
+}
