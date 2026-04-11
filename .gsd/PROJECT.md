@@ -20,7 +20,7 @@ M056's slice work lives in the sibling Hyperpush product repo rather than this c
 
 The planning problem behind M057 was external rather than code-level: the local code and split-boundary contract had run ahead of the public GitHub tracker state. M057 is now complete, with canonical repo mutation results under `.gsd/milestones/M057/slices/S02/` and canonical project-board results under `.gsd/milestones/M057/slices/S03/` plus retained `.tmp/m057-s02/verify/` and `.tmp/m057-s03/verify/` replay bundles.
 
-M059 is in flight and S01-S03 are now complete. The sibling product dashboard now runs as the canonical `../hyperpush-mono/mesher/client/` TanStack Start/Vite package instead of the old `frontend-exp` runtime path, keeps the visible dashboard shell and mock-data behavior, preserves the package-local `npm run dev`, `npm run build`, `npm run start`, `npm run test:e2e:dev`, and `npm run test:e2e:prod` contract, and has the surrounding machine-checked CI/README/Dependabot/root-Playwright surfaces rewired to `mesher/client`. The remaining milestone work is S04 equivalence proof and final direct operational cleanup.
+M059 is complete. The sibling product dashboard now runs from the canonical `../hyperpush-mono/mesher/client/` TanStack Start/Vite package, the full dev/prod route-parity suite and root-harness load check passed at closeout, the remaining direct maintainer guidance no longer points at `frontend-exp`, and requirements `R143` through `R148` are validated. The milestone closeout record lives under `.gsd/milestones/M059/` as `M059-VALIDATION.md` and `M059-SUMMARY.md`.
 
 ## Core Value
 
@@ -38,10 +38,10 @@ Mesh already ships a broad backend-oriented stack:
 - retained proof surfaces: the backend-only fixture under `scripts/fixtures/backend/reference-backend/`, the clustered fixtures under `scripts/fixtures/clustered/tiny-cluster` plus `scripts/fixtures/clustered/cluster-proof`, and the split-boundary wrappers that hand off into the maintained Hyperpush product repo
 - a real package registry service in `registry/`, a public packages website in `packages-website/`, a docs site in `website/`, and repo-owned split-boundary docs/install/release helpers for the sibling product repo
 - editor surfaces including the VS Code extension and repo-owned Neovim pack
-- in-progress frontend migration work under the sibling product repo: `../hyperpush-mono/mesher/client/` is now the canonical TanStack Start/Vite dashboard package with a pathless `_dashboard` layout, real file routes for the current top-level sections, a package-local Node bridge server over built `dist/` output, and repo-owned dev/prod Playwright parity rails; only M059/S04 equivalence proof and final stale-reference cleanup remain
+- the frontend migration wave is complete in the sibling product repo: `../hyperpush-mono/mesher/client/` is the canonical TanStack Start/Vite dashboard package, the parity suite covers Solana Programs AI sidebar auto-collapse/restore plus Issues browser-history state restoration, the AreaChart runtime path is quiet under Playwright after disabling Recharts area animation, the root Playwright harness still resolves the moved package path from `mesh-lang`, and direct maintainer guidance now points at `mesher/client` rather than `frontend-exp`
 
 Recent distributed-runtime state:
-- M039 proved automatic cluster formation, truthful membership, runtime-native internal balancing, and single-cluster degrade/rejoin on a narrow proof app
+- M039 proved automatic cluster formation, truthful membership, runtime-native internal balancing, and single-cluster failure/rejoin on a narrow proof app
 - M042 moved single-cluster keyed continuity into `mesh-rt` behind a Mesh-facing `Continuity` API
 - M043 proved cross-cluster primary/standby continuity, bounded promotion, and packaged same-image failover/operator rails
 - M044 productized clustered apps: manifest opt-in, runtime-owned declared-handler execution, built-in read-only operator/CLI surfaces, `meshc init --clustered`, bounded automatic promotion/recovery, and a rewritten `cluster-proof` on the public clustered-app contract
@@ -49,13 +49,13 @@ Recent distributed-runtime state:
 - M046 closed the route-free clustered proof wave: `meshc init --clustered` plus the internal `scripts/fixtures/clustered/tiny-cluster` and `scripts/fixtures/clustered/cluster-proof` proofs now share one tiny `1 + 1` clustered-work contract, and the authoritative closeout rail is `bash scripts/verify-m046-s06.sh`
 - M047 completed the public cutover to source-first `@cluster`, carried replication counts through runtime truth, shipped `HTTP.clustered(...)`, and updated the Todo scaffold, docs, and closeout rails around that shipped route wrapper
 
-Public docs and repo teaching surfaces are now much more truthful after M048-M051, but later milestones still need to keep the simple public story ahead of retained proof detail:
+Public docs and repo teaching surfaces are now much more truthful after M048-M051, and the current product-boundary state is also aligned:
 - the default-plus-override `[package].entrypoint` contract now spans compiler build, test discovery, LSP, editor hosts, and `meshpkg publish`; first-contact docs also point at the retained `bash scripts/verify-m048-s05.sh` closeout rail and keep `main.mpl` as the simple default while documenting override entries such as `lib/start.mpl`
 - the reset wave includes installer-backed `meshc update` / `meshpkg update`, bounded VS Code same-file-definition wording, manifest-first editor proof, and retained parity rails for `@cluster`, both interpolation forms, and clustered-runtime teaching truth
 - M050 and M051 completed the docs-graph reset, first-contact pages, secondary proof surfaces, retained backend fixture, and post-deletion closeout rail so readers now enter through scaffold/examples-first material while Mesher stays maintainer-facing
 - the broader Hyperpush landing story still has positioning cleanup left outside `/pitch`, but the language repo keeps only the evaluator-facing `/pitch` contract and the repo-boundary handoff into the sibling product repo
 - M057 completed the tracker truth reset across the two repos and org project #1
-- M059/S01-S03 completed the framework/path migration core: the product app no longer depends on Next.js on the active runtime path, the canonical dashboard path is now `mesher/client`, current top-level dashboard sections are real TanStack routes with URL-backed navigation and preserved shell-owned Issues state, and repo-owned Playwright plus root-harness checks confirm dev and built-production deep-link parity without backend-integration drift
+- M059 is complete: the product app no longer depends on Next.js on the active runtime path, the canonical dashboard path is `mesher/client`, current top-level dashboard sections are real TanStack routes with URL-backed navigation and preserved shell-owned Issues state, direct operational docs/templates now point at `mesher/client`, and the final parity rails pass in both dev and built production
 
 ## Architecture / Key Patterns
 
@@ -68,7 +68,7 @@ Public docs and repo teaching surfaces are now much more truthful after M048-M05
 - clustered HTTP routes now reuse the same declared-handler seam as ordinary clustered work: compiler lowering rewrites `HTTP.clustered(...)` to deterministic `__declared_route_<runtime_name>` bare shims, router registration reverse-maps those shims onto declared-handler runtime metadata, and continuity/operator views stay keyed by the real handler runtime name rather than the shim symbol
 - for public evaluator-facing surfaces, keep the simple path simpler than retained proof rails: scaffold/examples first, Mesher as the deeper real app, and verifier detail out of the primary docs story
 - tracker-reconciliation work now follows a fail-closed artifact chain: S01 produced canonical snapshots/evidence/ledger truth, S02 turned that ledger into checked repo mutation plan/results artifacts with canonical issue mapping, and S03 completed the org-project realignment from those persisted mappings plus live repo truth instead of re-deriving state from stale board text
-- M059 established the frontend migration pattern: keep one visible dashboard shell mounted through TanStack Start route files, decompose top-level sections into real file routes under a pathless layout while preserving shell-owned transient and Issues state, preserve the external command contract even if the internal production runner changes, move the canonical package wholesale when the route/state work is already proven, and keep repo-owned dev/prod parity rails plus a root harness when npm CLI forwarding from `mesh-lang` is not truthful enough
+- M059 established and closed the frontend migration pattern: keep one visible dashboard shell mounted through TanStack Start route files, decompose top-level sections into real file routes under a pathless layout while preserving shell-owned transient and Issues state, keep the external command contract even if the internal production runner changes, move the canonical package wholesale once route/state parity is proven, keep repo-owned dev/prod parity rails plus a root harness, and treat runtime-signal assertions plus direct-operational grep gates as the authoritative closeout seam
 
 ## Capability Contract
 
@@ -100,6 +100,6 @@ See `.gsd/REQUIREMENTS.md` for the explicit capability contract, requirement sta
 - [x] M055: Multi-Repo Split & GSD Workflow Continuity — split language and product ownership cleanly without breaking the truthful handoff chain
 - [x] M056: Interactive Pitch Deck Page — ship the evaluator-facing `/pitch` route in the product repo and retain the repo-boundary handoff in `mesh-lang`
 - [x] M057: Cross-Repo Tracker Reconciliation — align `mesh-lang`, `hyperpush`, and org project #1 to the actual code and ownership state
-- [ ] M059: Frontend Framework Migration to TanStack Start — TanStack route migration and canonical path cutover are complete through S03; only S04 equivalence proof and final direct operational cleanup remain
+- [x] M059: Frontend Framework Migration to TanStack Start — replaced the active Next.js dashboard runtime with TanStack Start, moved the canonical package to `mesher/client`, and closed the migration with passing parity proof plus updated operational guidance
 - [ ] M035: Test Framework Hardening — get Mesh's testing story ready to test `mesher` thoroughly during development
 - [ ] M037: Package Experience & Ecosystem Polish — improve the package manager experience, website-first, once the underlying trust path is proven

@@ -92,50 +92,6 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
-### R143 — The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
-- Class: constraint
-- Status: active
-- Description: The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
-- Why it matters: This milestone exists to swap frameworks, not to change the product surface.
-- Source: user
-- Primary owning slice: M058/S02
-- Supporting slices: M058/S01, M058/S03, M058/S04
-- Validation: mapped
-- Notes: Behavioral equivalence is the acceptance bar: same URLs, same visuals, same interactions, same mock-data semantics.
-
-### R145 — Current URLs, navigation structure, sidebar/panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
-- Class: quality-attribute
-- Status: active
-- Description: Current URLs, navigation structure, sidebar/panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
-- Why it matters: A migration that subtly changes how the dashboard works would violate the stated scope.
-- Source: user
-- Primary owning slice: M058/S02
-- Supporting slices: M058/S04
-- Validation: mapped
-- Notes: Equivalence is defined by user-visible behavior, not implementation detail.
-
-### R146 — Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
-- Class: constraint
-- Status: active
-- Description: Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
-- Why it matters: Keeping data behavior fixed isolates framework risk and prevents scope creep.
-- Source: user
-- Primary owning slice: M058/S02
-- Supporting slices: M058/S04
-- Validation: mapped
-- Notes: No new Mesher backend integration is part of M058.
-
-### R148 — Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
-- Class: operability
-- Status: active
-- Description: Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
-- Why it matters: The migration should not leave maintainers with stale operational guidance.
-- Source: inferred
-- Primary owning slice: M058/S04
-- Supporting slices: M058/S03
-- Validation: mapped
-- Notes: Only direct references need updating; broader product docs redesign is out of scope.
-
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -1055,6 +1011,17 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by M058/S01-S03: the active TanStack Start shell now removes fake `AI Copilot` and hardcoded identity chrome, exposes only backend-supported settings/admin surfaces, treats team membership as a deferred ledger item until a safe discovery seam exists, and passes focused UI tests plus the redacted S03 replay verifier/no-fake-shell guard.
 - Notes: S04 still provides browser-level evidence, but the UI-honesty cleanup owned by S03 is now delivered and verified.
 
+### R143 — The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
+- Class: constraint
+- Status: validated
+- Description: The product dashboard app is migrated from Next.js to TanStack Start without meaningful user-visible change.
+- Why it matters: This milestone exists to swap frameworks, not to change the product surface.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S01, M058/S03, M058/S04
+- Validation: Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev` and `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod` both passed the final dashboard route-parity suite from the canonical `mesher/client` package, preserving the visible shell and key user-facing behavior under TanStack Start.
+- Notes: Behavioral equivalence is the acceptance bar: same URLs, same visuals, same interactions, same mock-data semantics.
+
 ### R144 — The canonical frontend app path moves from `mesher/frontend-exp` to `mesher/client` while preserving the same external `dev`, `build`, and `start` command contract.
 - Class: launchability
 - Status: validated
@@ -1063,8 +1030,30 @@ This file is the explicit capability and coverage contract for the project.
 - Source: user
 - Primary owning slice: M058/S01
 - Supporting slices: M058/S03
-- Validation: Validated by M059/S03 after `npm --prefix ../hyperpush-mono/mesher/client run build`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod`, and the zero-match stale-path grep across `../hyperpush-mono/.github/workflows/ci.yml`, `../hyperpush-mono/mesher/scripts/verify-maintainer-surface.sh`, `../hyperpush-mono/README.md`, `../hyperpush-mono/.github/dependabot.yml`, and `./playwright.config.ts` proving the canonical app path moved to `mesher/client` while preserving the external `dev` / `build` / `start` contract.
+- Validation: Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run build`, `... run test:e2e:dev`, and `... run test:e2e:prod` all passed from `mesher/client`, with CI/docs/verifier/dependabot/root-harness references repointed away from `frontend-exp` to the canonical `mesher/client` path.
 - Notes: Primary move completed in M059/S03; app no longer requires `mesher/frontend-exp` for the canonical maintainer path.
+
+### R145 — Current URLs, navigation structure, sidebar/panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
+- Class: quality-attribute
+- Status: validated
+- Description: Current URLs, navigation structure, sidebar/panel behavior, filters, and major dashboard interactions remain equivalent after the TanStack Start migration.
+- Why it matters: A migration that subtly changes how the dashboard works would violate the stated scope.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S04
+- Validation: Validated by M059 closeout through the 9-test `dashboard-route-parity.spec.ts` suite in both dev and prod, covering URL/navigation parity, AI panel behavior, settings chrome, Issues search/filter/detail persistence, browser back/forward restoration, direct-entry routes, and unknown-path fallback.
+- Notes: Equivalence is defined by user-visible behavior, not implementation detail.
+
+### R146 — Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
+- Class: constraint
+- Status: validated
+- Description: Current mock-data semantics remain authoritative during the migration; the framework swap does not expand into backend integration work.
+- Why it matters: Keeping data behavior fixed isolates framework risk and prevents scope creep.
+- Source: user
+- Primary owning slice: M058/S02
+- Supporting slices: M058/S04
+- Validation: Validated by M059 closeout because the final build, dev parity, prod parity, and root-harness load checks all passed while the dashboard remained on the existing mock-data/client-state contract with no TanStack loaders, server functions, Mesher backend calls, or widened URL/search-param semantics.
+- Notes: No new Mesher backend integration is part of M058.
 
 ### R147 — The migrated app builds and starts successfully under TanStack Start without Next.js remaining on the critical runtime path.
 - Class: launchability
@@ -1074,8 +1063,19 @@ This file is the explicit capability and coverage contract for the project.
 - Source: inferred
 - Primary owning slice: M058/S03
 - Supporting slices: M058/S01, M058/S04
-- Validation: Validated by M059/S03 through successful `npm --prefix ../hyperpush-mono/mesher/client run build`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod`, and root-harness load validation via `PLAYWRIGHT_PROJECT=dev npx --prefix ../hyperpush-mono/mesher/client playwright test --config ./playwright.config.ts --project=dev --list`, proving the migrated TanStack Start app builds, starts, and serves parity routes without Next.js on the critical runtime path.
+- Validation: Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run build`, `... run test:e2e:dev`, `... run test:e2e:prod`, and `PLAYWRIGHT_PROJECT=dev npx --prefix ../hyperpush-mono/mesher/client playwright test --config ./playwright.config.ts --project=dev --list` all passed, proving the TanStack Start app builds, starts, and serves the migrated routes without Next.js on the runtime path.
 - Notes: The production start contract remains the package-local Node bridge over TanStack Start `dist/` output, but Next.js is no longer part of the runtime path.
+
+### R148 — Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
+- Class: operability
+- Status: validated
+- Description: Product-repo docs and workflows that directly reference `frontend-exp` or Next.js are updated to the new `client` plus TanStack Start contract.
+- Why it matters: The migration should not leave maintainers with stale operational guidance.
+- Source: inferred
+- Primary owning slice: M058/S04
+- Supporting slices: M058/S03
+- Validation: Validated by M059 closeout after maintainer-facing docs and workflow/config surfaces (`../hyperpush-mono/AGENTS.md`, `../hyperpush-mono/CONTRIBUTING.md`, `../hyperpush-mono/SUPPORT.md`, issue templates, CI, README, Dependabot, and `./AGENTS.md`) were confirmed to reference `mesher/client` and to have no direct stale `frontend-exp` guidance.
+- Notes: Only direct references need updating; broader product docs redesign is out of scope.
 
 ## Deferred
 
@@ -1754,12 +1754,12 @@ This file is the explicit capability and coverage contract for the project.
 | R140 |  | validated | none | none | Validated by M058/S03: `../hyperpush-mono/mesher/frontend-exp/BACKEND-GAP-LEDGER.md` now publishes the required missing-contract classifications, the live admin route surfaces endpoint-scoped failures without mock fallbacks, and `verify-s03-supported-admin.mjs` fails closed on the first broken API-key endpoint, missing ledger heading, or forbidden active-path identifier after the full slice verification chain passed. |
 | R141 |  | validated | none | none | Validated by M058/S01-S03: the active TanStack Start shell now removes fake `AI Copilot` and hardcoded identity chrome, exposes only backend-supported settings/admin surfaces, treats team membership as a deferred ledger item until a safe discovery seam exists, and passes focused UI tests plus the redacted S03 replay verifier/no-fake-shell guard. |
 | R142 | admin/support | deferred | none | none | unmapped |
-| R143 | constraint | active | M058/S02 | M058/S01, M058/S03, M058/S04 | mapped |
-| R144 | launchability | validated | M058/S01 | M058/S03 | Validated by M059/S03 after `npm --prefix ../hyperpush-mono/mesher/client run build`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod`, and the zero-match stale-path grep across `../hyperpush-mono/.github/workflows/ci.yml`, `../hyperpush-mono/mesher/scripts/verify-maintainer-surface.sh`, `../hyperpush-mono/README.md`, `../hyperpush-mono/.github/dependabot.yml`, and `./playwright.config.ts` proving the canonical app path moved to `mesher/client` while preserving the external `dev` / `build` / `start` contract. |
-| R145 | quality-attribute | active | M058/S02 | M058/S04 | mapped |
-| R146 | constraint | active | M058/S02 | M058/S04 | mapped |
-| R147 | launchability | validated | M058/S03 | M058/S01, M058/S04 | Validated by M059/S03 through successful `npm --prefix ../hyperpush-mono/mesher/client run build`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev`, `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod`, and root-harness load validation via `PLAYWRIGHT_PROJECT=dev npx --prefix ../hyperpush-mono/mesher/client playwright test --config ./playwright.config.ts --project=dev --list`, proving the migrated TanStack Start app builds, starts, and serves parity routes without Next.js on the critical runtime path. |
-| R148 | operability | active | M058/S04 | M058/S03 | mapped |
+| R143 | constraint | validated | M058/S02 | M058/S01, M058/S03, M058/S04 | Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:dev` and `npm --prefix ../hyperpush-mono/mesher/client run test:e2e:prod` both passed the final dashboard route-parity suite from the canonical `mesher/client` package, preserving the visible shell and key user-facing behavior under TanStack Start. |
+| R144 | launchability | validated | M058/S01 | M058/S03 | Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run build`, `... run test:e2e:dev`, and `... run test:e2e:prod` all passed from `mesher/client`, with CI/docs/verifier/dependabot/root-harness references repointed away from `frontend-exp` to the canonical `mesher/client` path. |
+| R145 | quality-attribute | validated | M058/S02 | M058/S04 | Validated by M059 closeout through the 9-test `dashboard-route-parity.spec.ts` suite in both dev and prod, covering URL/navigation parity, AI panel behavior, settings chrome, Issues search/filter/detail persistence, browser back/forward restoration, direct-entry routes, and unknown-path fallback. |
+| R146 | constraint | validated | M058/S02 | M058/S04 | Validated by M059 closeout because the final build, dev parity, prod parity, and root-harness load checks all passed while the dashboard remained on the existing mock-data/client-state contract with no TanStack loaders, server functions, Mesher backend calls, or widened URL/search-param semantics. |
+| R147 | launchability | validated | M058/S03 | M058/S01, M058/S04 | Validated by M059 closeout after `npm --prefix ../hyperpush-mono/mesher/client run build`, `... run test:e2e:dev`, `... run test:e2e:prod`, and `PLAYWRIGHT_PROJECT=dev npx --prefix ../hyperpush-mono/mesher/client playwright test --config ./playwright.config.ts --project=dev --list` all passed, proving the TanStack Start app builds, starts, and serves the migrated routes without Next.js on the runtime path. |
+| R148 | operability | validated | M058/S04 | M058/S03 | Validated by M059 closeout after maintainer-facing docs and workflow/config surfaces (`../hyperpush-mono/AGENTS.md`, `../hyperpush-mono/CONTRIBUTING.md`, `../hyperpush-mono/SUPPORT.md`, issue templates, CI, README, Dependabot, and `./AGENTS.md`) were confirmed to reference `mesher/client` and to have no direct stale `frontend-exp` guidance. |
 | R149 | integration | deferred | none | none | unmapped |
 | R150 | anti-feature | out-of-scope | none | none | n/a |
 | R151 | anti-feature | out-of-scope | none | none | n/a |
@@ -1767,7 +1767,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 12
-- Mapped to slices: 12
-- Validated: 87 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R144, R147)
+- Active requirements: 8
+- Mapped to slices: 8
+- Validated: 91 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148)
 - Unmapped active requirements: 0
