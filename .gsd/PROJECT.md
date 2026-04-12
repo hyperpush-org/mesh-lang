@@ -6,7 +6,7 @@ Mesh is a programming language and backend application platform repository aimed
 
 The repo works against a real two-repo sibling workspace: `mesh-lang` keeps the language/toolchain/docs/installers/registry/packages/public-site surfaces, and the sibling product repo (`hyperpush-org/hyperpush`, still surfaced locally through the `hyperpush-mono` workspace path) owns `mesher/`, `mesher/landing/`, and `mesher/client/`. This checkout does not own product source; any local `mesh-lang/mesher` path is compatibility-only and comes from the workspace helper instead of a tracked tree. `WORKSPACE.md` is the maintainer-facing contract for the blessed sibling layout, and repo-local `.gsd` remains authoritative instead of yielding to one umbrella workspace tree.
 
-The split-boundary and public-surface reset milestones are complete: M048 through M055, M057, and M059 all closed with retained proof and repo-boundary handoff intact. M060 remains active as the current product-facing milestone.
+The split-boundary and public-surface reset milestones are complete: M048 through M055, M057, M059, and M060 are closed with retained proof and repo-boundary handoff intact.
 
 ## Core Value
 
@@ -26,12 +26,13 @@ Mesh already ships a broad backend-oriented stack:
 - editor surfaces including the VS Code extension and repo-owned Neovim pack
 - the frontend migration wave is complete in the sibling product repo: `../hyperpush-mono/mesher/client/` is the canonical TanStack Start/Vite dashboard package, the parity suite covers route/runtime behavior in dev and prod, and direct maintainer guidance now points at `mesher/client`
 
-M060 is active, and S01 through S03 are complete.
+M060 is complete and verified.
 
-The canonical `mesher/client` dashboard now has three truthful live seams over the existing shell:
+The canonical `mesher/client` dashboard now has a proven assembled backend-backed shell:
 - S01 made the Issues route real through same-origin `/api/v1` reads, a typed live-overlay adapter, explicit live/derived/fallback source markers, and destructive toast feedback for failure paths.
 - S02 made dashboard summaries and existing issue actions real, with provider-owned mutation/refetch orchestration and deterministic seeded proof for live issue workflows.
-- S03 made the admin and ops surfaces truthful where the backend already has routes: Alerts acknowledge/resolve flows, Settings general/storage reads and writes, API key list/create/revoke, alert-rule list/create/toggle/delete, Team list/add/role/remove through org-slug resolution, and explicit `data-*` state markers plus mounted Radix toasts for read/write failures. The deterministic seed helper `bash mesher/scripts/seed-live-admin-ops.sh` now seeds the canonical Postgres state directly, and the passing dev/prod Playwright rail `npm --prefix mesher/client run test:e2e:{dev,prod} -- --grep "admin and ops live"` is the current slice proof.
+- S03 made the admin and ops surfaces truthful where the backend already has routes: Alerts acknowledge/resolve flows, Settings general/storage reads and writes, API key list/create/revoke, alert-rule list/create/toggle/delete, Team list/add/role/remove through org-slug resolution, and explicit `data-*` state markers plus mounted Radix toasts for read/write failures.
+- S04 closed the milestone with the canonical assembled-shell proof: a route-map-driven seeded walkthrough spanning every current dashboard route, shared same-origin runtime diagnostics in `mesher/client/tests/e2e/live-runtime-helpers.ts`, explicit sparse issue-detail state markers, serial Playwright execution for the shared seeded runtime, and README-documented dev/prod verification rails. The full seeded commands `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"` and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"` pass.
 
 ## Architecture / Key Patterns
 
@@ -43,8 +44,9 @@ The canonical `mesher/client` dashboard now has three truthful live seams over t
 - current clustered runtime surface lives primarily in `compiler/mesh-rt/src/dist/`, `compiler/mesh-codegen/`, `compiler/mesh-typeck/`, and `compiler/meshc/`, with user-facing docs in `website/docs/docs/distributed/` and scaffold generation in `compiler/mesh-pkg/src/scaffold.rs`
 - for public evaluator-facing surfaces, keep the simple path simpler than retained proof rails: scaffold/examples first, Mesher as the deeper real app, and verifier detail out of the primary docs story
 - M059 established and closed the frontend migration pattern: keep one visible dashboard shell mounted through TanStack Start route files, decompose top-level sections into real file routes while preserving shell-owned transient state, keep the external command contract even if the internal production runner changes, move the canonical package only after parity proof passes, and keep repo-owned dev/prod parity rails plus a root harness
-- M060 has established the live-shell wiring pattern for product-backed dashboard work: keep browser traffic on same-origin `/api/v1`, adapt Mesher payloads through typed live/mock overlays instead of weakening the existing UI contract, keep mutation orchestration and post-write refetch inside slice-owned state providers, expose source/state through stable `data-*` markers for proof, leave unsupported controls visibly present but explicitly non-live, and surface backend read/write failures through the mounted toast path instead of inventing a new error UX
+- M060 established and closed the live-shell wiring pattern for product-backed dashboard work: keep browser traffic on same-origin `/api/v1`, adapt Mesher payloads through typed live/mock overlays instead of weakening the existing UI contract, keep mutation orchestration and post-write refetch inside slice-owned state providers, expose source/state through stable `data-*` markers for proof, leave unsupported controls visibly present but explicitly non-live, surface backend read/write failures through the mounted toast path instead of inventing a new error UX, and close the milestone with one route-map-driven seeded walkthrough plus shared runtime diagnostics instead of disconnected route proofs
 - for deterministic admin/ops proof, seed canonical Postgres rows directly first and let the Playwright harness boot its own backend against that DB rather than trusting whichever Mesher might already be listening on `:18180`
+- for assembled client proof on M060, keep the shared Playwright runtime helper authoritative for same-origin request tracking, direct-backend rejection, and narrow known-abort filtering; the live suites intentionally run with `workers=1` because they share one seeded Mesher runtime
 
 ## Capability Contract
 
@@ -77,6 +79,6 @@ See `.gsd/REQUIREMENTS.md` for the explicit capability contract, requirement sta
 - [x] M056: Interactive Pitch Deck Page — ship the evaluator-facing `/pitch` route in the product repo and retain the repo-boundary handoff in `mesh-lang`
 - [x] M057: Cross-Repo Tracker Reconciliation — align `mesh-lang`, `hyperpush`, and org project #1 to the actual code and ownership state
 - [x] M059: Frontend Framework Migration to TanStack Start — replaced the active Next.js dashboard runtime with TanStack Start, moved the canonical package to `mesher/client`, and closed the migration with passing parity proof plus updated operational guidance
-- [ ] M060: Mesher Client Live Backend Wiring — connect the canonical `mesher/client` shell to the existing Mesher backend without redesigning the UI or deleting still-mocked surfaces; S01-S03 are complete and S04 remains
+- [x] M060: Mesher Client Live Backend Wiring — connected the canonical dashboard shell to the seeded Mesher backend through same-origin reads/writes and closed the work with passing seeded dev/prod full-shell proof across every current dashboard route
 - [ ] M035: Test Framework Hardening — get Mesh's testing story ready to test `mesher` thoroughly during development
 - [ ] M037: Package Experience & Ecosystem Polish — improve the package manager experience, website-first, once the underlying trust path is proven

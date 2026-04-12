@@ -92,39 +92,6 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
-### R153 — The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
-- Class: integration
-- Status: active
-- Description: The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
-- Why it matters: This milestone exists to turn the current shell into a real backend-backed dashboard without inventing new product scope.
-- Source: M060
-- Primary owning slice: M060/S02
-- Supporting slices: M060/S03, M060/S04
-- Validation: mapped
-- Notes: Backend-backed means real read paths for issues, events, dashboard summaries, alerts, settings/storage, team, and API keys where routes already exist.
-
-### R159 — Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
-- Class: integration
-- Status: active
-- Description: Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
-- Why it matters: The milestone must be allowed to repair blocking seams without turning into a backend rewrite.
-- Source: user
-- Primary owning slice: M060/S04
-- Supporting slices: M060/S02, M060/S03
-- Validation: mapped
-- Notes: Do not widen this into a general backend cleanup milestone.
-
-### R160 — The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
-- Class: launchability
-- Status: active
-- Description: The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
-- Why it matters: The point of this milestone is to unblock future work by establishing a real assembled shell seam.
-- Source: user
-- Primary owning slice: M060/S04
-- Supporting slices: M060/S01, M060/S02, M060/S03
-- Validation: mapped
-- Notes: The proof bar is the full backend-backed shell, not a thin representative route.
-
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -1110,6 +1077,17 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated by M059 closeout after maintainer-facing docs and workflow/config surfaces (`../hyperpush-mono/AGENTS.md`, `../hyperpush-mono/CONTRIBUTING.md`, `../hyperpush-mono/SUPPORT.md`, issue templates, CI, README, Dependabot, and `./AGENTS.md`) were confirmed to reference `mesher/client` and to have no direct stale `frontend-exp` guidance.
 - Notes: Only direct references need updating; broader product docs redesign is out of scope.
 
+### R153 — The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
+- Class: integration
+- Status: validated
+- Description: The dashboard client uses the real Mesher backend for every surface that already has an existing backend route.
+- Why it matters: This milestone exists to turn the current shell into a real backend-backed dashboard without inventing new product scope.
+- Source: M060
+- Primary owning slice: M060/S02
+- Supporting slices: M060/S03, M060/S04
+- Validation: Validated in M060/S04 by the passing seeded full-shell dev/prod rails `bash mesher/scripts/seed-live-issue.sh`, `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"`, which together prove the existing backend-backed Issues, dashboard summary, Alerts, Settings/storage, Team, API key, and alert-rule surfaces all use same-origin `/api/v1` reads/writes inside the assembled shell.
+- Notes: Backend-backed means real read paths for issues, events, dashboard summaries, alerts, settings/storage, team, and API keys where routes already exist.
+
 ### R154 — Existing backend-backed actions exposed by the dashboard work end to end from the client, not just the read path.
 - Class: primary-user-loop
 - Status: validated
@@ -1164,6 +1142,28 @@ This file is the explicit capability and coverage contract for the project.
 - Supporting slices: M060/S02, M060/S03
 - Validation: Validated in M060/S01 by mounting the existing Radix toaster, surfacing selected-issue read failures as visible destructive toasts, and proving the failure path in both dev and prod with the `issues live read seam shows a visible toast when selected-issue reads fail` Playwright case.
 - Notes: Use straightforward in-place or toast feedback rather than quiet fake fallback or a new operational UX.
+
+### R159 — Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
+- Class: integration
+- Status: validated
+- Description: Backend defects found during client wiring are fixed only to the degree required to make the existing backend-backed dashboard flows work.
+- Why it matters: The milestone must be allowed to repair blocking seams without turning into a backend rewrite.
+- Source: user
+- Primary owning slice: M060/S04
+- Supporting slices: M060/S02, M060/S03
+- Validation: Validated in M060/S04 by closing the assembled-shell blockers only at the exact proof seams exposed by the seeded walkthrough: shared E2E runtime diagnostics now filter only known hidden-Issues/font abort noise, issue detail exposes explicit sparse stack/breadcrumb state markers for truthful assertions, and Playwright runs serially to avoid false shared-runtime races. The passing dev/prod full-shell rails demonstrate the existing backend-backed flows work without introducing new backend routes or redesigning the shell.
+- Notes: Do not widen this into a general backend cleanup milestone.
+
+### R160 — The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
+- Class: launchability
+- Status: validated
+- Description: The milestone is only complete when the full backend-backed shell walkthrough works in a seeded local environment.
+- Why it matters: The point of this milestone is to unblock future work by establishing a real assembled shell seam.
+- Source: user
+- Primary owning slice: M060/S04
+- Supporting slices: M060/S01, M060/S02, M060/S03
+- Validation: Validated in M060/S04 by the seeded assembled-shell proof rail in `mesher/client/tests/e2e/seeded-walkthrough.spec.ts` plus the passing commands `bash mesher/scripts/seed-live-issue.sh`, `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"`, which prove one canonical route-map-driven walkthrough across every current dashboard route with truthful live and mock state in a seeded local environment.
+- Notes: The proof bar is the full backend-backed shell, not a thin representative route.
 
 ## Deferred
 
@@ -1906,14 +1906,14 @@ This file is the explicit capability and coverage contract for the project.
 | R150 | anti-feature | out-of-scope | none | none | n/a |
 | R151 | anti-feature | out-of-scope | none | none | n/a |
 | R152 | constraint | out-of-scope | none | none | n/a |
-| R153 | integration | active | M060/S02 | M060/S03, M060/S04 | mapped |
+| R153 | integration | validated | M060/S02 | M060/S03, M060/S04 | Validated in M060/S04 by the passing seeded full-shell dev/prod rails `bash mesher/scripts/seed-live-issue.sh`, `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"`, which together prove the existing backend-backed Issues, dashboard summary, Alerts, Settings/storage, Team, API key, and alert-rule surfaces all use same-origin `/api/v1` reads/writes inside the assembled shell. |
 | R154 | primary-user-loop | validated | M060/S03 | M060/S02, M060/S04 | Validated in M060/S03 by the passing `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "admin and ops live"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "admin and ops live"` rails, which prove end-to-end same-origin alerts acknowledge/resolve, settings retention/sample-rate writes, API key list/create/revoke, alert-rule list/create/toggle/delete, and Team list/add/role/remove behavior against the seeded Mesher backend. |
 | R155 | launchability | validated | M060/S01 | M060/S02 | Validated in M060/S01 via seeded default-context boot through same-origin /api/v1 reads, deterministic seed/readback (`bash mesher/scripts/seed-live-issue.sh`), and passing dev/prod Playwright live-seam verification (`npm --prefix mesher/client run test:e2e:dev -- --grep "issues live read seam"`, `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live read seam"`). |
 | R156 | constraint | validated | M060/S01 | M060/S02, M060/S03, M060/S04 | Validated in M060/S01 by preserving the existing Issues shell while live list/stats/chart/detail data overlays onto fallback shell fields, with sparse-detail/fallback coverage proven by the passing `issues live read seam` Playwright suite in dev and prod. |
 | R157 | constraint | validated | M060/S03 | M060/S04 | Validated in M060/S03 by the passing seeded dev/prod `admin and ops live` Playwright suites, which assert unsupported silence/channel and other still-mocked settings affordances remain visible, explicitly marked non-live, and shell-stable while live-backed admin/ops subsections use real backend reads and writes. |
 | R158 | failure-visibility | validated | M060/S01 | M060/S02, M060/S03 | Validated in M060/S01 by mounting the existing Radix toaster, surfacing selected-issue read failures as visible destructive toasts, and proving the failure path in both dev and prod with the `issues live read seam shows a visible toast when selected-issue reads fail` Playwright case. |
-| R159 | integration | active | M060/S04 | M060/S02, M060/S03 | mapped |
-| R160 | launchability | active | M060/S04 | M060/S01, M060/S02, M060/S03 | mapped |
+| R159 | integration | validated | M060/S04 | M060/S02, M060/S03 | Validated in M060/S04 by closing the assembled-shell blockers only at the exact proof seams exposed by the seeded walkthrough: shared E2E runtime diagnostics now filter only known hidden-Issues/font abort noise, issue detail exposes explicit sparse stack/breadcrumb state markers for truthful assertions, and Playwright runs serially to avoid false shared-runtime races. The passing dev/prod full-shell rails demonstrate the existing backend-backed flows work without introducing new backend routes or redesigning the shell. |
+| R160 | launchability | validated | M060/S04 | M060/S01, M060/S02, M060/S03 | Validated in M060/S04 by the seeded assembled-shell proof rail in `mesher/client/tests/e2e/seeded-walkthrough.spec.ts` plus the passing commands `bash mesher/scripts/seed-live-issue.sh`, `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"`, which prove one canonical route-map-driven walkthrough across every current dashboard route with truthful live and mock state in a seeded local environment. |
 | R161 | admin/support | deferred | none | none | unmapped |
 | R162 | launchability | deferred | none | none | unmapped |
 | R163 | differentiator | deferred | none | none | unmapped |
@@ -1923,7 +1923,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 11
-- Mapped to slices: 11
-- Validated: 96 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R154, R155, R156, R157, R158)
+- Active requirements: 8
+- Mapped to slices: 8
+- Validated: 99 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160)
 - Unmapped active requirements: 0
