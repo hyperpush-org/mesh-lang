@@ -72,7 +72,7 @@ PY`
   - Do: Add a root wrapper modeled on `../hyperpush-mono/scripts/verify-m051-s01.sh`, extend the package verifier to retain a proof bundle and `latest-proof-bundle.txt`, lock the new handoff/README/wrapper/CI markers in the node:test contract, and update CI to acknowledge the structural route-inventory contract truthfully.
   - Verify: `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`
   - Done when: the structural contract fails closed on missing handoff headings, stale wrapper markers, missing proof-bundle pointers, or CI drift, and a root-level closeout command exists.
-- [ ] **T03: Harden live-issue seeding and prove the closeout rail end to end** `est:110m`
+- [x] **T03: Harden live-issue seeding and prove the closeout rail end to end** `est:110m`
   - Why: the last reproduced repeatability hazard is stale backend reuse in `seed-live-issue.sh`; until that is fixed and the root wrapper passes, the handoff is not actually rerunnable.
   - Files: `../hyperpush-mono/mesher/scripts/seed-live-issue.sh`, `../hyperpush-mono/mesher/scripts/seed-live-admin-ops.sh`, `../hyperpush-mono/mesher/scripts/verify-client-route-inventory.sh`, `../hyperpush-mono/scripts/verify-m061-s04.sh`
   - Do: Mirror the isolated-port behavior from `seed-live-admin-ops.sh`, keep backend reuse opt-in only, align the delegated verifier and root wrapper around the retained proof-bundle/artifact paths, then rerun the root wrapper and fix only the reproduced setup/runtime drift needed to make it pass.
