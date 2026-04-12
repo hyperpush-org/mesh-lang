@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T01",
+  "unitId": "M061/S04/T01",
+  "timestamp": 1776015952968,
+  "passed": true,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "python3 - <<'PY'\nfrom pathlib import Path\ninventory = Path('../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md').read_text()\nclient_readme = Path('../hyperpush-mono/mesher/client/README.md').read_text()\nroot_readme = Path('../hyperpush-mono/README.md').read_text()\nassert '## Maintainer handoff' in inventory\nassert '### Backend expansion order' in inventory\nassert '### Proof commands to rerun' in inventory\nassert 'bash scripts/verify-m061-s04.sh' in client_readme\nassert 'bash scripts/verify-m061-s04.sh' in root_readme\nassert 'mock-data TanStack dashboard' not in root_readme\nPY",
+      "exitCode": 0,
+      "durationMs": 73,
+      "verdict": "pass"
+    }
+  ]
+}

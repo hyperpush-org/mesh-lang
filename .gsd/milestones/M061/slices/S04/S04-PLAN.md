@@ -66,7 +66,7 @@ assert 'bash scripts/verify-m061-s04.sh' in root_readme
 assert 'mock-data TanStack dashboard' not in root_readme
 PY`
   - Done when: backend maintainers can read the inventory and the two README surfaces and know what to expand next plus which commands must stay green.
-- [ ] **T02: Add the product-root closeout wrapper and lock the closeout contract markers** `est:100m`
+- [x] **T02: Add the product-root closeout wrapper and lock the closeout contract markers** `est:100m`
   - Why: R170 requires a fail-closed proof rail and root-level surfacing, not just more prose in the canonical inventory.
   - Files: `../hyperpush-mono/scripts/verify-m061-s04.sh`, `../hyperpush-mono/mesher/scripts/verify-client-route-inventory.sh`, `../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, `../hyperpush-mono/.github/workflows/ci.yml`
   - Do: Add a root wrapper modeled on `../hyperpush-mono/scripts/verify-m051-s01.sh`, extend the package verifier to retain a proof bundle and `latest-proof-bundle.txt`, lock the new handoff/README/wrapper/CI markers in the node:test contract, and update CI to acknowledge the structural route-inventory contract truthfully.

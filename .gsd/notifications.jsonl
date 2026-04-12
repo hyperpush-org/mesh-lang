@@ -410,3 +410,5 @@
 {"id":"17500a8e-7b58-40cc-ab82-94c4e24c6850","ts":"2026-04-12T17:03:57.347Z","severity":"info","message":"Committed: feat: Added a fail-closed backend gap map for mixed Issues, Alerts, and…","source":"notify","read":false}
 {"id":"8432243d-5315-4ffe-a470-45e05d495de3","ts":"2026-04-12T17:12:09.923Z","severity":"info","message":"Committed: feat: Documented the missing backend route families behind Mesher’s rem…","source":"notify","read":false}
 {"id":"f0debf16-4166-4acb-9935-f13efd39d460","ts":"2026-04-12T17:18:54.902Z","severity":"info","message":"Committed: test: Locked backend-gap section ordering and fail-closed contract cove…","source":"notify","read":false}
+{"id":"44c82c29-cee9-4eb4-977f-ebc4c9a2deb6","ts":"2026-04-12T17:45:52.915Z","severity":"info","message":"Committed: docs: Published the canonical backend-expansion handoff in the client i…","source":"notify","read":false}
+{"id":"37452487-acb0-44fe-8393-60a3bdd503c9","ts":"2026-04-12T17:45:53.092Z","severity":"info","message":"Verification gate: 1/1 checks passed","source":"notify","read":false}
