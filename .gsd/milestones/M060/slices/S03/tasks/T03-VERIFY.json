@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M060/S03/T03",
+  "timestamp": 1775952708985,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash mesher/scripts/seed-live-admin-ops.sh",
+      "exitCode": 1,
+      "durationMs": 44,
+      "verdict": "fail"
+    },
+    {
+      "command": "npm --prefix mesher/client run test:e2e:dev -- --grep \"admin and ops live\"",
+      "exitCode": 1,
+      "durationMs": 40323,
+      "verdict": "fail"
+    },
+    {
+      "command": "npm --prefix mesher/client run test:e2e:prod -- --grep \"admin and ops live\"",
+      "exitCode": 1,
+      "durationMs": 68410,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}
