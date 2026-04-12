@@ -92,17 +92,6 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
-### R169 — The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
-- Class: integration
-- Status: active
-- Description: The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
-- Why it matters: The user wants this milestone to be usable for expanding the backend until it fully supports what the client side promises.
-- Source: user
-- Primary owning slice: M061/S03
-- Supporting slices: M061/S02, M061/S04
-- Validation: mapped
-- Notes: This is a planning-grade gap map for later implementation, not implementation work in this milestone.
-
 ### R170 — The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
 - Class: quality-attribute
 - Status: active
@@ -1220,6 +1209,17 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated in M061/S02 by the canonical mixed-surface tables in `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`, the fail-closed parser/test rail in `../hyperpush-mono/mesher/scripts/lib/client-route-inventory.mjs` + `../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, and passing dev Playwright proof for `issues-live-read.spec.ts`, `issues-live-actions.spec.ts`, `admin-ops-live.spec.ts`, and `seeded-walkthrough.spec.ts` run from `mesh-lang` with the explicit sibling config path.
 - Notes: S02 now proves Issues, Alerts, and Settings truth at panel/subsection/control granularity with stable surface keys and explicit live/shell-only boundaries.
 
+### R169 — The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Class: integration
+- Status: validated
+- Description: The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Why it matters: The user wants this milestone to be usable for expanding the backend until it fully supports what the client side promises.
+- Source: user
+- Primary owning slice: M061/S03
+- Supporting slices: M061/S02, M061/S04
+- Validation: Validated in M061/S03 by the canonical `## Backend gap map` in `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`, backed by `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs` plus markdown presence checks confirming mixed-route and mock-only backend-gap rows/statuses.
+- Notes: This is a planning-grade gap map for later implementation, not implementation work in this milestone.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -2015,7 +2015,7 @@ This file is the explicit capability and coverage contract for the project.
 | R166 | anti-feature | out-of-scope | none | none | n/a |
 | R167 | admin/support | validated | M061/S01 | M061/S04 | Validated by `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md` as the canonical maintainer-facing top-level route inventory, plus `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, which locks exact route-map parity, allowed classifications, and non-empty evidence cells against `components/dashboard/dashboard-route-map.ts`. |
 | R168 | integration | validated | M061/S02 | M061/S01 | Validated in M061/S02 by the canonical mixed-surface tables in `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`, the fail-closed parser/test rail in `../hyperpush-mono/mesher/scripts/lib/client-route-inventory.mjs` + `../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, and passing dev Playwright proof for `issues-live-read.spec.ts`, `issues-live-actions.spec.ts`, `admin-ops-live.spec.ts`, and `seeded-walkthrough.spec.ts` run from `mesh-lang` with the explicit sibling config path. |
-| R169 | integration | active | M061/S03 | M061/S02, M061/S04 | mapped |
+| R169 | integration | validated | M061/S03 | M061/S02, M061/S04 | Validated in M061/S03 by the canonical `## Backend gap map` in `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`, backed by `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs` plus markdown presence checks confirming mixed-route and mock-only backend-gap rows/statuses. |
 | R170 | quality-attribute | active | M061/S04 | M061/S01, M061/S02, M061/S03 | mapped |
 | R171 | launchability | active | M061/S04 | M061/S03 | mapped |
 | R172 | operability | deferred | none | none | unmapped |
@@ -2025,7 +2025,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 11
-- Mapped to slices: 11
-- Validated: 101 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160, R167, R168)
+- Active requirements: 10
+- Mapped to slices: 10
+- Validated: 102 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160, R167, R168, R169)
 - Unmapped active requirements: 0
