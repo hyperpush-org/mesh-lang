@@ -351,3 +351,6 @@
 {"id":"a8fadb10-8627-4739-b1bb-b0bcad33eae5","ts":"2026-04-11T23:08:50.402Z","severity":"warning","message":"Artifact missing for execute-task M060/S03/T01 — retrying (attempt 1)","source":"notify","read":false}
 {"id":"1537918f-b051-4765-8bca-f1401bb1b6e8","ts":"2026-04-11T23:26:12.453Z","severity":"info","message":"Committed: test: Wired the Alerts route to same-origin live Mesher reads/actions a…","source":"notify","read":false}
 {"id":"06eb61be-580e-44fe-aeab-9232f6cf663f","ts":"2026-04-11T23:26:29.667Z","severity":"info","message":"Verification gate: 1/1 checks passed","source":"notify","read":false}
+{"id":"a33be3f7-510b-4132-b03a-7969ff253ecc","ts":"2026-04-11T23:54:17.004Z","severity":"info","message":"Committed: test: Made Settings truthful for live general, API-key, and alert-rule…","source":"notify","read":false}
+{"id":"5496e0b5-6c05-4222-91c0-acaa42b5e941","ts":"2026-04-11T23:54:39.131Z","severity":"info","message":"Verification gate: FAILED — ","source":"notify","read":false}
+{"id":"26841620-ea26-44b0-a181-e00bf5af8c88","ts":"2026-04-11T23:54:39.139Z","severity":"warning","message":"Verification failed () — auto-fix attempt 1/2","source":"notify","read":false}

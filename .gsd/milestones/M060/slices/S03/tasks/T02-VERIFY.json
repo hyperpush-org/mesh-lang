@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T02",
+  "unitId": "M060/S03/T02",
+  "timestamp": 1775951657060,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "npm --prefix mesher/client run test:e2e:dev -- --grep \"admin and ops live settings\"",
+      "exitCode": 0,
+      "durationMs": 21905,
+      "verdict": "pass"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2,
+  "runtimeErrors": [
+    {
+      "source": "bg-shell",
+      "severity": "crash",
+      "message": "[mesher-backend-browser] exitCode=1",
+      "blocking": true
+    }
+  ]
+}

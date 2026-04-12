@@ -62,7 +62,7 @@
   - Do: Add a settings-owned state seam, wire live General/storage, API key, and alert-rule subsections through the shared adapters, remove fake global save behavior for unsupported controls, and expand the browser proof for same-origin settings mutations and failure toasts.
   - Verify: `npm --prefix mesher/client run test:e2e:dev -- --grep "admin and ops live settings"`
   - Done when: Settings General/storage, API Keys, and Alert Rules are truthful in the current shell, unsupported tabs stay visibly stable but non-live, and the proof file covers the backed write paths.
-- [ ] **T03: Resolve org-scoped team context and close the seeded admin/ops proof in dev and prod** `est:2h`
+- [x] **T03: Resolve org-scoped team context and close the seeded admin/ops proof in dev and prod** `est:2h`
   - Why: Team work is still blocked on org-context lookup, and the slice is not closed until the combined admin/ops seam is reproducible in seeded dev and prod runs.
   - Files: `mesher/storage/queries.mpl`, `mesher/api/helpers.mpl`, `mesher/api/team.mpl`, `mesher/client/lib/mesher-api.ts`, `mesher/client/components/dashboard/settings/settings-live-state.tsx`, `mesher/client/components/dashboard/settings/settings-page.tsx`, `mesher/scripts/seed-live-admin-ops.sh`, `mesher/client/tests/e2e/admin-ops-live.spec.ts`
   - Do: Add an org-slug resolver, update Team handlers to accept the seeded default slug, wire live Team list/add/role/remove behavior with a truthful raw-`user_id` affordance, create a deterministic admin/ops seed helper, and finish the combined dev/prod browser proof.
