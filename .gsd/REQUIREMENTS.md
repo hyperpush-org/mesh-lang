@@ -1165,6 +1165,61 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: Validated in M060/S04 by the seeded assembled-shell proof rail in `mesher/client/tests/e2e/seeded-walkthrough.spec.ts` plus the passing commands `bash mesher/scripts/seed-live-issue.sh`, `bash mesher/scripts/seed-live-admin-ops.sh`, `npm --prefix mesher/client run test:e2e:dev -- --grep "issues live|admin and ops live|seeded walkthrough"`, and `npm --prefix mesher/client run test:e2e:prod -- --grep "issues live|admin and ops live|seeded walkthrough"`, which prove one canonical route-map-driven walkthrough across every current dashboard route with truthful live and mock state in a seeded local environment.
 - Notes: The proof bar is the full backend-backed shell, not a thin representative route.
 
+### R167 — A canonical maintainer-facing document exists beside `mesher/client` that says exactly what is still mocked, mixed, or live after the server wiring milestone.
+- Class: admin/support
+- Status: active
+- Description: A canonical maintainer-facing document exists beside `mesher/client` that says exactly what is still mocked, mixed, or live after the server wiring milestone.
+- Why it matters: Backend expansion should start from a truthful current-state inventory instead of memory, scattered README notes, or UI guesswork.
+- Source: user
+- Primary owning slice: M061/S01
+- Supporting slices: M061/S04
+- Validation: mapped
+- Notes: The canonical home is the product-side maintainer surface next to `../hyperpush-mono/mesher/client`, not only milestone-local notes.
+
+### R168 — The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
+- Class: integration
+- Status: active
+- Description: The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
+- Why it matters: Route-level labels are not enough for mixed pages like Settings, Issues, and Alerts, where one screen can both be truthful and still overpromise.
+- Source: user
+- Primary owning slice: M061/S02
+- Supporting slices: M061/S01
+- Validation: mapped
+- Notes: The milestone should answer not just whether a route is live, but which specific controls and claims on that route are still shell-only.
+
+### R169 — The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Class: integration
+- Status: active
+- Description: The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Why it matters: The user wants this milestone to be usable for expanding the backend until it fully supports what the client side promises.
+- Source: user
+- Primary owning slice: M061/S03
+- Supporting slices: M061/S02, M061/S04
+- Validation: mapped
+- Notes: This is a planning-grade gap map for later implementation, not implementation work in this milestone.
+
+### R170 — The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
+- Class: quality-attribute
+- Status: active
+- Description: The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
+- Why it matters: A stale inventory is almost worse than none; maintainers need a way to re-check that the documentation still matches the code and verification surfaces.
+- Source: inferred
+- Primary owning slice: M061/S04
+- Supporting slices: M061/S01, M061/S02, M061/S03
+- Validation: mapped
+- Notes: Evidence can come from code seams, existing Playwright proof, route maps, and explicit absence of backend wiring.
+
+### R171 — The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
+- Class: launchability
+- Status: active
+- Description: The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
+- Why it matters: The audit only pays off if it compresses future planning work and gives backend maintainers a stable surface to work from.
+- Source: inferred
+- Primary owning slice: M061/S04
+- Supporting slices: M061/S03
+- Validation: mapped
+- Notes: The gap map should be ordered and phrased so later milestones can sequence backend work from it directly.
+
 ## Deferred
 
 ### R012 — Mesh should continue from the reference-backend and mesher proof surfaces toward broader backend forms like long-running services, realtime systems, and distributed backends.
@@ -1227,11 +1282,17 @@ This file is the explicit capability and coverage contract for the project.
 - Status: deferred
 - Description: SQLite-specific ORM and migration extras should be implemented after the neutral core and PG extras are proven on real pressure.
 - Why it matters: The design should leave a clean SQLite path, but current implementation pressure is coming from Postgres-backed mesher work.
-- Source: user
+
+### R172 — The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
+- Class: operability
+- Status: deferred
+- Description: The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
+- Why it matters: A generated inventory would reduce maintenance drift once the initial truthful map exists.
+- Source: inferred
 - Primary owning slice: none
 - Supporting slices: none
 - Validation: unmapped
-- Notes: M033 should shape the extension points so this later work is straightforward.
+- Notes: Deferred because the immediate need is truthful current-state documentation and a usable backend gap map, not an extraction framework.
 
 ### R054 — Mesh should remain open to later discovery adapters such as seed-node, gossip, or control-plane-backed discovery after the DNS-first proof path is real.
 - Class: admin/support
@@ -1754,6 +1815,33 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: n/a
 - Notes: Backend fixes are allowed only when they directly unblock live shell behavior.
 
+### R173 — This milestone implements the missing backend surfaces it identifies.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone implements the missing backend surfaces it identifies.
+- Why it matters: Prevents the documentation milestone from turning into a surprise implementation wave.
+- Source: user
+- Validation: n/a
+- Notes: The purpose here is to map the gaps so later backend work can be planned cleanly.
+
+### R174 — This milestone redesigns or materially restyles `mesher/client` to make the inventory easier to explain.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone redesigns or materially restyles `mesher/client` to make the inventory easier to explain.
+- Why it matters: The shell itself is evidence; the milestone should document it, not rewrite it.
+- Source: inferred
+- Validation: n/a
+- Notes: Preserve the current shell vocabulary and identify truth within it.
+
+### R175 — This milestone becomes a public-facing product docs wave instead of an internal maintainer and backend-planning surface.
+- Class: anti-feature
+- Status: out-of-scope
+- Description: This milestone becomes a public-facing product docs wave instead of an internal maintainer and backend-planning surface.
+- Why it matters: The user asked for a documentation milestone that helps backend expansion, not a public marketing or evaluator rewrite.
+- Source: user
+- Validation: n/a
+- Notes: The canonical document should live with `mesher/client` maintainers and roadmap planning, not the public docs site.
+
 ## Traceability
 
 | ID | Class | Status | Primary owner | Supporting | Proof |
@@ -1920,10 +2008,19 @@ This file is the explicit capability and coverage contract for the project.
 | R164 | anti-feature | out-of-scope | none | none | n/a |
 | R165 | anti-feature | out-of-scope | none | none | n/a |
 | R166 | anti-feature | out-of-scope | none | none | n/a |
+| R167 | admin/support | active | M061/S01 | M061/S04 | mapped |
+| R168 | integration | active | M061/S02 | M061/S01 | mapped |
+| R169 | integration | active | M061/S03 | M061/S02, M061/S04 | mapped |
+| R170 | quality-attribute | active | M061/S04 | M061/S01, M061/S02, M061/S03 | mapped |
+| R171 | launchability | active | M061/S04 | M061/S03 | mapped |
+| R172 | operability | deferred | none | none | unmapped |
+| R173 | anti-feature | out-of-scope | none | none | n/a |
+| R174 | anti-feature | out-of-scope | none | none | n/a |
+| R175 | anti-feature | out-of-scope | none | none | n/a |
 
 ## Coverage Summary
 
-- Active requirements: 8
-- Mapped to slices: 8
+- Active requirements: 13
+- Mapped to slices: 13
 - Validated: 99 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160)
 - Unmapped active requirements: 0

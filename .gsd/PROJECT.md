@@ -80,5 +80,6 @@ See `.gsd/REQUIREMENTS.md` for the explicit capability contract, requirement sta
 - [x] M057: Cross-Repo Tracker Reconciliation — align `mesh-lang`, `hyperpush`, and org project #1 to the actual code and ownership state
 - [x] M059: Frontend Framework Migration to TanStack Start — replaced the active Next.js dashboard runtime with TanStack Start, moved the canonical package to `mesher/client`, and closed the migration with passing parity proof plus updated operational guidance
 - [x] M060: Mesher Client Live Backend Wiring — connected the canonical dashboard shell to the seeded Mesher backend through same-origin reads/writes and closed the work with passing seeded dev/prod full-shell proof across every current dashboard route
+- [ ] M061: Mesher Client Mock Truth & Backend Gap Map — document exactly what in `mesher/client` is still mocked, mixed, or live so backend expansion can follow the client’s current promises without re-auditing the shell
 - [ ] M035: Test Framework Hardening — get Mesh's testing story ready to test `mesher` thoroughly during development
 - [ ] M037: Package Experience & Ecosystem Polish — improve the package manager experience, website-first, once the underlying trust path is proven
