@@ -381,3 +381,4 @@
 {"id":"42694050-35b5-447d-99ac-463aa41d3228","ts":"2026-04-12T02:42:17.965Z","severity":"info","message":"Dynamic routing: enabled — simple tasks may use cheaper models (ceiling: openai-codex/gpt-5.4)","source":"notify","read":false}
 {"id":"c2387d84-e055-478a-8517-262e13258aa1","ts":"2026-04-12T02:42:17.971Z","severity":"info","message":"Pre-flight: 58 milestones queued. All have full context.","source":"notify","read":false}
 {"id":"a9ff3306-e2fd-4789-ac32-876b6701a28f","ts":"2026-04-12T02:42:18.700Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 35m of uncommitted changes","source":"notify","read":false}
+{"id":"4cd004eb-be75-48ec-8273-67e25fa87112","ts":"2026-04-12T03:05:08.818Z","severity":"info","message":"Committed: feat: Added mesher/client/ROUTE-INVENTORY.md with canonical top-level r…","source":"notify","read":false}
