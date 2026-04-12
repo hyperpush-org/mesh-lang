@@ -71,7 +71,7 @@ for needle in (
     assert needle in text, needle
 PY`
   - Done when: `ROUTE-INVENTORY.md` contains machine-readable Issues/Alerts/Settings tables with stable surface keys and honest row-level boundaries that cover the slice demo.
-- [ ] **T02: Extend the route-inventory parser and contract test for mixed-surface rows** `est:90m`
+- [x] **T02: Extend the route-inventory parser and contract test for mixed-surface rows** `est:90m`
   - Why: R168 and R171 only stay useful if future edits to the maintainer doc fail closed instead of silently drifting back to prose or overstated live claims.
   - Files: `../hyperpush-mono/mesher/scripts/lib/client-route-inventory.mjs`, `../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`
   - Do: Update the parser so it understands section-scoped mixed-surface tables in addition to the top-level inventory; lock the exact expected `(route section, surface key)` pairs for Issues, Alerts, and Settings; preserve S01's top-level route-map parity contract; reject duplicate rows, blank evidence cells, `fallback` as a canonical classification, and unrecognized proof references; and make failures name the offending section/surface row instead of only reporting generic markdown drift.
