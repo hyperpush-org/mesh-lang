@@ -428,3 +428,6 @@
 {"id":"7e3692aa-b159-4f0e-aa34-91a03add35f4","ts":"2026-04-12T20:13:41.334Z","severity":"info","message":"Dynamic routing: enabled — simple tasks may use cheaper models (ceiling: openai-codex/gpt-5.4)","source":"notify","read":false}
 {"id":"1b6fe42b-57df-43a7-bd71-0fbec7e248f1","ts":"2026-04-12T20:13:41.340Z","severity":"info","message":"Pre-flight: 58 milestones queued. All have full context.","source":"notify","read":false}
 {"id":"088301b0-f5c9-443a-a70b-157a99762fd7","ts":"2026-04-12T20:13:46.994Z","severity":"warning","message":"[dispatch] Implementation artifact check inconclusive for M061 — proceeding (git context unavailable)","source":"workflow-logger","read":false}
+{"id":"52cff13f-2dc3-4caf-9748-9dab1b9be625","ts":"2026-04-12T20:16:03.989Z","severity":"info","message":"Committed: chore: auto-commit after complete-milestone","source":"notify","read":false}
+{"id":"af76b385-1bbe-4a42-b331-c402cc7c45fd","ts":"2026-04-12T20:16:03.993Z","severity":"warning","message":"Artifact missing for complete-milestone M061 — retrying (attempt 1)","source":"notify","read":false}
+{"id":"b6f65c01-6c34-4598-bb71-7ad1367a6134","ts":"2026-04-12T20:16:10.834Z","severity":"warning","message":"[dispatch] Implementation artifact check inconclusive for M061 — proceeding (git context unavailable)","source":"workflow-logger","read":false}
