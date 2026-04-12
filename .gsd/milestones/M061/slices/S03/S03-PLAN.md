@@ -70,7 +70,7 @@ for needle in (
     assert needle in text, needle
 PY`
   - Done when: the backend gap map has stable mixed-route rows that backend maintainers can use to see which currently shipped issue/alert/settings promises are already covered and which still need payload or control support.
-- [ ] **T02: Document the missing backend route families behind mock-only dashboard routes** `est:75m`
+- [x] **T02: Document the missing backend route families behind mock-only dashboard routes** `est:75m`
   - Why: R171 is not met if maintainers still have to re-open every mock-only page to learn that Performance, Solana Programs, Releases, Bounties, and Treasury do not map to any backend route family yet.
   - Files: `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`, `../hyperpush-mono/mesher/main.mpl`, `../hyperpush-mono/mesher/client/components/dashboard/performance-page.tsx`, `../hyperpush-mono/mesher/client/components/dashboard/solana-programs-page.tsx`, `../hyperpush-mono/mesher/client/components/dashboard/releases-page.tsx`, `../hyperpush-mono/mesher/client/components/dashboard/bounties-page.tsx`, `../hyperpush-mono/mesher/client/components/dashboard/treasury-page.tsx`
   - Do: Confirm in `main.mpl` that no dedicated `/api/v1` route families exist for the remaining mock-only dashboard pages, then add route-scoped backend-gap rows that name the visible promise and the missing backend family each page would need. Keep these rows maintainable by grouping each wholly mock-backed page at route or major-subsection granularity instead of exploding every CTA into its own gap row.
