@@ -408,3 +408,4 @@
 {"id":"f13782f0-17fd-47a0-831f-b3aeff2096c6","ts":"2026-04-12T16:35:56.574Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
 {"id":"be22930d-cddd-4e6a-a7d9-4340e4bed80c","ts":"2026-04-12T16:36:06.309Z","severity":"info","message":"Resume: applied 15 fix(es) to state.","source":"notify","read":false}
 {"id":"17500a8e-7b58-40cc-ab82-94c4e24c6850","ts":"2026-04-12T17:03:57.347Z","severity":"info","message":"Committed: feat: Added a fail-closed backend gap map for mixed Issues, Alerts, and…","source":"notify","read":false}
+{"id":"8432243d-5315-4ffe-a470-45e05d495de3","ts":"2026-04-12T17:12:09.923Z","severity":"info","message":"Committed: feat: Documented the missing backend route families behind Mesher’s rem…","source":"notify","read":false}

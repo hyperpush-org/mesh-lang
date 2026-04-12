@@ -88,7 +88,7 @@ for needle in (
     assert needle in text, needle
 PY`
   - Done when: the gap map names every remaining mock-only dashboard route and the missing backend family it still needs, without inventing unsupported route registrations.
-- [ ] **T03: Lock the backend gap map with parser and contract coverage** `est:90m`
+- [x] **T03: Lock the backend gap map with parser and contract coverage** `est:90m`
   - Why: R170 only advances if the new backend-gap rows fail closed on drift, rather than becoming another prose-only table that silently rots.
   - Files: `../hyperpush-mono/mesher/scripts/lib/client-route-inventory.mjs`, `../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md`
   - Do: Extend the document parser to read backend-gap sections on top of the existing S01/S02 model, preserve the older top-level reader wrappers, and lock exact expected mixed-route and mock-only gap rows plus allowed status values in `verify-client-route-inventory.test.mjs`. Add regression cases for missing sections, duplicate keys, blank seam/missing-support cells, and stale row sets so future edits fail with actionable messages.
