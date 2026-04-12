@@ -92,6 +92,50 @@ This file is the explicit capability and coverage contract for the project.
 - Validation: mapped
 - Notes: This includes fixing packages navigation, landing messaging, and evaluator-facing positioning.
 
+### R168 — The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
+- Class: integration
+- Status: active
+- Description: The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
+- Why it matters: Route-level labels are not enough for mixed pages like Settings, Issues, and Alerts, where one screen can both be truthful and still overpromise.
+- Source: user
+- Primary owning slice: M061/S02
+- Supporting slices: M061/S01
+- Validation: mapped
+- Notes: The milestone should answer not just whether a route is live, but which specific controls and claims on that route are still shell-only.
+
+### R169 — The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Class: integration
+- Status: active
+- Description: The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
+- Why it matters: The user wants this milestone to be usable for expanding the backend until it fully supports what the client side promises.
+- Source: user
+- Primary owning slice: M061/S03
+- Supporting slices: M061/S02, M061/S04
+- Validation: mapped
+- Notes: This is a planning-grade gap map for later implementation, not implementation work in this milestone.
+
+### R170 — The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
+- Class: quality-attribute
+- Status: active
+- Description: The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
+- Why it matters: A stale inventory is almost worse than none; maintainers need a way to re-check that the documentation still matches the code and verification surfaces.
+- Source: inferred
+- Primary owning slice: M061/S04
+- Supporting slices: M061/S01, M061/S02, M061/S03
+- Validation: mapped
+- Notes: Evidence can come from code seams, existing Playwright proof, route maps, and explicit absence of backend wiring.
+
+### R171 — The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
+- Class: launchability
+- Status: active
+- Description: The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
+- Why it matters: The audit only pays off if it compresses future planning work and gives backend maintainers a stable surface to work from.
+- Source: inferred
+- Primary owning slice: M061/S04
+- Supporting slices: M061/S03
+- Validation: mapped
+- Notes: The gap map should be ordered and phrased so later milestones can sequence backend work from it directly.
+
 ## Validated
 
 ### R001 — Mesh has an explicit definition of what "production ready language needs to have" means for this repo, and that baseline can be checked through concrete proof rather than vague claims.
@@ -1167,58 +1211,14 @@ This file is the explicit capability and coverage contract for the project.
 
 ### R167 — A canonical maintainer-facing document exists beside `mesher/client` that says exactly what is still mocked, mixed, or live after the server wiring milestone.
 - Class: admin/support
-- Status: active
+- Status: validated
 - Description: A canonical maintainer-facing document exists beside `mesher/client` that says exactly what is still mocked, mixed, or live after the server wiring milestone.
 - Why it matters: Backend expansion should start from a truthful current-state inventory instead of memory, scattered README notes, or UI guesswork.
 - Source: user
 - Primary owning slice: M061/S01
 - Supporting slices: M061/S04
-- Validation: mapped
-- Notes: The canonical home is the product-side maintainer surface next to `../hyperpush-mono/mesher/client`, not only milestone-local notes.
-
-### R168 — The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
-- Class: integration
-- Status: active
-- Description: The inventory classifies `mesher/client` at fine-grained route, panel, subsection, and control level wherever a page mixes real backend behavior with shell-only behavior.
-- Why it matters: Route-level labels are not enough for mixed pages like Settings, Issues, and Alerts, where one screen can both be truthful and still overpromise.
-- Source: user
-- Primary owning slice: M061/S02
-- Supporting slices: M061/S01
-- Validation: mapped
-- Notes: The milestone should answer not just whether a route is live, but which specific controls and claims on that route are still shell-only.
-
-### R169 — The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
-- Class: integration
-- Status: active
-- Description: The milestone produces a backend gap map from client promise to current backend seam to missing backend support.
-- Why it matters: The user wants this milestone to be usable for expanding the backend until it fully supports what the client side promises.
-- Source: user
-- Primary owning slice: M061/S03
-- Supporting slices: M061/S02, M061/S04
-- Validation: mapped
-- Notes: This is a planning-grade gap map for later implementation, not implementation work in this milestone.
-
-### R170 — The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
-- Class: quality-attribute
-- Status: active
-- Description: The mock/live classifications are backed by repo evidence and a repeatable proof rail instead of prose alone.
-- Why it matters: A stale inventory is almost worse than none; maintainers need a way to re-check that the documentation still matches the code and verification surfaces.
-- Source: inferred
-- Primary owning slice: M061/S04
-- Supporting slices: M061/S01, M061/S02, M061/S03
-- Validation: mapped
-- Notes: Evidence can come from code seams, existing Playwright proof, route maps, and explicit absence of backend wiring.
-
-### R171 — The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
-- Class: launchability
-- Status: active
-- Description: The final handoff is actionable enough that a later backend milestone can pick expansion slices from documented gaps without re-auditing `mesher/client` first.
-- Why it matters: The audit only pays off if it compresses future planning work and gives backend maintainers a stable surface to work from.
-- Source: inferred
-- Primary owning slice: M061/S04
-- Supporting slices: M061/S03
-- Validation: mapped
-- Notes: The gap map should be ordered and phrased so later milestones can sequence backend work from it directly.
+- Validation: Validated by `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md` as the canonical maintainer-facing top-level route inventory, plus `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, which locks exact route-map parity, allowed classifications, and non-empty evidence cells against `components/dashboard/dashboard-route-map.ts`.
+- Notes: M061/S01 validates the existence and structural truth of the canonical top-level inventory. Fine-grained mixed-surface decomposition and full backend gap mapping remain in R168/R169 follow-on slices.
 
 ## Deferred
 
@@ -1282,17 +1282,11 @@ This file is the explicit capability and coverage contract for the project.
 - Status: deferred
 - Description: SQLite-specific ORM and migration extras should be implemented after the neutral core and PG extras are proven on real pressure.
 - Why it matters: The design should leave a clean SQLite path, but current implementation pressure is coming from Postgres-backed mesher work.
-
-### R172 — The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
-- Class: operability
-- Status: deferred
-- Description: The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
-- Why it matters: A generated inventory would reduce maintenance drift once the initial truthful map exists.
-- Source: inferred
+- Source: user
 - Primary owning slice: none
 - Supporting slices: none
 - Validation: unmapped
-- Notes: Deferred because the immediate need is truthful current-state documentation and a usable backend gap map, not an extraction framework.
+- Notes: M033 should shape the extension points so this later work is straightforward.
 
 ### R054 — Mesh should remain open to later discovery adapters such as seed-node, gossip, or control-plane-backed discovery after the DNS-first proof path is real.
 - Class: admin/support
@@ -1461,6 +1455,17 @@ This file is the explicit capability and coverage contract for the project.
 - Source: inferred
 - Validation: unmapped
 - Notes: Deferred unless a route already exists and can be wired without expanding backend scope.
+
+### R172 — The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
+- Class: operability
+- Status: deferred
+- Description: The mock/live inventory should eventually be generated automatically from code and test metadata rather than relying primarily on manual classification.
+- Why it matters: A generated inventory would reduce maintenance drift once the initial truthful map exists.
+- Source: inferred
+- Primary owning slice: none
+- Supporting slices: none
+- Validation: unmapped
+- Notes: Deferred because the immediate need is truthful current-state documentation and a usable backend gap map, not an extraction framework.
 
 ## Out of Scope
 
@@ -2008,7 +2013,7 @@ This file is the explicit capability and coverage contract for the project.
 | R164 | anti-feature | out-of-scope | none | none | n/a |
 | R165 | anti-feature | out-of-scope | none | none | n/a |
 | R166 | anti-feature | out-of-scope | none | none | n/a |
-| R167 | admin/support | active | M061/S01 | M061/S04 | mapped |
+| R167 | admin/support | validated | M061/S01 | M061/S04 | Validated by `../hyperpush-mono/mesher/client/ROUTE-INVENTORY.md` as the canonical maintainer-facing top-level route inventory, plus `node --test ../hyperpush-mono/mesher/scripts/tests/verify-client-route-inventory.test.mjs`, which locks exact route-map parity, allowed classifications, and non-empty evidence cells against `components/dashboard/dashboard-route-map.ts`. |
 | R168 | integration | active | M061/S02 | M061/S01 | mapped |
 | R169 | integration | active | M061/S03 | M061/S02, M061/S04 | mapped |
 | R170 | quality-attribute | active | M061/S04 | M061/S01, M061/S02, M061/S03 | mapped |
@@ -2020,7 +2025,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 13
-- Mapped to slices: 13
-- Validated: 99 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160)
+- Active requirements: 12
+- Mapped to slices: 12
+- Validated: 100 (R001, R002, R003, R004, R005, R006, R007, R008, R009, R010, R011, R013, R015, R016, R017, R018, R019, R023, R024, R025, R026, R027, R035, R036, R037, R038, R039, R040, R045, R046, R047, R048, R051, R053, R061, R062, R063, R064, R065, R066, R067, R068, R069, R070, R077, R078, R079, R080, R081, R085, R086, R087, R088, R089, R090, R091, R092, R093, R097, R098, R099, R100, R101, R102, R103, R104, R105, R106, R112, R113, R114, R119, R121, R122, R123, R128, R129, R130, R131, R132, R133, R134, R139, R140, R141, R143, R144, R145, R146, R147, R148, R153, R154, R155, R156, R157, R158, R159, R160, R167)
 - Unmapped active requirements: 0

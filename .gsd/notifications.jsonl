@@ -382,3 +382,20 @@
 {"id":"c2387d84-e055-478a-8517-262e13258aa1","ts":"2026-04-12T02:42:17.971Z","severity":"info","message":"Pre-flight: 58 milestones queued. All have full context.","source":"notify","read":false}
 {"id":"a9ff3306-e2fd-4789-ac32-876b6701a28f","ts":"2026-04-12T02:42:18.700Z","severity":"info","message":"Pre-dispatch: pre-dispatch: created gsd snapshot after 35m of uncommitted changes","source":"notify","read":false}
 {"id":"4cd004eb-be75-48ec-8273-67e25fa87112","ts":"2026-04-12T03:05:08.818Z","severity":"info","message":"Committed: feat: Added mesher/client/ROUTE-INVENTORY.md with canonical top-level r…","source":"notify","read":false}
+{"id":"927e2057-a8c2-45a6-8433-99f632498823","ts":"2026-04-12T03:11:31.635Z","severity":"info","message":"Committed: test: Added a fail-closed route inventory parser and structural contrac…","source":"notify","read":false}
+{"id":"a5dbbfaf-a2cf-4bcc-a8ea-bc021e30fd13","ts":"2026-04-12T03:11:32.621Z","severity":"info","message":"Verification gate: 1/1 checks passed","source":"notify","read":false}
+{"id":"5e746372-1499-4a7d-81c9-639f636120c3","ts":"2026-04-12T03:41:34.722Z","severity":"warning","message":"Timeout recovery: steering execute-task M061/S01/T03 to finish durable output (attempt 1, session 1/1).","source":"notify","read":false}
+{"id":"49b17319-7f43-4180-821c-d880803b7109","ts":"2026-04-12T03:42:03.597Z","severity":"warning","message":"Session creation timed out for execute-task M061/S01/T03. Pausing auto-mode (recoverable).","source":"notify","read":false}
+{"id":"315f92bb-7de9-4c14-9abd-6feded6ca96d","ts":"2026-04-12T03:42:03.609Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"1b777b0d-ccdd-49ee-b3c6-4bf1e9ab2299","ts":"2026-04-12T05:33:31.345Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"73489f49-fb0c-4659-9d05-8a7c11c9d7b4","ts":"2026-04-12T05:33:44.802Z","severity":"info","message":"Resume: applied 16 fix(es) to state.","source":"notify","read":false}
+{"id":"93ee827a-f5d4-4007-bdc0-68f651c50b34","ts":"2026-04-12T06:03:55.469Z","severity":"warning","message":"Timeout recovery: steering complete-slice M061/S01 to produce Slice S01 marked [x] in .gsd/milestones/M061/M061-ROADMAP.md + summary + UAT written (attempt 1, session 1/1).","source":"notify","read":false}
+{"id":"901d4057-b565-428e-862e-e2bd2f1fe7e1","ts":"2026-04-12T06:04:20.667Z","severity":"warning","message":"Session creation timed out for complete-slice M061/S01. Pausing auto-mode (recoverable).","source":"notify","read":false}
+{"id":"a6da68b3-e85b-4591-8da1-3c47935c3762","ts":"2026-04-12T06:04:20.689Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"1e21da5d-c4af-4147-8686-55f701967b45","ts":"2026-04-12T06:08:20.354Z","severity":"warning","message":"[manifest] Seeding 171 requirements from REQUIREMENTS.md into DB (first update triggers import)","source":"workflow-logger","read":false}
+{"id":"427b0641-f4ca-416c-95f2-0f2f30982525","ts":"2026-04-12T06:13:34.689Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"3f0b1ba5-9820-428e-be76-5bd7757a78ea","ts":"2026-04-12T06:13:41.487Z","severity":"info","message":"Resume: applied 15 fix(es) to state.","source":"notify","read":false}
+{"id":"e68cfb1b-5184-4888-adc1-7ea5e642431d","ts":"2026-04-12T06:28:41.899Z","severity":"error","message":"Pre-execution checks failed: 2 blocking issues found","source":"notify","read":false}
+{"id":"5ea42d2a-0ccc-4464-aebd-b9787b9649f2","ts":"2026-04-12T06:28:41.911Z","severity":"info","message":"Auto-mode paused (Escape). Type to interact, or /gsd auto to resume.","source":"notify","read":false}
+{"id":"a77049fa-c400-4f87-9c90-e0b4090b9d9d","ts":"2026-04-12T06:29:04.070Z","severity":"info","message":"Auto-mode resumed.","source":"notify","read":false}
+{"id":"d06adab4-1377-46ee-97aa-275a385f2a2e","ts":"2026-04-12T06:29:09.460Z","severity":"info","message":"Resume: applied 14 fix(es) to state.","source":"notify","read":false}
