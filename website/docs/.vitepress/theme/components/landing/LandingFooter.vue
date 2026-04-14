@@ -19,9 +19,9 @@ const features = [
 ]
 
 const community = [
-  { label: 'GitHub', href: 'https://github.com/hyperpush-org/mesh-lang' },
-  { label: 'Discussions', href: 'https://github.com/hyperpush-org/mesh-lang/discussions' },
-  { label: 'Packages', href: '/packages/' },
+  { label: 'GitHub', href: 'https://github.com/hyperpush-org/mesh-lang', target:'_blank' },
+  { label: 'Discussions', href: 'https://github.com/hyperpush-org/mesh-lang/discussions', target: '_blank' },
+  { label: 'Packages', href: 'https://packages.meshlang.dev', target: '_blank' },
 ]
 </script>
 
@@ -72,8 +72,8 @@ const community = [
         <div>
           <h3 class="text-xs font-semibold text-foreground uppercase tracking-wider">Community</h3>
           <ul class="mt-4 space-y-2.5">
-            <li v-for="link in community" :key="link.href">
-              <a :href="link.href" class="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <li v-for="link in community" :key="link.href" >
+              <a :href="link.href" :target="link.target" class="text-sm text-muted-foreground transition-colors hover:text-foreground">
                 {{ link.label }}
               </a>
             </li>
