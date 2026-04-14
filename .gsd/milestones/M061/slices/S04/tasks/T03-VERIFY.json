@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T03",
+  "unitId": "M061/S04/T03",
+  "timestamp": 1776018450751,
+  "passed": false,
+  "discoverySource": "task-plan",
+  "checks": [
+    {
+      "command": "bash ../hyperpush-mono/scripts/verify-m061-s04.sh",
+      "exitCode": 1,
+      "durationMs": 65856,
+      "verdict": "fail"
+    }
+  ],
+  "retryAttempt": 1,
+  "maxRetries": 2
+}
