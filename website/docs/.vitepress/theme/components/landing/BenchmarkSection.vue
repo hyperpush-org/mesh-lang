@@ -84,11 +84,11 @@ onMounted(() => {
       </div>
 
       <!-- Tab switcher -->
-      <div class="mt-12 flex items-center justify-center">
-        <div class="inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+      <div class="mt-10 flex items-center justify-center sm:mt-12">
+        <div class="grid w-full max-w-md grid-cols-3 rounded-lg border border-border bg-card p-1 gap-1">
           <button
             @click="activeTab = 'throughput'"
-            class="flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200"
+            class="flex items-center justify-center gap-1 rounded-md px-2 py-2 text-xs font-medium transition-all duration-200 sm:gap-1.5 sm:px-4 sm:text-sm"
             :class="activeTab === 'throughput' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground'"
           >
             <Server class="size-3.5" />
@@ -96,7 +96,7 @@ onMounted(() => {
           </button>
           <button
             @click="activeTab = 'latency'"
-            class="flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200"
+            class="flex items-center justify-center gap-1 rounded-md px-2 py-2 text-xs font-medium transition-all duration-200 sm:gap-1.5 sm:px-4 sm:text-sm"
             :class="activeTab === 'latency' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground'"
           >
             <Clock class="size-3.5" />
@@ -104,7 +104,7 @@ onMounted(() => {
           </button>
           <button
             @click="activeTab = 'memory'"
-            class="flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200"
+            class="flex items-center justify-center gap-1 rounded-md px-2 py-2 text-xs font-medium transition-all duration-200 sm:gap-1.5 sm:px-4 sm:text-sm"
             :class="activeTab === 'memory' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground'"
           >
             <Cpu class="size-3.5" />
@@ -114,7 +114,7 @@ onMounted(() => {
       </div>
 
       <!-- Throughput chart -->
-      <div v-show="activeTab === 'throughput'" class="mt-10">
+      <div v-show="activeTab === 'throughput'" class="mt-8 sm:mt-10">
         <div class="rounded-xl border border-border bg-card p-6 md:p-8 shadow-lg">
           <div class="flex items-baseline justify-between mb-8">
             <div>
@@ -128,10 +128,10 @@ onMounted(() => {
 
           <div class="space-y-5">
             <div v-for="(item, index) in throughputData" :key="item.lang" class="group">
-              <div class="flex items-center gap-4">
-                <div class="w-16 shrink-0 text-right">
+              <div class="flex items-center gap-2 sm:gap-4">
+                <div class="w-12 shrink-0 text-right sm:w-16">
                   <span
-                    class="text-sm font-semibold"
+                    class="text-xs font-semibold sm:text-sm"
                     :class="item.highlight ? 'text-foreground' : 'text-muted-foreground'"
                   >{{ item.lang }}</span>
                 </div>
@@ -161,9 +161,9 @@ onMounted(() => {
                   />
                 </div>
 
-                <div class="w-20 shrink-0 text-right">
+                <div class="w-16 shrink-0 text-right sm:w-20">
                   <span
-                    class="text-sm font-mono font-bold tabular-nums"
+                    class="text-xs font-mono font-bold tabular-nums sm:text-sm"
                     :class="[
                       item.highlight ? 'text-foreground' : 'text-muted-foreground',
                       barsVisible ? 'counter-animated' : 'opacity-0',
@@ -178,7 +178,7 @@ onMounted(() => {
       </div>
 
       <!-- Latency chart -->
-      <div v-show="activeTab === 'latency'" class="mt-10">
+      <div v-show="activeTab === 'latency'" class="mt-8 sm:mt-10">
         <div class="rounded-xl border border-border bg-card p-6 md:p-8 shadow-lg">
           <div class="flex items-baseline justify-between mb-8">
             <div>
@@ -192,21 +192,21 @@ onMounted(() => {
 
           <div class="space-y-6">
             <div v-for="item in latencyData" :key="item.lang" class="group">
-              <div class="flex items-center gap-4 mb-1.5">
-                <div class="w-16 shrink-0 text-right">
+              <div class="mb-1.5 flex items-center gap-2 sm:gap-4">
+                <div class="w-12 shrink-0 text-right sm:w-16">
                   <span
-                    class="text-sm font-semibold"
+                    class="text-xs font-semibold sm:text-sm"
                     :class="item.highlight ? 'text-foreground' : 'text-muted-foreground'"
                   >{{ item.lang }}</span>
                 </div>
                 <div class="flex-1" />
-                <div class="shrink-0 flex items-center gap-4 text-xs font-mono tabular-nums">
+                <div class="shrink-0 flex items-center gap-2 text-[11px] font-mono tabular-nums sm:gap-4 sm:text-xs">
                   <span class="text-muted-foreground">p50 <strong :style="{ color: item.highlight ? 'var(--foreground)' : item.textColor }">{{ item.p50 }}ms</strong></span>
                   <span class="text-muted-foreground">p99 <strong :style="{ color: item.highlight ? 'var(--foreground)' : item.textColor }">{{ item.p99 }}ms</strong></span>
                 </div>
               </div>
-              <div class="flex items-center gap-4">
-                <div class="w-16 shrink-0" />
+              <div class="flex items-center gap-2 sm:gap-4">
+                <div class="w-12 shrink-0 sm:w-16" />
                 <div class="flex-1 relative h-3 rounded-full bg-muted/50 overflow-hidden">
                   <!-- p99 bar (background) -->
                   <div
@@ -233,7 +233,7 @@ onMounted(() => {
       </div>
 
       <!-- Memory chart -->
-      <div v-show="activeTab === 'memory'" class="mt-10">
+      <div v-show="activeTab === 'memory'" class="mt-8 sm:mt-10">
         <div class="rounded-xl border border-border bg-card p-6 md:p-8 shadow-lg">
           <div class="flex items-baseline justify-between mb-8">
             <div>
@@ -247,10 +247,10 @@ onMounted(() => {
 
           <div class="space-y-5">
             <div v-for="item in memoryData" :key="item.lang" class="group">
-              <div class="flex items-center gap-4">
-                <div class="w-16 shrink-0 text-right">
+              <div class="flex items-center gap-2 sm:gap-4">
+                <div class="w-12 shrink-0 text-right sm:w-16">
                   <span
-                    class="text-sm font-semibold"
+                    class="text-xs font-semibold sm:text-sm"
                     :class="item.highlight ? 'text-foreground' : 'text-muted-foreground'"
                   >{{ item.lang }}</span>
                 </div>
@@ -266,9 +266,9 @@ onMounted(() => {
                   />
                 </div>
 
-                <div class="w-16 shrink-0 text-right">
+                <div class="w-14 shrink-0 text-right sm:w-16">
                   <span
-                    class="text-sm font-mono font-bold tabular-nums"
+                    class="text-xs font-mono font-bold tabular-nums sm:text-sm"
                     :class="item.highlight ? 'text-foreground' : 'text-muted-foreground'"
                   >{{ item.value }} MB</span>
                 </div>

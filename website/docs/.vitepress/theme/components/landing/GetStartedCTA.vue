@@ -40,17 +40,17 @@ onMounted(() => {
       <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
         Start building your distributed system
       </h2>
-      <p class="mt-4 text-lg text-muted-foreground">
+      <p class="mt-4 text-base text-muted-foreground sm:text-lg">
         Install Mesh in seconds. Works on macOS, Linux, and Windows.
       </p>
 
       <!-- Install command -->
-      <div class="mx-auto mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-border bg-card px-5 py-4 font-mono text-sm shadow-lg ring-1 ring-foreground/[0.03]">
+      <div class="mx-auto mt-8 flex max-w-xl flex-col items-start gap-3 rounded-xl border border-border bg-card px-4 py-4 font-mono text-sm shadow-lg ring-1 ring-foreground/[0.03] sm:flex-row sm:items-center sm:px-5">
         <span class="text-emerald-500 select-none font-bold">$</span>
-        <code class="flex-1 text-left text-foreground truncate">{{ installCommand }}</code>
+        <code class="flex-1 text-left text-foreground break-all sm:truncate">{{ installCommand }}</code>
         <button
           @click="copyCommand"
-          class="shrink-0 rounded-md p-1.5 text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
+          class="shrink-0 self-end rounded-md p-1.5 text-muted-foreground transition-all hover:bg-muted hover:text-foreground sm:self-auto"
           :title="copied ? 'Copied!' : 'Copy to clipboard'"
         >
           <Check v-if="copied" class="size-4 text-emerald-500" />
@@ -59,12 +59,12 @@ onMounted(() => {
       </div>
 
       <!-- CTA buttons -->
-      <div class="mt-8 flex items-center justify-center gap-3">
-        <Button as="a" href="/docs/getting-started/" size="lg" class="h-12 px-8 rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-shadow">
+      <div class="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+        <Button as="a" href="/docs/getting-started/" size="lg" class="h-12 w-full px-8 rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-shadow sm:w-auto">
           Get Started
           <ArrowRight class="ml-1.5 size-4" />
         </Button>
-        <Button as="a" href="/docs/distributed/" variant="outline" size="lg" class="h-12 px-8 rounded-lg text-base font-semibold">
+        <Button as="a" href="/docs/distributed/" variant="outline" size="lg" class="h-12 w-full px-8 rounded-lg text-base font-semibold sm:w-auto">
           Distributed Docs
         </Button>
       </div>

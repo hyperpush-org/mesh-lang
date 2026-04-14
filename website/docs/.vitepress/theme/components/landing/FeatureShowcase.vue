@@ -129,7 +129,7 @@ onMounted(async () => {
           class="reveal grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
         >
           <!-- Text -->
-          <div :class="{ 'lg:order-last': index % 2 === 1 }">
+          <div class="min-w-0" :class="{ 'lg:order-last': index % 2 === 1 }">
             <div class="flex items-center gap-3">
               <div class="font-mono text-sm font-bold text-muted-foreground/50">{{ feature.number }}</div>
               <div
@@ -150,7 +150,7 @@ onMounted(async () => {
           </div>
 
           <!-- Code block -->
-          <div v-if="!feature.visual" class="group overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl ring-1 ring-foreground/[0.03]">
+          <div v-if="!feature.visual" class="group min-w-0 w-full max-w-full overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-shadow duration-300 hover:shadow-xl ring-1 ring-foreground/[0.03]">
             <!-- Terminal chrome -->
             <div class="flex items-center gap-2 border-b border-border px-4 py-3 bg-muted/30">
               <div class="flex gap-1.5">
@@ -163,11 +163,11 @@ onMounted(async () => {
             <div
               v-if="highlighted[index]"
               v-html="highlighted[index]"
-              class="vp-code [&_pre]:p-5 [&_pre]:!bg-transparent [&_pre]:text-sm [&_pre]:leading-relaxed"
+              class="vp-code w-full max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:p-4 sm:[&_pre]:p-5 [&_pre]:!bg-transparent [&_pre]:text-xs sm:[&_pre]:text-sm [&_pre]:leading-relaxed"
             />
             <pre
               v-else
-              class="overflow-x-auto p-5 text-sm leading-relaxed text-foreground font-mono"
+              class="max-w-full overflow-x-auto p-4 text-xs leading-relaxed text-foreground font-mono sm:p-5 sm:text-sm"
             ><code>{{ feature.code }}</code></pre>
           </div>
 
