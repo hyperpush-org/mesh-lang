@@ -8732,11 +8732,12 @@ fn ast_pattern_to_abstract(pat: &Pattern, env: &TypeEnv, type_registry: &TypeReg
                 if let Some(_scheme) = env.lookup(&name_text) {
                     // Check if this resolves to a sum type constructor by looking
                     // at the type registry for a variant with this name.
-                    if let Some((sum_info, _variant)) = type_registry.lookup_variant(&name_text) {
+                    if let Some((sum_info, variant)) = type_registry.lookup_variant(&name_text) {
+                        let arity = variant.fields.len();
                         return AbsPat::Constructor {
                             name: name_text,
                             type_name: sum_info.name.clone(),
-                            args: vec![],
+                            args: vec![AbsPat::Wildcard; arity],
                         };
                     }
                 }
@@ -9960,6 +9961,8 @@ fn infer_pattern(
                 // Check if this identifier is a known nullary variant constructor.
                 // In Mesh, bare uppercase names like `Red`, `None`, `Point` in pattern
                 // position should resolve to constructors, not create fresh bindings.
+                // Bare payload-bearing constructors like `Ok` or `Err` (no parens) are
+                // treated as `Ok(_)` / `Err(_)` -- match the constructor, ignore payload.
                 if let Some(scheme) = env.lookup(&name_text) {
                     let candidate = ctx.instantiate(scheme);
                     let resolved = ctx.resolve(candidate.clone());
@@ -9969,6 +9972,14 @@ fn infer_pattern(
                     if is_sum_type {
                         types.insert(pat.syntax().text_range(), candidate.clone());
                         return Ok(candidate);
+                    }
+                    // Uppercase + function type → payload-bearing constructor used bare.
+                    // Return the constructor's result type; the payload is implicitly wildcarded.
+                    if name_text.starts_with(|c: char| c.is_uppercase()) {
+                        if let Ty::Fun(_, ret) = resolved {
+                            types.insert(pat.syntax().text_range(), (*ret).clone());
+                            return Ok(*ret);
+                        }
                     }
                 }
 

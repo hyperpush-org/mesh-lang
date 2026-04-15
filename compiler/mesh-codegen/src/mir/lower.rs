@@ -9840,22 +9840,22 @@ impl<'a> Lowerer<'a> {
                 // pattern matching codegen (switch on tag).
                 if name.starts_with(|c: char| c.is_uppercase()) {
                     if let Some(type_name) = find_type_for_variant(&name, self.registry) {
-                        // Verify it's actually a nullary constructor (no fields).
-                        let is_nullary = self
+                        let variant_fields = self
                             .registry
                             .sum_type_defs
                             .get(&type_name)
                             .and_then(|info| info.variants.iter().find(|v| v.name == name))
-                            .map(|v| v.fields.is_empty())
-                            .unwrap_or(false);
-                        if is_nullary {
-                            return MirPattern::Constructor {
-                                type_name,
-                                variant: name,
-                                fields: vec![],
-                                bindings: vec![],
-                            };
-                        }
+                            .map(|v| v.fields.len())
+                            .unwrap_or(0);
+                        // Nullary constructor: no fields.
+                        // Payload-bearing constructor without explicit binder: treat as
+                        // Constructor(_) -- wildcards cover all fields, bind nothing.
+                        return MirPattern::Constructor {
+                            type_name,
+                            variant: name,
+                            fields: vec![MirPattern::Wildcard; variant_fields],
+                            bindings: vec![],
+                        };
                     }
                 }
 

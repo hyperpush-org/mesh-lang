@@ -268,3 +268,35 @@ fn test_or_pattern_covers_all_variants() {
     );
     assert_no_errors(&result);
 }
+
+// ── Bare payload-bearing constructor patterns ────────────────────────
+
+/// Bare `Ok` / `Err` without explicit binder compiles as sugar for `Ok(_)` / `Err(_)`.
+#[test]
+fn test_bare_payload_constructor_is_exhaustive() {
+    let result = check_source(
+        "let r = Ok(1)\n\
+         case r do\n  Ok -> 1\n  Err -> 0\nend",
+    );
+    assert_no_errors(&result);
+}
+
+/// Bare `Some` without binder is sugar for `Some(_)`.
+#[test]
+fn test_bare_some_constructor_is_exhaustive() {
+    let result = check_source(
+        "let o = Some(42)\n\
+         case o do\n  Some -> 1\n  None -> 0\nend",
+    );
+    assert_no_errors(&result);
+}
+
+/// Mix of bare and explicit binder forms in the same case is valid.
+#[test]
+fn test_bare_and_explicit_binder_mixed() {
+    let result = check_source(
+        "let r = Ok(1)\n\
+         case r do\n  Ok(_) -> 1\n  Err -> 0\nend",
+    );
+    assert_no_errors(&result);
+}

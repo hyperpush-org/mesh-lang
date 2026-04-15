@@ -7154,3 +7154,38 @@ fn e2e_m032_limit_timer_service_cast() {
     let output = compile_and_run(M032_TIMER_SERVICE_CAST_MAIN);
     assert_eq!(output, "0\n");
 }
+
+/// Bare payload-bearing constructor in pattern position (no explicit binder).
+/// `Ok` / `Err` without `(_)` must compile and match correctly -- sugar for `Ok(_)`.
+#[test]
+fn e2e_bare_payload_constructor_pattern() {
+    let output = compile_and_run(
+        r#"
+fn main() do
+  let r = Err("boom")
+  case r do
+    Ok -> println("ok")
+    Err -> println("err")
+  end
+end
+"#,
+    );
+    assert_eq!(output, "err\n");
+}
+
+/// Bare `Ok` with actual Ok value hits the Ok arm.
+#[test]
+fn e2e_bare_payload_constructor_ok_arm() {
+    let output = compile_and_run(
+        r#"
+fn main() do
+  let r = Ok(42)
+  case r do
+    Ok -> println("ok")
+    Err -> println("err")
+  end
+end
+"#,
+    );
+    assert_eq!(output, "ok\n");
+}
