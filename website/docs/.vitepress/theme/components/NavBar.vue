@@ -13,9 +13,9 @@ const { isDark } = useData()
 const mobileMenuOpen = ref(false)
 
 const navLinks = [
-  { text: 'Docs', href: '/docs/getting-started/' },
-  { text: 'Packages', href: '/packages/' },
-  { text: 'GitHub', href: 'https://github.com/hyperpush-org/mesh-lang' },
+  { text: 'Docs', href: '/docs/getting-started/', target: '_self' },
+  { text: 'Packages', href: 'https://packages.meshlang.dev', target: '_blank' },
+  { text: 'GitHub', href: 'https://github.com/hyperpush-org/mesh-lang', target: '_blank' },
 ]
 </script>
 
@@ -66,6 +66,7 @@ const navLinks = [
         </a>
         <a
           href="https://github.com/hyperpush-org/mesh-lang"
+          target="_blank"
           class="pointer-events-auto rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:text-foreground hover:bg-accent"
         >
           GitHub
@@ -89,6 +90,7 @@ const navLinks = [
           v-for="link in navLinks"
           :key="link.href"
           :href="link.href"
+          :target="link.target"
           class="flex items-center rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground hover:bg-accent"
           @click="mobileMenuOpen = false"
         >
